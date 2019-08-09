@@ -12,6 +12,7 @@ var server = require('http').Server(app);
 
 app.use( require('body-parser')({"limit": "1024mb"}) );
 app.use( '/common/gitui79/', express.static( path.resolve(__dirname, '../../../dist/') ) );
+app.use( '/common/gitparse79/', express.static( path.resolve(__dirname, '../../../node_modules/gitparse79/dist/') ) );
 app.use( '/apis/git', function(req, res, next){
 	console.log(req);
 	console.log(req.method);
