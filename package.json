@@ -1,0 +1,46 @@
+{
+  "name": "gitui79",
+  "version": "0.1.0-alpha.1+dev",
+  "private": true,
+  "description": "",
+  "main": "src/gitui79.js",
+  "scripts": {
+    "start": "node ./tests/app/server/server.js;",
+    "up": "node ./tests/app/server/server.js;",
+    "preview": "gulp preview;",
+    "test": "mocha --ui tdd ./tests/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomk79/gitui79.js.git"
+  },
+  "author": "Tomoya Koyanagi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tomk79/gitui79.js/issues"
+  },
+  "homepage": "https://github.com/tomk79/gitui79.js#readme",
+  "dependencies": {
+    "es6-promise": "^4.1.0",
+    "fs-extra": "^7.0.1",
+    "iterate79": "^1.0.0",
+    "utils79": "0.0.4"
+  },
+  "devDependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "express-session": "^1.15.2",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-browserify": "^0.5.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-uglify": "^2.1.2",
+    "jquery": "^3.2.1",
+    "mocha": "^3.2.0",
+    "url-parse": "^1.1.8"
+  }
+}
