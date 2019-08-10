@@ -8,6 +8,25 @@
 <script>
 var gitUi79 = window.gitUi79 = new GitUi79(
     document.getElementById('gitui79'),
+    function(cmdAry, callback){
+        // サーバーでgitコマンドを実行するAPIを用意してください。
+        // callback には、 gitコマンドが出力した文字列を返してください。
+        var stdout = '';
+        $.ajax({
+            url: '/path/to/endpoint',
+            data: cmdAry,
+            success: function(data){
+                stdout += data;
+            },
+            error: function(data){
+                stdout += data; // エラー出力も stdout に混ぜて送る
+            },
+            complete: function(){
+                callback(0, stdout);
+            }
+        });
+        return;
+    },
     {
     }
 );

@@ -1,3 +1,27 @@
 .gitui79 {
   display: -ms-flexbox;
-  display: flex; }
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  font-size: medium; }
+  .gitui79__toolbar ul {
+    padding: 0;
+    margin: 0;
+    display: -ms-flexbox;
+    display: flex; }
+    .gitui79__toolbar ul li {
+      list-style-type: none;
+      padding: 0;
+      margin: 0; }
+  .gitui79__body {
+    overflow: auto; }
+  .gitui79__statusbar {
+    overflow: auto; }
+  .gitui79__list-status {
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid #ddd; }
+    .gitui79__list-status li {
+      list-style-type: none;
+      padding: 0.2em 1em;
+      border-bottom: 1px solid #ddd; }
