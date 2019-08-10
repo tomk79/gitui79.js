@@ -14,6 +14,9 @@ window.GitUi79 = function($elm, fncCallGit, options){
 		"mineFrame": '<div class="gitui79__toolbar">'
 				+ '<ul>'
 				+ '<li><button class="gitui79__btn gitui79__btn--status">status</button></li>'
+				+ '<li><button class="gitui79__btn gitui79__btn--pull">pull</button></li>'
+				+ '<li><button class="gitui79__btn gitui79__btn--commit">commit</button></li>'
+				+ '<li><button class="gitui79__btn gitui79__btn--push">push</button></li>'
 				+ '</ul>'
 				+ '</div>'
 				+ '<div class="gitui79__body"></div>'
@@ -32,6 +35,15 @@ window.GitUi79 = function($elm, fncCallGit, options){
 		$elm.getElementsByClassName('gitui79__btn--status')[0].addEventListener('click', function(e){
 			_this.pageStatus();
 		});
+		$elm.getElementsByClassName('gitui79__btn--pull')[0].addEventListener('click', function(e){
+			_this.pagePull();
+		});
+		$elm.getElementsByClassName('gitui79__btn--commit')[0].addEventListener('click', function(e){
+			_this.pageCommit();
+		});
+		$elm.getElementsByClassName('gitui79__btn--push')[0].addEventListener('click', function(e){
+			_this.pagePush();
+		});
 
 		// body
 		$elms.body = $elm.getElementsByClassName('gitui79__body')[0];
@@ -46,6 +58,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	 * page: status
 	 */
 	this.pageStatus = function(){
+		$elms.body.innerHTML = '';
 		gitparse79.git(
 			['status'],
 			function(result){
@@ -70,6 +83,73 @@ window.GitUi79 = function($elm, fncCallGit, options){
 				src += mksrc(result.staged.deleted, true, 'deleted');
 				src += '</ul>';
 				$elms.body.innerHTML = src;
+			}
+		);
+	}
+
+	/**
+	 * page: pull
+	 */
+	this.pagePull = function(){
+		$elms.body.innerHTML = '';
+		gitparse79.git(
+			['pull'],
+			function(result){
+				console.log(result);
+				// alert('refresh');
+				var src = '';
+				src += '<pre><code>';
+				src += '</code></pre>';
+				$elms.body.innerHTML = src;
+				$elms.body.getElementsByTagName('code')[0].innerHTML = result.stdout;
+			}
+		);
+	}
+
+	/**
+	 * page: commit
+	 */
+	this.pageCommit = function(){
+		$elms.body.innerHTML = '';
+		var message = prompt('Commit message?');
+		if(!message){
+			return;
+		}
+		gitparse79.git(
+			['add', './'],
+			function(result){
+				console.log(result);
+				gitparse79.git(
+					['commit', '-m', message],
+					function(result){
+						console.log(result);
+						// alert('refresh');
+						var src = '';
+						src += '<pre><code>';
+						src += '</code></pre>';
+						$elms.body.innerHTML = src;
+						$elms.body.getElementsByTagName('code')[0].innerHTML = result.stdout;
+					}
+				);
+			}
+		);
+	}
+
+	/**
+	 * page: push
+	 */
+	this.pagePush = function(){
+		$elms.body.innerHTML = '';
+		gitparse79.git(
+			['push'],
+			function(result){
+				console.log(result);
+				// alert('refresh');
+				var src = '';
+				src += '<pre><code>';
+				src += '</code></pre>';
+				$elms.body.innerHTML = src;
+				$elms.body.getElementsByTagName('code')[0].innerHTML = result.stdout;
 			}
 		);
 	}
