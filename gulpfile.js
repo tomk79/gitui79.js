@@ -1,4 +1,6 @@
 var gulp = require('gulp');
+var webpack = require('webpack');
+var webpackStream = require('webpack-stream');
 var sass = require('gulp-sass');//CSSコンパイラ
 var autoprefixer = require("gulp-autoprefixer");//CSSにベンダープレフィックスを付与してくれる
 var minifyCss = require('gulp-minify-css');//CSSファイルの圧縮ツール
@@ -6,7 +8,6 @@ var uglify = require("gulp-uglify");//JavaScriptファイルの圧縮ツール
 var concat = require('gulp-concat');//ファイルの結合ツール
 var plumber = require("gulp-plumber");//コンパイルエラーが起きても watch を抜けないようになる
 var rename = require("gulp-rename");//ファイル名の置き換えを行う
-var browserify = require("gulp-browserify");//NodeJSのコードをブラウザ向けコードに変換
 var packageJson = require(__dirname+'/package.json');
 var _tasks = [
 	'gitui79.js',
@@ -39,10 +40,14 @@ gulp.task('.css.scss', function(){
 
 // gitui79.js (frontend) を処理
 gulp.task("gitui79.js", function() {
-	gulp.src(["src/gitui79.js"])
+	return webpackStream({
+		mode: 'development',
+		entry: "./src/gitui79.js",
+		output: {
+			filename: "gitui79.js"
+		}
+	}, webpack)
 		.pipe(plumber())
-		.pipe(browserify({}))
-		.pipe(concat('gitui79.js'))
 		.pipe(gulp.dest( './dist/' ))
 		.pipe(concat('gitui79.min.js'))
 		.pipe(uglify())
