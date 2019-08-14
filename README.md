@@ -40,7 +40,7 @@ gitUi79.init(function(){
 
 ## 更新履歴 - Change log
 
-### gitui79 v0.1.0 (リリース日未定)
+### gitui79 v0.1.0 (2019年8月15日)
 
 - 初回リリース
 
