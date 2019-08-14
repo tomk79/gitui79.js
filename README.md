@@ -6,7 +6,7 @@
 <div id="gitui79"></div>
 
 <script>
-var gitUi79 = window.gitUi79 = new GitUi79(
+var gitUi79 = new GitUi79(
     document.getElementById('gitui79'),
     function(cmdAry, callback){
         // サーバーでgitコマンドを実行するAPIを用意してください。
@@ -40,7 +40,7 @@ gitUi79.init(function(){
 
 ## 更新履歴 - Change log
 
-### gitui79 v0.0.1 (リリース日未定)
+### gitui79 v0.1.0 (リリース日未定)
 
 - 初回リリース
 
