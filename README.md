@@ -40,6 +40,10 @@ gitUi79.init(function(){
 
 ## 更新履歴 - Change log
 
+### gitui79 v0.1.1 (リリース日未定)
+
+- `git status` 画面に、コミットログを表示するようになった。
+
 ### gitui79 v0.1.0 (2019年8月15日)
 
 - 初回リリース

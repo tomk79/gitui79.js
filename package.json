@@ -44,6 +44,7 @@
     "jquery": "^3.2.1",
     "mocha": "^3.2.0",
     "px2style": "^2.0.6",
+    "twig": "^1.13.3",
     "webpack": "^4.39.2",
     "webpack-stream": "^5.2.1"
   }

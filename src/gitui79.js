@@ -6,11 +6,13 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	options = options || {};
 
 	var gitparse79 = new window.GitParse79(fncCallGit);
+	var _twig = require('twig');
 
 	var $elms = {};
 
 	var templates = {
-		"mainframe": require('./resources/templates/mainframe.html')
+		"mainframe": require('./resources/templates/mainframe.html'),
+		"git_status": require('./resources/templates/git_status.html')
 	};
 
 	/**
@@ -49,32 +51,43 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	 */
 	this.pageStatus = function(){
 		$elms.body.innerHTML = '';
-		gitparse79.git(
-			['status'],
-			function(result){
-				console.log(result);
-				// alert('refresh');
-				var src = '';
-				src += '<ul class="gitui79__list-status">';
-				function mksrc(ary, isStaged, status){
-					var src = '';
-					ary.forEach(function(row){
-						src += '<li class="'+(isStaged ? 'gitui79__list-status-staged' : '')+' '+('gitui79__list-status-'+status)+'">';
-						src += row;
-						src += '</li>';
-					});
-					return src;
-				}
-				src += mksrc(result.notStaged.untracked, false, 'untracked');
-				src += mksrc(result.notStaged.modified, false, 'modified');
-				src += mksrc(result.notStaged.deleted, false, 'deleted');
-				src += mksrc(result.staged.untracked, true, 'untracked');
-				src += mksrc(result.staged.modified, true, 'modified');
-				src += mksrc(result.staged.deleted, true, 'deleted');
-				src += '</ul>';
+		var git_status,
+			git_log;
+
+		new Promise(function(rlv){rlv();})
+			.then(function(){ return new Promise(function(rlv, rjt){
+				gitparse79.git(
+					['status'],
+					function(result){
+						console.log(result);
+						git_status = result;
+						rlv();
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				gitparse79.git(
+					['log', '-p'],
+					function(result){
+						console.log(result);
+						git_log = result;
+						rlv();
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				var src = _twig.twig({
+					data: templates.git_status
+				}).render({
+					status: git_status,
+					log: git_log
+				});
+
 				$elms.body.innerHTML = src;
-			}
-		);
+
+				rlv();
+			}); })
+		;
 	}
 
 	/**

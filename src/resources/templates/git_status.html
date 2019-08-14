@@ -1,0 +1,46 @@
+<p>Branch: <q>{{ status.currentBranchName }}</q></p>
+<ul class="gitui79__list-status">
+
+{% if status.notStaged.untracked.length
+ or status.notStaged.modified.length
+ or status.notStaged.deleted.length
+ or status.staged.untracked.length
+ or status.staged.modified.length
+ or status.staged.deleted.length
+%}
+<li>Uncommited changes
+    <ul>
+{% for file in status.notStaged.untracked %}
+        <li class="gitui79__list-status-untracked">{{ file }}</li>
+{% endfor %}
+{% for file in status.notStaged.modified %}
+        <li class="gitui79__list-status-modified">{{ file }}</li>
+{% endfor %}
+{% for file in status.notStaged.deleted %}
+        <li class="gitui79__list-status-deleted">{{ file }}</li>
+{% endfor %}
+{% for file in status.staged.untracked %}
+        <li class="gitui79__list-status-staged gitui79__list-status-untracked">{{ file }}</li>
+{% endfor %}
+{% for file in status.staged.modified %}
+        <li class="gitui79__list-status-staged gitui79__list-status-modified">{{ file }}</li>
+{% endfor %}
+{% for file in status.staged.deleted %}
+        <li class="gitui79__list-status-staged gitui79__list-status-deleted">{{ file }}</li>
+{% endfor %}
+
+    </ul>
+</li>
+{% endif %}
+
+{% for commit in log.logs %}
+<li>{{ commit.message }}
+    <ul>
+        {% for file in commit.files %}
+        <li>{{ file.filename }}</li>
+        {% endfor %}
+    </ul>
+</li>
+{% endfor %}
+
+</ul>
