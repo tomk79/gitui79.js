@@ -53,6 +53,14 @@ gulp.task("gitui79.js", function() {
 		entry: "./src/gitui79.js",
 		output: {
 			filename: "gitui79.js"
+		},
+		module:{
+			rules:[
+				{
+					test:/\.html$/,
+					use:['html-loader']
+				}
+			]
 		}
 	}, webpack)
 		.pipe(plumber())

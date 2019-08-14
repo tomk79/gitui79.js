@@ -10,16 +10,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	var $elms = {};
 
 	var templates = {
-		"mineFrame": '<div class="gitui79__toolbar">'
-				+ '<ul>'
-				+ '<li><button class="px2-btn px2-btn--default gitui79__btn gitui79__btn--status">status</button></li>'
-				+ '<li><button class="px2-btn px2-btn--default gitui79__btn gitui79__btn--pull">pull</button></li>'
-				+ '<li><button class="px2-btn px2-btn--default gitui79__btn gitui79__btn--commit">commit</button></li>'
-				+ '<li><button class="px2-btn px2-btn--default gitui79__btn gitui79__btn--push">push</button></li>'
-				+ '</ul>'
-				+ '</div>'
-				+ '<div class="gitui79__body"></div>'
-				+ '<div class="gitui79__statusbar"></div>'
+		"mainframe": require('./resources/templates/mainframe.html')
 	};
 
 	/**
@@ -28,7 +19,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	this.init = function( callback ){
 		callback = callback || function(){};
 		$elm.classList.add("gitui79");
-		$elm.innerHTML = templates.mineFrame;
+		$elm.innerHTML = templates.mainframe;
 
 		// buttons
 		$elm.getElementsByClassName('gitui79__btn--status')[0].addEventListener('click', function(e){

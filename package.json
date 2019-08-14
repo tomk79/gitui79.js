@@ -40,6 +40,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
     "gulp-uglify": "^2.1.2",
+    "html-loader": "^0.5.5",
     "jquery": "^3.2.1",
     "mocha": "^3.2.0",
     "px2style": "^2.0.6",
