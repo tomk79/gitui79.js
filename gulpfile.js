@@ -10,9 +10,17 @@ var plumber = require("gulp-plumber");//コンパイルエラーが起きても 
 var rename = require("gulp-rename");//ファイル名の置き換えを行う
 var packageJson = require(__dirname+'/package.json');
 var _tasks = [
+	'client-libs',
 	'gitui79.js',
 	'.css.scss'
 ];
+
+// client-libs (frontend) を処理
+gulp.task("client-libs", function() {
+	// gulp.src(["node_modules/px2style/dist/**/*"])
+	// 	.pipe(gulp.dest( './tests/app/client/libs/px2style/dist/' ))
+	// ;
+});
 
 // src 中の *.css.scss を処理
 gulp.task('.css.scss', function(){

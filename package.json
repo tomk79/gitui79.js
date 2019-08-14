@@ -41,6 +41,7 @@
     "gulp-uglify": "^2.1.2",
     "jquery": "^3.2.1",
     "mocha": "^3.2.0",
+    "px2style": "^2.0.6",
     "webpack": "^4.39.2",
     "webpack-stream": "^5.2.1"
   }
