@@ -18,6 +18,7 @@ app.use(bodyParser.json());
 app.use( '/common/gitui79/', express.static( path.resolve(__dirname, '../../../dist/') ) );
 app.use( '/common/gitparse79/', express.static( path.resolve(__dirname, '../../../node_modules/gitparse79/dist/') ) );
 app.use( '/common/px2style/', express.static( path.resolve(__dirname, '../../../node_modules/px2style/dist/') ) );
+app.use( '/common/bootstrap/', express.static( path.resolve(__dirname, '../../../node_modules/bootstrap/dist/') ) );
 app.use( '/apis/git', function(req, res, next){
 	// console.log(req);
 	// console.log(req.method);
