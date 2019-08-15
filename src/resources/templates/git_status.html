@@ -1,5 +1,5 @@
 <section class="gitui79__current-branch-name">
-	<p>Branch: <q>{{ status.currentBranchName }}</q></p>
+	<p>Branch: <q>{{ currentBranchName }}</q></p>
 </section>
 
 <section class="gitui79__uncommited-changes">
@@ -48,23 +48,5 @@
 	<div class="gitui79__uncommited-changes-nothing-to-commit">
 		<p>コミットされていない変更はありません。</p>
 	</div>
-{% endif %}
-</section>
-
-<section class="gitui79__commit-logs">
-<h2>コミットログ</h2>
-{% if log.logs.length %}
-<ul class="gitui79__list-commit-logs">
-{% for commit in log.logs %}
-<li><h3>{{ commit.message }}</h3>
-	<p>by {{ commit.author }} &lt;{{ commit.email }}&gt; at {{ commit.date }}</p>
-	<ul class="gitui79__list-changes">
-		{% for file in commit.files %}
-		<li class="gitui79__list-changes-{{ file.type }}">{{ file.filename }}</li>
-		{% endfor %}
-	</ul>
-</li>
-{% endfor %}
-</ul>
 {% endif %}
 </section>

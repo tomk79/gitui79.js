@@ -13,13 +13,16 @@ window.GitUi79 = function($elm, fncCallGit, options){
 
 	var templates = {
 		"mainframe": require('./resources/templates/mainframe.html'),
-		"git_status": require('./resources/templates/git_status.html')
+		"git_status": require('./resources/templates/git_status.html'),
+		"git_log": require('./resources/templates/git_log.html'),
+		"git_log_rows": require('./resources/templates/git_log_rows.html')
 	};
 
 	var committer = {
 		name: "",
 		email: ""
 	};
+	var currentBranchName;
 
 	/**
 	 * GitUi79 を初期化します。
@@ -66,6 +69,9 @@ window.GitUi79 = function($elm, fncCallGit, options){
 				$elm.getElementsByClassName('gitui79__btn--status')[0].addEventListener('click', function(e){
 					_this.pageStatus();
 				});
+				$elm.getElementsByClassName('gitui79__btn--log')[0].addEventListener('click', function(e){
+					_this.pageLog();
+				});
 				$elm.getElementsByClassName('gitui79__btn--pull')[0].addEventListener('click', function(e){
 					_this.pagePull();
 				});
@@ -95,8 +101,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	 */
 	this.pageStatus = function(){
 		$elms.body.innerHTML = '';
-		var git_status,
-			git_log;
+		var git_status;
 
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
@@ -105,16 +110,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 					function(result){
 						console.log(result);
 						git_status = result;
-						rlv();
-					}
-				);
-			}); })
-			.then(function(){ return new Promise(function(rlv, rjt){
-				gitparse79.git(
-					['log', '-p'],
-					function(result){
-						console.log(result);
-						git_log = result;
+						currentBranchName = git_status.currentBranchName;
 						rlv();
 					}
 				);
@@ -124,7 +120,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 					data: templates.git_status
 				}).render({
 					status: git_status,
-					log: git_log,
+					currentBranchName: currentBranchName,
 					committer: committer
 				});
 
@@ -174,6 +170,82 @@ window.GitUi79 = function($elm, fncCallGit, options){
 						}
 					);
 
+				});
+				rlv();
+			}); })
+		;
+	}
+
+	/**
+	 * page: log
+	 */
+	this.pageLog = function(){
+		$elms.body.innerHTML = '';
+		var git_log;
+		var dpp = 50;
+		var currentPage = 0;
+
+		new Promise(function(rlv){rlv();})
+			.then(function(){ return new Promise(function(rlv, rjt){
+				gitparse79.git(
+					['log', '--max-count='+(dpp), '--skip='+(dpp*currentPage)],
+					function(result){
+						console.log(result);
+						git_log = result;
+						rlv();
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				var src = _twig.twig({
+					data: templates.git_log
+				}).render({
+					currentBranchName: currentBranchName,
+					log: git_log,
+					committer: committer,
+					dpp: dpp
+				});
+				$elms.body.innerHTML = src;
+
+				var src_rows = _twig.twig({
+					data: templates.git_log_rows
+				}).render({
+					log: git_log
+				});
+				$elms.body.querySelector('.gitui79__list-commit-logs').innerHTML += src_rows;
+
+				if( !git_log.logs.length || git_log.logs.length < dpp ){
+					document.querySelector('.gitui79__btn-block-next-page').style.display = 'none';
+				}
+
+				rlv();
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				var $btnNext = document.querySelector('.gitui79__btn-block-next-page button');
+				$btnNext.addEventListener('click', function(){
+					var _this = this;
+					_this.disabled = true;
+					currentPage ++;
+					gitparse79.git(
+						['log', '--max-count='+(dpp), '--skip='+(dpp*currentPage)],
+						function(result){
+							console.log(result);
+							git_log = result;
+
+							var src_rows = _twig.twig({
+								data: templates.git_log_rows
+							}).render({
+								log: git_log
+							});
+							$elms.body.querySelector('.gitui79__list-commit-logs').innerHTML += src_rows;
+
+							if( !git_log.logs.length || git_log.logs.length < dpp ){
+								document.querySelector('.gitui79__btn-block-next-page').style.display = 'none';
+							}
+							_this.disabled = false;
+							rlv();
+						}
+					);
 				});
 				rlv();
 			}); })

@@ -1,0 +1,14 @@
+<section class="gitui79__current-branch-name">
+	<p>Branch: <q>{{ currentBranchName }}</q></p>
+</section>
+
+<section class="gitui79__commit-logs">
+<h2>コミットログ</h2>
+{% if log.logs.length %}
+<ul class="gitui79__list-commit-logs">
+</ul>
+<div class="text-center gitui79__btn-block-next-page"><button class="px2-btn px2-btn--primary" type="button">次の {{dpp}} 件</button></div>
+{% else %}
+<p>コミットログはありません。</p>
+{% endif %}
+</section>
