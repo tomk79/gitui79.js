@@ -24,6 +24,10 @@
 			return;
 		},
 		{
+			committer: {
+				name: 'Test User',
+				email: 'test.user@example.com'
+			}
 		}
 	);
 	// console.log(gitUi79);

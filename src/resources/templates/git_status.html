@@ -1,6 +1,9 @@
-<p>Branch: <q>{{ status.currentBranchName }}</q></p>
-<ul class="gitui79__list-status">
+<section class="gitui79__current-branch-name">
+	<p>Branch: <q>{{ status.currentBranchName }}</q></p>
+</section>
 
+<section class="gitui79__uncommited-changes">
+	<h2>コミットされていない変更</h2>
 {% if status.notStaged.untracked.length
  or status.notStaged.modified.length
  or status.notStaged.deleted.length
@@ -8,39 +11,60 @@
  or status.staged.modified.length
  or status.staged.deleted.length
 %}
-<li>Uncommited changes
-    <ul>
+	<ul class="gitui79__list-changes">
 {% for file in status.notStaged.untracked %}
-        <li class="gitui79__list-status-untracked">{{ file }}</li>
+		<li class="gitui79__list-changes-untracked">{{ file }}</li>
 {% endfor %}
 {% for file in status.notStaged.modified %}
-        <li class="gitui79__list-status-modified">{{ file }}</li>
+		<li class="gitui79__list-changes-modified">{{ file }}</li>
 {% endfor %}
 {% for file in status.notStaged.deleted %}
-        <li class="gitui79__list-status-deleted">{{ file }}</li>
+		<li class="gitui79__list-changes-deleted">{{ file }}</li>
 {% endfor %}
 {% for file in status.staged.untracked %}
-        <li class="gitui79__list-status-staged gitui79__list-status-untracked">{{ file }}</li>
+		<li class="gitui79__list-changes-staged gitui79__list-changes-untracked">{{ file }}</li>
 {% endfor %}
 {% for file in status.staged.modified %}
-        <li class="gitui79__list-status-staged gitui79__list-status-modified">{{ file }}</li>
+		<li class="gitui79__list-changes-staged gitui79__list-changes-modified">{{ file }}</li>
 {% endfor %}
 {% for file in status.staged.deleted %}
-        <li class="gitui79__list-status-staged gitui79__list-status-deleted">{{ file }}</li>
+		<li class="gitui79__list-changes-staged gitui79__list-changes-deleted">{{ file }}</li>
 {% endfor %}
+	</ul>
+	<div class="clearfix px2-p gitui79__btn-block-open-commit-form">
+		<div class="float-right"><button class="px2-btn px2-btn--primary" type="button">コミットする</button></div>
+	</div>
+	<div class="gitui79__commit-form" style="display: none;">
+		<form action="javascript:;" method="post">
+			<h3>コミットコメント</h3>
+			<p><textarea class="form-control"></textarea></p>
+			<h3>コミッター</h3>
+			<p>{{ committer.name }} &lt;{{ committer.email }}&gt;</p>
+			<div class="text-center"><button class="px2-btn px2-btn--primary gitui79__btn-do-commit" type="submit">コミットする</button></div>
+		</form>
+	</div>
 
-    </ul>
-</li>
+{% else %}
+	<div class="gitui79__uncommited-changes-nothing-to-commit">
+		<p>コミットされていない変更はありません。</p>
+	</div>
 {% endif %}
+</section>
 
+<section class="gitui79__commit-logs">
+<h2>コミットログ</h2>
+{% if log.logs.length %}
+<ul class="gitui79__list-commit-logs">
 {% for commit in log.logs %}
-<li>{{ commit.message }}
-    <ul>
-        {% for file in commit.files %}
-        <li>{{ file.filename }}</li>
-        {% endfor %}
-    </ul>
+<li><h3>{{ commit.message }}</h3>
+	<p>by {{ commit.author }} &lt;{{ commit.email }}&gt; at {{ commit.date }}</p>
+	<ul class="gitui79__list-changes">
+		{% for file in commit.files %}
+		<li class="gitui79__list-changes-{{ file.type }}">{{ file.filename }}</li>
+		{% endfor %}
+	</ul>
 </li>
 {% endfor %}
-
 </ul>
+{% endif %}
+</section>

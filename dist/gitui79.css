@@ -1,27 +1,77 @@
+@charset "UTF-8";
 .gitui79 {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
       flex-direction: column;
   font-size: medium; }
-  .gitui79__toolbar ul {
-    padding: 0;
-    margin: 0;
-    display: -ms-flexbox;
-    display: flex; }
-    .gitui79__toolbar ul li {
-      list-style-type: none;
+  .gitui79 p {
+    margin: 1em 0; }
+  .gitui79 section {
+    margin: 1em 0 2em; }
+  .gitui79 h2 {
+    font-size: large;
+    font-weight: bold;
+    margin: 1em 0; }
+  .gitui79 h3 {
+    font-size: medium;
+    font-weight: bold;
+    margin: 0.5em 0; }
+  .gitui79__toolbar {
+    padding: 5px 10px; }
+    .gitui79__toolbar ul {
       padding: 0;
-      margin: 0; }
+      margin: 0;
+      display: -ms-flexbox;
+      display: flex; }
+      .gitui79__toolbar ul li {
+        list-style-type: none;
+        padding: 0;
+        margin: 0; }
   .gitui79__body {
-    overflow: auto; }
+    overflow: auto;
+    padding: 5px 10px; }
   .gitui79__statusbar {
-    overflow: auto; }
-  .gitui79__list-status {
+    overflow: auto;
+    padding: 5px 10px; }
+  .gitui79__uncommited-changes-nothing-to-commit {
+    text-align: center;
+    padding: 3em 20px; }
+  .gitui79__list-commit-logs {
     padding: 0;
     margin: 0;
     border-top: 1px solid #ddd; }
-    .gitui79__list-status li {
+    .gitui79__list-commit-logs > li {
       list-style-type: none;
       padding: 0.2em 1em;
       border-bottom: 1px solid #ddd; }
+  .gitui79__list-changes {
+    padding: 0;
+    margin: 0.2em 2em;
+    border-top: 1px solid #ddd; }
+    .gitui79__list-changes > li {
+      list-style-type: none;
+      padding: 0.2em 1em;
+      border-bottom: 1px solid #ddd; }
+  .gitui79__list-changes-added:before, .gitui79__list-changes-untracked:before {
+    content: "■";
+    color: #15c118;
+    margin-right: 0.5em; }
+  .gitui79__list-changes-changed:before, .gitui79__list-changes-modified:before {
+    content: "■";
+    color: #edbc42;
+    margin-right: 0.5em; }
+  .gitui79__list-changes-deleted:before {
+    content: "■";
+    color: #e55454;
+    margin-right: 0.5em; }
+  .gitui79__commit-form {
+    margin: 1em;
+    padding: 1em;
+    border: 1px solid #00a0e6;
+    border-radius: 5px;
+    background-color: #f2fbff; }
+    .gitui79__commit-form h3 {
+      margin: 0; }
+    .gitui79__commit-form p {
+      margin: 0 0 0.4em; }

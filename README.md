@@ -28,6 +28,10 @@ var gitUi79 = new GitUi79(
         return;
     },
     {
+        committer: {
+            name: "Committer Name",
+            email: "committer@example.com"
+        }
     }
 );
 // console.log(remoteFinder);
@@ -43,6 +47,8 @@ gitUi79.init(function(){
 ### gitui79 v0.1.1 (リリース日未定)
 
 - `git status` 画面に、コミットログを表示するようになった。
+- オプション `committer` を追加した。
+- コミット画面とステータス画面を統合した。
 
 ### gitui79 v0.1.0 (2019年8月15日)
 

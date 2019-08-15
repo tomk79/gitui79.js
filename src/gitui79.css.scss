@@ -3,7 +3,26 @@
 	flex-direction: column;
 	font-size: medium;
 
+	p{
+		margin: 1em 0;
+	}
+	section{
+		margin: 1em 0 2em;
+	}
+	h2{
+		font-size: large;
+		font-weight: bold;
+		margin: 1em 0;
+	}
+	h3{
+		font-size: medium;
+		font-weight: bold;
+		margin: 0.5em 0;
+	}
+
+
 	&__toolbar{
+		padding: 5px 10px;
 		ul{
 			padding: 0;
 			margin: 0;
@@ -18,20 +37,70 @@
 
 	&__body{
 		overflow: auto;
+		padding: 5px 10px;
 	}
 
 	&__statusbar{
 		overflow: auto;
+		padding: 5px 10px;
 	}
 
-	&__list-status{
+	&__uncommited-changes-nothing-to-commit{
+		text-align: center;
+		padding: 3em 20px;
+	}
+
+	&__list-commit-logs{
 		padding: 0;
 		margin: 0;
 		border-top: 1px solid #ddd;
-		li{
+		> li{
 			list-style-type: none;
 			padding: 0.2em 1em;
 			border-bottom: 1px solid #ddd;
+		}
+	}
+
+	&__list-changes{
+		padding: 0;
+		margin: 0.2em 2em;
+		border-top: 1px solid #ddd;
+		> li{
+			list-style-type: none;
+			padding: 0.2em 1em;
+			border-bottom: 1px solid #ddd;
+		}
+	}
+
+	&__list-changes-added:before,
+	&__list-changes-untracked:before{
+		content: "■";
+		color: #15c118;
+		margin-right: 0.5em;
+	}
+	&__list-changes-changed:before,
+	&__list-changes-modified:before{
+		content: "■";
+		color: #edbc42;
+		margin-right: 0.5em;
+	}
+	&__list-changes-deleted:before{
+		content: "■";
+		color: #e55454;
+		margin-right: 0.5em;
+	}
+
+	&__commit-form{
+		margin: 1em;
+		padding: 1em;
+		border: 1px solid #00a0e6;
+		border-radius: 5px;
+		background-color: #f2fbff;
+		h3{
+			margin: 0;
+		}
+		p{
+			margin: 0 0 0.4em;
 		}
 	}
 }
