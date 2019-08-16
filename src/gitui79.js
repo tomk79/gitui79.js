@@ -313,28 +313,43 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	 */
 	this.pagePull = function(){
 		$elms.body.innerHTML = '';
+		var git_remote;
 
-		var src = _twig.twig({
-			data: templates.git_pull
-		}).render({
-			currentBranchName: currentBranchName
-		});
-		$elms.body.innerHTML = src;
+		new Promise(function(rlv){rlv();})
+			.then(function(){ return new Promise(function(rlv, rjt){
+				gitparse79.git(
+					['remote', '-v'],
+					function(result){
+						console.log(result);
+						git_remote = result;
+						rlv();
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				var src = _twig.twig({
+					data: templates.git_pull
+				}).render({
+					currentBranchName: currentBranchName,
+					remote: git_remote
+				});
+				$elms.body.innerHTML = src;
+				rlv();
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				$elms.body.querySelector('button').addEventListener('click', function(){
+					gitparse79.git(
+						['pull'],
+						function(result){
+							console.log(result);
+							// alert('refresh');
+							$elms.body.querySelector('.gitui79__result-stdout code').innerHTML = result.stdout;
+						}
+					);
+				});
+			}); })
+		;
 
-		$elms.body.querySelector('button').addEventListener('click', function(){
-			gitparse79.git(
-				['pull'],
-				function(result){
-					console.log(result);
-					// alert('refresh');
-					var src = '';
-					src += '<pre><code>';
-					src += '</code></pre>';
-					$elms.body.innerHTML = src;
-					$elms.body.getElementsByTagName('code')[0].innerHTML = result.stdout;
-				}
-			);
-		});
 	}
 
 	/**
@@ -342,27 +357,42 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	 */
 	this.pagePush = function(){
 		$elms.body.innerHTML = '';
+		var git_remote;
 
-		var src = _twig.twig({
-			data: templates.git_push
-		}).render({
-			currentBranchName: currentBranchName
-		});
-		$elms.body.innerHTML = src;
+		new Promise(function(rlv){rlv();})
+			.then(function(){ return new Promise(function(rlv, rjt){
+				gitparse79.git(
+					['remote', '-v'],
+					function(result){
+						console.log(result);
+						git_remote = result;
+						rlv();
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				var src = _twig.twig({
+					data: templates.git_push
+				}).render({
+					currentBranchName: currentBranchName,
+					remote: git_remote
+				});
+				$elms.body.innerHTML = src;
+				rlv();
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				$elms.body.querySelector('button').addEventListener('click', function(){
+					gitparse79.git(
+						['push', 'origin'],
+						function(result){
+							console.log(result);
+							// alert('refresh');
+							$elms.body.querySelector('.gitui79__result-stdout code').innerHTML = result.stdout;
+						}
+					);
+				});
+			}); })
+		;
 
-		$elms.body.querySelector('button').addEventListener('click', function(){
-			gitparse79.git(
-				['push'],
-				function(result){
-					console.log(result);
-					// alert('refresh');
-					var src = '';
-					src += '<pre><code>';
-					src += '</code></pre>';
-					$elms.body.innerHTML = src;
-					$elms.body.getElementsByTagName('code')[0].innerHTML = result.stdout;
-				}
-			);
-		});
 	}
 }
