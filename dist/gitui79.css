@@ -89,11 +89,11 @@
     padding: 0;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-direction: column;
-        flex-direction: column;
-    -ms-flex-align: end;
-        align-items: end; }
+    -ms-flex-direction: row;
+        flex-direction: row;
+    -ms-flex-pack: end;
+        justify-content: flex-end; }
     .gitui79__menu-list > li {
       list-style-type: none;
-      margin: 0;
+      margin: 2px 2px 0;
       padding: 0; }

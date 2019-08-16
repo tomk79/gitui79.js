@@ -265,7 +265,19 @@ window.GitUi79 = function($elm, fncCallGit, options){
 						var branchName = this.getAttribute('data-branch-name');
 						var method =  this.getAttribute('data-method');
 						// alert(branchName);
-						if( method == 'delete' ){
+						if( method == 'merge' ){
+							// ブランチをマージ
+							if( !confirm('ブランチ '+branchName+' を、 ' + currentBranchName + ' にマージしようとしています。' + "\n" + 'よろしいですか？') ){
+								return;
+							}
+							gitparse79.git(
+								['merge', branchName],
+								function(result){
+									console.log(result);
+									loadPage('branch');
+								}
+							);
+						}else if( method == 'delete' ){
 							// ブランチを削除
 							if( !confirm('ブランチ '+branchName+' を、削除してもよろしいですか？') ){
 								return;

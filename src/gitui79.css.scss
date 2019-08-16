@@ -121,11 +121,11 @@
 		margin: 0;
 		padding: 0;
 		display: flex;
-		flex-direction: column;
-		align-items: end;
+		flex-direction: row;
+		justify-content: flex-end;
 		> li{
 			list-style-type: none;
-			margin: 0;
+			margin: 2px 2px 0;
 			padding: 0;
 		}
 	}
