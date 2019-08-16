@@ -103,4 +103,30 @@
 			margin: 0 0 0.4em;
 		}
 	}
+
+	&__branch-list{
+		margin: 0;
+		padding: 0;
+		border-bottom: 1px solid #ddd;
+
+		> li{
+			list-style-type: none;
+			margin: 0 2px;
+			padding: 10px 20px;
+			border-top: 1px solid #ddd;
+		}
+	}
+
+	&__menu-list{
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: end;
+		> li{
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+		}
+	}
 }

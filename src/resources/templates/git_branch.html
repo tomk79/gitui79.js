@@ -1,12 +1,18 @@
 <section>
 	<h2>ブランチリスト</h2>
-	<ul>
+	<ul class="gitui79__branch-list">
 		{% for row in branch.branches %}
 		<li>
 			{% if row == currentBranchName %}
 			{{ row }}
+			<ul class="gitui79__menu-list">
+				<li><button class="px2-btn" disabled data-branch-name="{{ row }}" data-method="delete">削除</button></li>
+			</ul>
 			{% else %}
 			<a href="javascript:;" data-branch-name="{{ row }}">{{ row }}</a>
+			<ul class="gitui79__menu-list">
+				<li><button class="px2-btn px2-btn--danger" data-branch-name="{{ row }}" data-method="delete">削除</button></li>
+			</ul>
 			{% endif %}
 		</li>
 		{% endfor %}

@@ -75,3 +75,25 @@
       margin: 0; }
     .gitui79__commit-form p {
       margin: 0 0 0.4em; }
+  .gitui79__branch-list {
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #ddd; }
+    .gitui79__branch-list > li {
+      list-style-type: none;
+      margin: 0 2px;
+      padding: 10px 20px;
+      border-top: 1px solid #ddd; }
+  .gitui79__menu-list {
+    margin: 0;
+    padding: 0;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-align: end;
+        align-items: end; }
+    .gitui79__menu-list > li {
+      list-style-type: none;
+      margin: 0;
+      padding: 0; }

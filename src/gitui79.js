@@ -260,6 +260,26 @@ window.GitUi79 = function($elm, fncCallGit, options){
 						);
 					});
 				});
+				$elms.body.querySelectorAll('button[data-branch-name]').forEach(function(elm){
+					elm.addEventListener('click', function(){
+						var branchName = this.getAttribute('data-branch-name');
+						var method =  this.getAttribute('data-method');
+						// alert(branchName);
+						if( method == 'delete' ){
+							// ブランチを削除
+							if( !confirm('ブランチ '+branchName+' を、削除してもよろしいですか？') ){
+								return;
+							}
+							gitparse79.git(
+								['branch', '--delete', branchName],
+								function(result){
+									console.log(result);
+									loadPage('branch');
+								}
+							);
+						}
+					});
+				});
 
 				$elms.body.querySelector('form').addEventListener('submit', function(elm){
 					var newBranchName = this.querySelector('input[name=branch-name]').value;
