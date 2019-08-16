@@ -14,6 +14,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	var templates = {
 		"mainframe": require('./resources/templates/mainframe.html'),
 		"git_status": require('./resources/templates/git_status.html'),
+		"git_show": require('./resources/templates/git_show.html'),
 		"git_log": require('./resources/templates/git_log.html'),
 		"git_log_rows": require('./resources/templates/git_log_rows.html')
 	};
@@ -94,6 +95,16 @@ window.GitUi79 = function($elm, fncCallGit, options){
 				rlv();
 			}); })
 		;
+	}
+
+	function parseCommitMessage(message){
+		var msgLines = message.split(/\r\n|\r|\n/);
+		var title = msgLines.shift();
+		var body = msgLines.join("\n");
+		return {
+			title: title,
+			body: body
+		};
 	}
 
 	/**
@@ -185,6 +196,59 @@ window.GitUi79 = function($elm, fncCallGit, options){
 		var dpp = 50;
 		var currentPage = 0;
 
+		function appendLogList(git_log){
+			git_log.logs.forEach(function(log){
+				var parsedCommitMessage = parseCommitMessage(log.message);
+				log.messageTitle = parsedCommitMessage.title;
+				log.messageBody = parsedCommitMessage.body;
+			});
+			var src_rows = _twig.twig({
+				data: templates.git_log_rows
+			}).render({
+				log: git_log
+			});
+			$elms.body.querySelector('.gitui79__list-commit-logs').innerHTML += src_rows;
+			$elms.body.querySelectorAll('.gitui79__list-commit-logs a').forEach(function(elm){
+				elm.addEventListener('click', function(){
+					gitparse79.git(
+						['show', this.getAttribute('data-commit')],
+						function(result){
+							console.log(result);
+							var splitedCommitMessage = parseCommitMessage(result.message);
+							var src = _twig.twig({
+								data: templates.git_show
+							}).render({
+								commit: result,
+								title: splitedCommitMessage.title,
+								body: splitedCommitMessage.body
+							});
+							px2style.modal(
+								{
+									title: splitedCommitMessage.title,
+									body: src,
+									buttons: [
+										'<button type="submit" class="px2-btn px2-btn--primary">OK</button>'
+									],
+									form: {
+										action: 'javascript:;',
+										method: 'get',
+										submit: function(){
+											px2style.closeModal();
+										}
+									},
+									width: 700
+								},
+								function(){
+									console.log('done.');
+								}
+							);
+						}
+					);
+
+				});
+			});
+		}
+
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
 				gitparse79.git(
@@ -207,12 +271,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 				});
 				$elms.body.innerHTML = src;
 
-				var src_rows = _twig.twig({
-					data: templates.git_log_rows
-				}).render({
-					log: git_log
-				});
-				$elms.body.querySelector('.gitui79__list-commit-logs').innerHTML += src_rows;
+				appendLogList(git_log);
 
 				if( !git_log.logs.length || git_log.logs.length < dpp ){
 					document.querySelector('.gitui79__btn-block-next-page').style.display = 'none';
@@ -232,12 +291,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 							console.log(result);
 							git_log = result;
 
-							var src_rows = _twig.twig({
-								data: templates.git_log_rows
-							}).render({
-								log: git_log
-							});
-							$elms.body.querySelector('.gitui79__list-commit-logs').innerHTML += src_rows;
+							appendLogList(git_log);
 
 							if( !git_log.logs.length || git_log.logs.length < dpp ){
 								document.querySelector('.gitui79__btn-block-next-page').style.display = 'none';

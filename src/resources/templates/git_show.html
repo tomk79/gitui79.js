@@ -1,0 +1,29 @@
+<div class="px2-p">
+	{{ body }}
+</div>
+<div class="px2-p">
+	<table class="px2-table">
+		<tbody>
+			<tr>
+				<th>commit:</th>
+				<td>{{ commit.commit }}</td>
+			</tr>
+			<tr>
+				<th>committer:</th>
+				<td>{{ commit.author }} &lt;{{ commit.email }}</td>
+			</tr>
+			<tr>
+				<th>date:</th>
+				<td>{{ commit.date }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+
+<h2>変更履歴</h2>
+<ul class="gitui79__list-changes">
+	{% for file in commit.files %}
+	<li class="gitui79__list-changes-{{ file.type }}">{{ file.filename }}</li>
+	{% endfor %}
+</ul>
