@@ -15,6 +15,8 @@ window.GitUi79 = function($elm, fncCallGit, options){
 		"mainframe": require('./resources/templates/mainframe.html'),
 		"git_status": require('./resources/templates/git_status.html'),
 		"git_show": require('./resources/templates/git_show.html'),
+		"git_push": require('./resources/templates/git_push.html'),
+		"git_pull": require('./resources/templates/git_pull.html'),
 		"git_log": require('./resources/templates/git_log.html'),
 		"git_log_rows": require('./resources/templates/git_log_rows.html')
 	};
@@ -311,18 +313,28 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	 */
 	this.pagePull = function(){
 		$elms.body.innerHTML = '';
-		gitparse79.git(
-			['pull'],
-			function(result){
-				console.log(result);
-				// alert('refresh');
-				var src = '';
-				src += '<pre><code>';
-				src += '</code></pre>';
-				$elms.body.innerHTML = src;
-				$elms.body.getElementsByTagName('code')[0].innerHTML = result.stdout;
-			}
-		);
+
+		var src = _twig.twig({
+			data: templates.git_pull
+		}).render({
+			currentBranchName: currentBranchName
+		});
+		$elms.body.innerHTML = src;
+
+		$elms.body.querySelector('button').addEventListener('click', function(){
+			gitparse79.git(
+				['pull'],
+				function(result){
+					console.log(result);
+					// alert('refresh');
+					var src = '';
+					src += '<pre><code>';
+					src += '</code></pre>';
+					$elms.body.innerHTML = src;
+					$elms.body.getElementsByTagName('code')[0].innerHTML = result.stdout;
+				}
+			);
+		});
 	}
 
 	/**
@@ -330,17 +342,27 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	 */
 	this.pagePush = function(){
 		$elms.body.innerHTML = '';
-		gitparse79.git(
-			['push'],
-			function(result){
-				console.log(result);
-				// alert('refresh');
-				var src = '';
-				src += '<pre><code>';
-				src += '</code></pre>';
-				$elms.body.innerHTML = src;
-				$elms.body.getElementsByTagName('code')[0].innerHTML = result.stdout;
-			}
-		);
+
+		var src = _twig.twig({
+			data: templates.git_push
+		}).render({
+			currentBranchName: currentBranchName
+		});
+		$elms.body.innerHTML = src;
+
+		$elms.body.querySelector('button').addEventListener('click', function(){
+			gitparse79.git(
+				['push'],
+				function(result){
+					console.log(result);
+					// alert('refresh');
+					var src = '';
+					src += '<pre><code>';
+					src += '</code></pre>';
+					$elms.body.innerHTML = src;
+					$elms.body.getElementsByTagName('code')[0].innerHTML = result.stdout;
+				}
+			);
+		});
 	}
 }
