@@ -1,0 +1,26 @@
+<section>
+	<h2>ブランチリスト</h2>
+	<ul>
+		{% for row in branch.branches %}
+		<li>
+			{% if row == currentBranchName %}
+			{{ row }}
+			{% else %}
+			<a href="javascript:;" data-branch-name="{{ row }}">{{ row }}</a>
+			{% endif %}
+		</li>
+		{% endfor %}
+	</ul>
+</section>
+
+<section>
+	<h2>ブランチを作成する</h2>
+	<form action="javascript:;" method="get">
+		<div class="input-group mb-3">
+			<input type="text" name="branch-name" value="" class="form-control" />
+			<div class="input-group-append">
+				<button type="submit" class="px2-btn px2-btn--primary">作成する</button>
+			</div>
+		</div>
+	</form>
+</section>

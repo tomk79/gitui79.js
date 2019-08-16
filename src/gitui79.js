@@ -5,6 +5,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	var _this = this;
 	options = options || {};
 	options.committer = options.committer || {};
+	this.pages = {};
 
 	var gitparse79 = new window.GitParse79(fncCallGit);
 	var _twig = require('twig');
@@ -15,6 +16,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 		"mainframe": require('./resources/templates/mainframe.html'),
 		"git_status": require('./resources/templates/git_status.html'),
 		"git_show": require('./resources/templates/git_show.html'),
+		"git_branch": require('./resources/templates/git_branch.html'),
 		"git_push": require('./resources/templates/git_push.html'),
 		"git_pull": require('./resources/templates/git_pull.html'),
 		"git_log": require('./resources/templates/git_log.html'),
@@ -69,27 +71,33 @@ window.GitUi79 = function($elm, fncCallGit, options){
 				$elm.innerHTML = templates.mainframe;
 
 				// buttons
-				$elm.getElementsByClassName('gitui79__btn--status')[0].addEventListener('click', function(e){
-					_this.pageStatus();
+				$elm.querySelector('.gitui79__btn--status').addEventListener('click', function(e){
+					loadPage('status');
 				});
-				$elm.getElementsByClassName('gitui79__btn--log')[0].addEventListener('click', function(e){
-					_this.pageLog();
+				$elm.querySelector('.gitui79__btn--branch').addEventListener('click', function(e){
+					loadPage('branch');
 				});
-				$elm.getElementsByClassName('gitui79__btn--pull')[0].addEventListener('click', function(e){
-					_this.pagePull();
+				$elm.querySelector('.gitui79__btn--log').addEventListener('click', function(e){
+					loadPage('log');
 				});
-				$elm.getElementsByClassName('gitui79__btn--push')[0].addEventListener('click', function(e){
-					_this.pagePush();
+				$elm.querySelector('.gitui79__btn--pull').addEventListener('click', function(e){
+					loadPage('pull');
+				});
+				$elm.querySelector('.gitui79__btn--push').addEventListener('click', function(e){
+					loadPage('push');
 				});
 
 				// body
 				$elms.body = $elm.querySelector('.gitui79__body');
 
+				// tab
+				$elm.querySelector('.gitui79__btn--status').classList.add('active');
+
 				rlv();
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				// initialize page
-				_this.pageStatus();
+				_this.pages.status();
 				rlv();
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
@@ -99,6 +107,20 @@ window.GitUi79 = function($elm, fncCallGit, options){
 		;
 	}
 
+	/**
+	 * ページを開く
+	 */
+	function loadPage(pageName){
+		$elm.querySelectorAll('.gitui79__toolbar a').forEach(function(elm){
+			elm.classList.remove('active');
+		});
+		$elm.querySelector('.gitui79__btn--'+pageName).classList.add('active');
+		_this.pages[pageName]();
+	}
+
+	/**
+	 * コミットメッセージを解析する
+	 */
 	function parseCommitMessage(message){
 		var msgLines = message.split(/\r\n|\r|\n/);
 		var title = msgLines.shift();
@@ -112,7 +134,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	/**
 	 * page: status
 	 */
-	this.pageStatus = function(){
+	this.pages.status = function(){
 		$elms.body.innerHTML = '';
 		var git_status;
 
@@ -177,7 +199,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 								function(result){
 									console.log(result);
 									// alert('refresh');
-									_this.pageStatus();
+									_this.pages.status();
 								}
 							);
 						}
@@ -189,10 +211,80 @@ window.GitUi79 = function($elm, fncCallGit, options){
 		;
 	}
 
+
+	/**
+	 * page: branch
+	 */
+	this.pages.branch = function(){
+		$elms.body.innerHTML = '';
+		var git_branch;
+
+		new Promise(function(rlv){rlv();})
+			.then(function(){ return new Promise(function(rlv, rjt){
+				gitparse79.git(
+					['branch'],
+					function(result){
+						console.log(result);
+						git_branch = result;
+						rlv();
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				var src = _twig.twig({
+					data: templates.git_branch
+				}).render({
+					currentBranchName: currentBranchName,
+					branch: git_branch
+				});
+				$elms.body.innerHTML = src;
+
+				rlv();
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				$elms.body.querySelectorAll('a[data-branch-name]').forEach(function(elm){
+					elm.addEventListener('click', function(){
+						var branchName = this.getAttribute('data-branch-name');
+						// alert(branchName);
+						gitparse79.git(
+							['checkout', branchName],
+							function(result){
+								console.log(result);
+								if( result.result ){
+									currentBranchName = result.currentBranchName;
+									loadPage('branch');
+								}else{
+									alert('Failed.');
+								}
+							}
+						);
+					});
+				});
+
+				$elms.body.querySelector('form').addEventListener('submit', function(elm){
+					var newBranchName = this.querySelector('input[name=branch-name]').value;
+					// alert(newBranchName);
+					gitparse79.git(
+						['checkout', '-b', newBranchName],
+						function(result){
+							console.log(result);
+							if( result.result ){
+								currentBranchName = result.currentBranchName;
+								loadPage('branch');
+							}else{
+								alert('Failed.');
+							}
+						}
+					);
+				});
+			}); })
+		;
+	}
+
 	/**
 	 * page: log
 	 */
-	this.pageLog = function(){
+	this.pages.log = function(){
 		$elms.body.innerHTML = '';
 		var git_log;
 		var dpp = 50;
@@ -311,7 +403,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	/**
 	 * page: pull
 	 */
-	this.pagePull = function(){
+	this.pages.pull = function(){
 		$elms.body.innerHTML = '';
 		var git_remote;
 
@@ -355,7 +447,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	/**
 	 * page: push
 	 */
-	this.pagePush = function(){
+	this.pages.push = function(){
 		$elms.body.innerHTML = '';
 		var git_remote;
 
