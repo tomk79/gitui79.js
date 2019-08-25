@@ -1,0 +1,3 @@
+[submodule "submodules/node-git-parser"]
+	path = submodules/node-git-parser
+	url = https://github.com/tomk79/node-git-parser.git

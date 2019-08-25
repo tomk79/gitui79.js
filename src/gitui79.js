@@ -7,7 +7,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	options.committer = options.committer || {};
 	this.pages = {};
 
-	var gitparse79 = new window.GitParse79(fncCallGit);
+	var gitparse79 = new (require('gitparse79'))(fncCallGit);
 	var _twig = require('twig');
 
 	var $elms = {};
