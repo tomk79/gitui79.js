@@ -7,7 +7,7 @@
 		<ul>
 		{% for remote_row in remote.remotes %}
 		<li>{{ remote_row.name }}
-			<p>by {{ remote_row.fetch }}</p>
+			<div>{{ remote_row.fetch }}</div>
 		</li>
 		{% endfor %}
 		</ul>
