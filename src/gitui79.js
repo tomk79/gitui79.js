@@ -90,6 +90,9 @@ window.GitUi79 = function($elm, fncCallGit, options){
 				// body
 				$elms.body = $elm.querySelector('.gitui79__body');
 
+				// statusbar
+				$elms.statusbar = $elm.querySelector('.gitui79__statusbar');
+
 				// tab
 				$elm.querySelector('.gitui79__btn--status').classList.add('active');
 
@@ -137,6 +140,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	this.pages.status = function(){
 		$elms.body.innerHTML = '';
 		var git_status;
+		px2style.loading();
 
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
@@ -186,6 +190,12 @@ window.GitUi79 = function($elm, fncCallGit, options){
 						this.querySelector('textarea').focus();
 						return;
 					}
+					commitForm.querySelectorAll('input, button, select, textarea').forEach(function(elm){
+						elm.disabled = true;
+					});
+					px2style.loading();
+					px2style.loadingMessage('コミットしています...');
+
 					gitparse79.git(
 						['add', './'],
 						function(result){
@@ -198,14 +208,22 @@ window.GitUi79 = function($elm, fncCallGit, options){
 								],
 								function(result){
 									console.log(result);
-									// alert('refresh');
-									_this.pages.status();
+									_this.flashMessage('コミットしました。');
+									px2style.loadingMessage('コミットしました。');
+									setTimeout(function(){
+										px2style.closeLoading();
+										_this.pages.status();
+									}, 3000);
 								}
 							);
 						}
 					);
 
 				});
+				rlv();
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				px2style.closeLoading();
 				rlv();
 			}); })
 		;
@@ -321,6 +339,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 		var git_log;
 		var dpp = 50;
 		var currentPage = 0;
+		px2style.loading();
 
 		function appendLogList(git_log){
 			git_log.logs.forEach(function(log){
@@ -336,6 +355,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 			$elms.body.querySelector('.gitui79__list-commit-logs').innerHTML += src_rows;
 			$elms.body.querySelectorAll('.gitui79__list-commit-logs a').forEach(function(elm){
 				elm.addEventListener('click', function(){
+					px2style.loading();
 					gitparse79.git(
 						['show', this.getAttribute('data-commit')],
 						function(result){
@@ -365,6 +385,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 									width: 700
 								},
 								function(){
+									px2style.closeLoading();
 									console.log('done.');
 								}
 							);
@@ -408,6 +429,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 			.then(function(){ return new Promise(function(rlv, rjt){
 				var $btnNext = document.querySelector('.gitui79__btn-block-next-page button');
 				$btnNext.addEventListener('click', function(){
+					px2style.loading();
 					var _this = this;
 					_this.disabled = true;
 					currentPage ++;
@@ -423,10 +445,17 @@ window.GitUi79 = function($elm, fncCallGit, options){
 								document.querySelector('.gitui79__btn-block-next-page').style.display = 'none';
 							}
 							_this.disabled = false;
+
+							px2style.closeLoading();
 							rlv();
 						}
 					);
 				});
+
+				rlv();
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				px2style.closeLoading();
 				rlv();
 			}); })
 		;
@@ -518,5 +547,19 @@ window.GitUi79 = function($elm, fncCallGit, options){
 			}); })
 		;
 
+	}
+
+
+	/**
+	 * フラッシュメッセージを表示する
+	 */
+	this.flashMessage = function( message, callback ){
+		callback = callback || function(){}
+		console.info(message);
+		// $elms.statusbar.innerText = message;
+		// setTimeout(function(){
+		// 	$elms.statusbar.innerText = '';
+		// }, 5000);
+		callback();
 	}
 }
