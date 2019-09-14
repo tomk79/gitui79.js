@@ -467,6 +467,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	this.pages.pull = function(){
 		$elms.body.innerHTML = '';
 		var git_remote;
+		px2style.loading();
 
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
@@ -487,19 +488,39 @@ window.GitUi79 = function($elm, fncCallGit, options){
 					remote: git_remote
 				});
 				$elms.body.innerHTML = src;
+
+				if( !git_remote.remotes.length ){
+					$elms.body.querySelectorAll('button').forEach(function(elm){
+						elm.disabled = true;
+					});
+				}
 				rlv();
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				$elms.body.querySelector('button').addEventListener('click', function(){
+					px2style.loading();
+					var formElements = $elms.body.querySelectorAll('button');
+					formElements.forEach(function(elm){
+						elm.disabled = true;
+					});
 					gitparse79.git(
 						['pull'],
 						function(result){
 							console.log(result);
 							// alert('refresh');
 							$elms.body.querySelector('.gitui79__result-stdout code').innerHTML = result.stdout;
+							formElements.forEach(function(elm){
+								elm.disabled = false;
+							});
+							px2style.closeLoading();
 						}
 					);
 				});
+				rlv();
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				px2style.closeLoading();
+				rlv();
 			}); })
 		;
 
@@ -511,6 +532,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 	this.pages.push = function(){
 		$elms.body.innerHTML = '';
 		var git_remote;
+		px2style.loading();
 
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
@@ -531,19 +553,39 @@ window.GitUi79 = function($elm, fncCallGit, options){
 					remote: git_remote
 				});
 				$elms.body.innerHTML = src;
+
+				if( !git_remote.remotes.length ){
+					$elms.body.querySelectorAll('button').forEach(function(elm){
+						elm.disabled = true;
+					});
+				}
 				rlv();
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				$elms.body.querySelector('button').addEventListener('click', function(){
+					px2style.loading();
+					var formElements = $elms.body.querySelectorAll('button');
+					formElements.forEach(function(elm){
+						elm.disabled = true;
+					});
 					gitparse79.git(
 						['push', 'origin'],
 						function(result){
 							console.log(result);
 							// alert('refresh');
 							$elms.body.querySelector('.gitui79__result-stdout code').innerHTML = result.stdout;
+							formElements.forEach(function(elm){
+								elm.disabled = false;
+							});
+							px2style.closeLoading();
 						}
 					);
 				});
+				rlv();
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				px2style.closeLoading();
+				rlv();
 			}); })
 		;
 

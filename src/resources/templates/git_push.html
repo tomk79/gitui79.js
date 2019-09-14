@@ -3,7 +3,17 @@
 </section>
 
 <section>
-	<pre><code>{{ remote.stdout }}</code></pre>
+	{% if remote.remotes.length %}
+		<ul>
+		{% for remote_row in remote.remotes %}
+		<li>{{ remote_row.name }}
+			<p>by {{ remote_row.push }}</p>
+		</li>
+		{% endfor %}
+		</ul>
+	{% else %}
+		<pre><code>{{ remote.stdout }}</code></pre>
+	{% endif %}
 	<div><button class="px2-btn px2-btn--primary">プッシュする</button></div>
 	<pre class="gitui79__result-stdout"><code></code></pre>
 </section>
