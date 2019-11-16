@@ -6,7 +6,7 @@
 	{% if remote.remotes.length %}
 		<ul>
 		{% for remote_row in remote.remotes %}
-		<li>{{ remote_row.name }}
+		<li><label><input type="radio" name="remote_name" value="{{ remote_row.name }}"{% if remote_row.name == "origin" %} checked{% endif %} /> {{ remote_row.name }}</label>
 			<div>{{ remote_row.push }}</div>
 		</li>
 		{% endfor %}

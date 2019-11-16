@@ -503,8 +503,19 @@ window.GitUi79 = function($elm, fncCallGit, options){
 					formElements.forEach(function(elm){
 						elm.disabled = true;
 					});
+
+					var remoteName = $elms.body.querySelector('input[type=radio][name=remote_name]:checked').value;
+					if( !remoteName ){
+						alert('Select remote.');
+						formElements.forEach(function(elm){
+							elm.disabled = false;
+						});
+						px2style.closeLoading();
+						return;
+					}
+
 					gitparse79.git(
-						['pull'],
+						['pull', remoteName, currentBranchName+':'+currentBranchName],
 						function(result){
 							console.log(result);
 							// alert('refresh');
@@ -568,8 +579,19 @@ window.GitUi79 = function($elm, fncCallGit, options){
 					formElements.forEach(function(elm){
 						elm.disabled = true;
 					});
+
+					var remoteName = $elms.body.querySelector('input[type=radio][name=remote_name]:checked').value;
+					if( !remoteName ){
+						alert('Select remote.');
+						formElements.forEach(function(elm){
+							elm.disabled = false;
+						});
+						px2style.closeLoading();
+						return;
+					}
+
 					gitparse79.git(
-						['push', 'origin'],
+						['push', remoteName, currentBranchName+':'+currentBranchName],
 						function(result){
 							console.log(result);
 							// alert('refresh');
