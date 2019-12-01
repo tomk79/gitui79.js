@@ -145,7 +145,7 @@ window.GitUi79 = function($elm, fncCallGit, options){
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
 				gitparse79.git(
-					['status'],
+					['status', '-uall'],
 					function(result){
 						console.log(result);
 						git_status = result;
