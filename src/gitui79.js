@@ -264,18 +264,39 @@ window.GitUi79 = function($elm, fncCallGit, options){
 					elm.addEventListener('click', function(){
 						var branchName = this.getAttribute('data-branch-name');
 						// alert(branchName);
-						gitparse79.git(
-							['checkout', branchName],
-							function(result){
-								console.log(result);
-								if( result.result ){
-									currentBranchName = result.currentBranchName;
-									loadPage('branch');
-								}else{
-									alert('Failed.');
+						if( branchName.match(/^remotes\//) ){
+							// alert('remotes!');
+							var remoteBranchName = branchName.replace(/^remotes\//, '');
+							var localBranchName = branchName.replace(/^remotes\/[^\/]*?\//, '');
+							// alert(remoteBranchName);
+							// alert(localBranchName);
+							// return;
+							gitparse79.git(
+								['checkout', '-b', localBranchName, remoteBranchName],
+								function(result){
+									console.log(result);
+									if( result.result ){
+										currentBranchName = result.currentBranchName;
+										loadPage('branch');
+									}else{
+										alert('Failed.');
+									}
 								}
-							}
-						);
+							);
+						}else{
+							gitparse79.git(
+								['checkout', branchName],
+								function(result){
+									console.log(result);
+									if( result.result ){
+										currentBranchName = result.currentBranchName;
+										loadPage('branch');
+									}else{
+										alert('Failed.');
+									}
+								}
+							);
+						}
 					});
 				});
 				$elms.body.querySelectorAll('button[data-branch-name]').forEach(function(elm){
@@ -292,6 +313,11 @@ window.GitUi79 = function($elm, fncCallGit, options){
 								['merge', branchName],
 								function(result){
 									console.log(result);
+									if(result.code){
+										alert(result.stdout);
+									}else{
+										alert('Success!');
+									}
 									loadPage('branch');
 								}
 							);
@@ -300,19 +326,48 @@ window.GitUi79 = function($elm, fncCallGit, options){
 							if( !confirm('ブランチ '+branchName+' を、削除してもよろしいですか？') ){
 								return;
 							}
-							gitparse79.git(
-								['branch', '--delete', branchName],
-								function(result){
-									console.log(result);
-									loadPage('branch');
-								}
-							);
+							if( branchName.match(/^remotes\//) ){
+								// alert('remotes!');
+								var remoteName = branchName.replace(/^remotes\/([^\/]*?)\/[\s\S]*$/, '$1');
+								var localBranchName = branchName.replace(/^remotes\/[^\/]*?\//, '');
+								// alert(remoteName);
+								// alert(localBranchName);
+								gitparse79.git(
+									['push', '--delete', remoteName, localBranchName],
+									function(result){
+										console.log(result);
+										if(result.code){
+											alert(result.stdout);
+										}
+										loadPage('branch');
+									}
+								);
+							}else{
+								gitparse79.git(
+									['branch', '--delete', branchName],
+									function(result){
+										console.log(result);
+										if(result.code){
+											alert(result.stdout);
+										}
+										loadPage('branch');
+									}
+								);
+							}
 						}
 					});
 				});
 
 				$elms.body.querySelector('form').addEventListener('submit', function(elm){
 					var newBranchName = this.querySelector('input[name=branch-name]').value;
+					if( newBranchName.match(/^remotes/i) ){
+						alert('remotes で始まる名前は使えません。');
+						return;
+					}
+					if( newBranchName.match(/(?:\s|　)/i) ){
+						alert('ブランチ名にスペースや空白文字を含めることはできません。');
+						return;
+					}
 					// alert(newBranchName);
 					gitparse79.git(
 						['checkout', '-b', newBranchName],

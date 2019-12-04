@@ -68,3 +68,4 @@ typings/
 
 # project
 tests/data/
+tests/remote/
