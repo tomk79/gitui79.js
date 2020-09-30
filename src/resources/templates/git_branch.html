@@ -26,10 +26,14 @@
 	<ul class="gitui79__branch-list">
 		{% for row in branch.remoteBranches %}
 		<li>
-			<a href="javascript:;" data-branch-name="{{ row }}">{{ row }}</a>
+			{% if checkoutedRemoteBranches[row] %}
+			{{ row }}
+			{% else %}
+			<a href="javascript:;" data-branch-name="remotes/{{ row }}">{{ row }}</a>
+			{% endif %}
 			<ul class="gitui79__menu-list">
-				<li><button class="px2-btn px2-btn--default" data-branch-name="{{ row }}" data-method="merge">マージ</button></li>
-				<li><button class="px2-btn px2-btn--danger" data-branch-name="{{ row }}" data-method="delete">削除</button></li>
+				<li><button class="px2-btn px2-btn--default" data-branch-name="remotes/{{ row }}" data-method="merge">マージ</button></li>
+				<li><button class="px2-btn px2-btn--danger" data-branch-name="remotes/{{ row }}" data-method="delete">削除</button></li>
 			</ul>
 		</li>
 		{% endfor %}
