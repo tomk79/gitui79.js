@@ -43,7 +43,32 @@ module.exports = function(main, $elms, gitparse79){
 						if( !confirm('変更を取り消し、元に戻します。よろしいですか？') ){
 							return;
 						}
-						alert('[ERROR] 開発中の機能です。');
+						new Promise(function(rlv){rlv();})
+							.then(function(){ return new Promise(function(rlv, rjt){
+								if( status == 'untracked' ){
+									gitparse79.git(
+										['clean', '-f', file],
+										function(result){
+											// console.log(result);
+											rlv();
+										}
+									);
+									rlv();
+								}else{
+									gitparse79.git(
+										['checkout', 'HEAD', '--', file],
+										function(result){
+											// console.log(result);
+											rlv();
+										}
+									);
+								}
+							}); })
+							.then(function(){ return new Promise(function(rlv, rjt){
+								px2style.closeModal();
+								main.pages.load('status');
+							}); })
+						;
 					})
 				;
 
