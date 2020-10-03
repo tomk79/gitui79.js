@@ -45,6 +45,21 @@ module.exports = function(main, $elms, gitparse79){
 						}
 						new Promise(function(rlv){rlv();})
 							.then(function(){ return new Promise(function(rlv, rjt){
+								if( status != 'untracked' || isStaged != 'staged' ){
+									rlv();
+									return;
+								}
+								// ステージング済みの新規ファイルは、
+								// 一旦 unstage する。
+								gitparse79.git(
+									['reset', 'HEAD', file],
+									function(result){
+										// console.log(result);
+										rlv();
+									}
+								);
+							}); })
+							.then(function(){ return new Promise(function(rlv, rjt){
 								if( status == 'untracked' ){
 									gitparse79.git(
 										['clean', '-f', file],
