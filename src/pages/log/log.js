@@ -51,7 +51,8 @@ module.exports = function(main, $elms, gitparse79){
 				$body.find('.gitui79__list-changes a')
 					.on('click', function(){
 						var file = $(this).attr('data-file');
-						showCommitFile(file);
+						var status = $(this).attr('data-status');
+						showCommitFile(commit, file, status);
 					})
 				;
 			}
@@ -60,7 +61,7 @@ module.exports = function(main, $elms, gitparse79){
 
 	// --------------------------------------
 	// コミットに含まれるファイルの情報を表示する
-	function showCommitFile(file){
+	function showCommitFile(commit, file, status){
 		px2style.loading();
 
 		var $body = $('<div>').text(file);
@@ -73,6 +74,18 @@ module.exports = function(main, $elms, gitparse79){
 						body: $body,
 						buttons: [
 							'<button type="submit" class="px2-btn px2-btn--primary">OK</button>'
+						],
+						buttonsSecondary: [
+							$('<button>')
+								.text('このバージョンに戻す')
+								.addClass('px2-btn')
+								.attr('type', 'button')
+								.on('click', function(){
+									if( !confirm('選択したファイルのバージョンを戻します。コミットされていない変更がある場合は、破棄されます。続けますか？') ){
+										return;
+									}
+									rollbackFile(commit, file, status);
+								})
 						],
 						form: {
 							action: 'javascript:;',
@@ -91,6 +104,58 @@ module.exports = function(main, $elms, gitparse79){
 			}); })
 		;
 	}
+
+	// --------------------------------------
+	// ファイルをコミット時点の状態までロールバックする
+	function rollbackFile(commit, file, status){
+		px2style.loading();
+		console.log(commit, file, status);
+
+		new Promise(function(rlv){rlv();})
+			.then(function(){ return new Promise(function(rlv, rjt){
+				// rollback
+				if( status == 'deleted' ){
+					gitparse79.git(
+						['rm', file],
+						function(result){
+							// console.log(result);
+							rlv();
+							return;
+						}
+					);
+					return;
+				}else{
+					gitparse79.git(
+						['checkout', commit, file],
+						function(result){
+							// console.log(result);
+							rlv();
+							return;
+						}
+					);
+				}
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				// unstage
+				gitparse79.git(
+					['reset', 'HEAD', file],
+					function(result){
+						// console.log(result);
+						rlv();
+						return;
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				px2style.closeLoading();
+				console.log('done.');
+				alert('ファイル '+file+' のバージョンを戻しました。');
+				rlv();
+			}); })
+		;
+
+	}
+
 
 	return function(){
 		$elms.body.innerHTML = '';
