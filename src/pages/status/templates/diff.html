@@ -1,6 +1,8 @@
-<ul>
-    <li>file: <code>{{ file }}</code></li>
-    <li>status: <code>{{ status }}</code></li>
-    <li>is staged: <code>{{ isStaged }}</code></li>
-</ul>
+<table class="px2-table">
+    <tr><th>file</th><td>{{ file }}</td></tr>
+    <tr><th>status</th><td>{{ status }}</td></tr>
+    <tr><th>is staged</th><td>{{ isStaged }}</td></tr>
+</table>
+
+<h2>差分</h2>
 <pre><code>{{ code|e }}</code></pre>

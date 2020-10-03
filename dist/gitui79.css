@@ -17,6 +17,12 @@
     font-size: medium;
     font-weight: bold;
     margin: 0.5em 0; }
+  .gitui79 pre code {
+    display: block;
+    padding: 1em;
+    overflow: auto;
+    background-color: #f9f9f9;
+    border: 1px solid #e9e9e9; }
   .gitui79__toolbar {
     padding: 5px 10px; }
     .gitui79__toolbar ul {

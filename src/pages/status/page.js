@@ -8,6 +8,8 @@ module.exports = function(main, $elms, gitparse79){
 		"diff": require('./templates/diff.html')
 	};
 
+	// --------------------------------------
+	// 差分を表示する
 	function showDiff( file, status, isStaged ){
 		var diffInfo;
 		px2style.loading();
@@ -32,7 +34,18 @@ module.exports = function(main, $elms, gitparse79){
 					isStaged: isStaged,
 					code: diffInfo.stdout
 				});
-				var $body = $(src);
+				var $body = $('<div>').addClass('gitui79').append(src);
+				var $rollbackButton = $('<button>')
+					.text('この変更を取り消す')
+					.addClass('px2-btn')
+					.attr('type', 'button')
+					.on('click', function(){
+						if( !confirm('変更を取り消し、元に戻します。よろしいですか？') ){
+							return;
+						}
+						alert('[ERROR] 開発中の機能です。');
+					})
+				;
 
 				px2style.modal(
 					{
@@ -40,6 +53,9 @@ module.exports = function(main, $elms, gitparse79){
 						body: $body,
 						buttons: [
 							'<button type="submit" class="px2-btn px2-btn--primary">OK</button>'
+						],
+						buttonsSecondary: [
+							$rollbackButton
 						],
 						form: {
 							action: 'javascript:;',
@@ -52,13 +68,17 @@ module.exports = function(main, $elms, gitparse79){
 					},
 					function(){
 						px2style.closeLoading();
-						console.log('done.');
 					}
 				);
+
 			}); })
 		;
 		return;
 	}
+
+
+
+
 
 	return function(){
 		$elms.body.innerHTML = '';
