@@ -21,27 +21,27 @@ module.exports = function(main, gitparse79, $elms, templates){
 	/**
 	 * page: status
 	 */
-	this.pages.status = require('../pages/status/page.js')(main, $elms, gitparse79);
+	this.pages.status = require('../pages/status/status.js')(main, $elms, gitparse79);
 
 	/**
 	 * page: branch
 	 */
-	this.pages.branch = require('./pages/branch.js')(main, $elms, templates, gitparse79);
+	this.pages.branch = require('../pages/branch/branch.js')(main, $elms, gitparse79);
 
 	/**
 	 * page: log
 	 */
-	this.pages.log = require('./pages/log.js')(main, $elms, templates, gitparse79);
+	this.pages.log = require('../pages/log/log.js')(main, $elms, gitparse79);
 
 	/**
 	 * page: pull
 	 */
-	this.pages.pull = require('./pages/pull.js')(main, $elms, templates, gitparse79);
+	this.pages.pull = require('../pages/pull/pull.js')(main, $elms, gitparse79);
 
 	/**
 	 * page: push
 	 */
-	this.pages.push = require('./pages/push.js')(main, $elms, templates, gitparse79);
+	this.pages.push = require('../pages/push/push.js')(main, $elms, gitparse79);
 
 
 }

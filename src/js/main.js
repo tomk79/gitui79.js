@@ -11,13 +11,7 @@ module.exports = function($elm, fncCallGit, options){
 	var $elms = {};
 
 	var templates = {
-		"mainframe": require('../resources/templates/mainframe.html'),
-		"git_show": require('../resources/templates/git_show.html'),
-		"git_branch": require('../resources/templates/git_branch.html'),
-		"git_push": require('../resources/templates/git_push.html'),
-		"git_pull": require('../resources/templates/git_pull.html'),
-		"git_log": require('../resources/templates/git_log.html'),
-		"git_log_rows": require('../resources/templates/git_log_rows.html')
+		"mainframe": require('../resources/templates/mainframe.html')
 	};
 
 	var committer = {

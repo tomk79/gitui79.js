@@ -1,8 +1,11 @@
 /**
  * page: branch
  */
-module.exports = function(main, $elms, templates, gitparse79){
+module.exports = function(main, $elms, gitparse79){
 	var _twig = require('twig');
+	var templates = {
+		"git_branch": require('./templates/git_branch.html')
+	};
 
 	return function(){
 

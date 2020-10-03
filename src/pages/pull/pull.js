@@ -1,8 +1,11 @@
 /**
- * page: push
+ * page: pull
  */
-module.exports = function(main, $elms, templates, gitparse79){
+module.exports = function(main, $elms, gitparse79){
 	var _twig = require('twig');
+	var templates = {
+		"git_pull": require('./templates/git_pull.html')
+	};
 
 	return function(){
 		$elms.body.innerHTML = '';
@@ -22,7 +25,7 @@ module.exports = function(main, $elms, templates, gitparse79){
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				var src = _twig.twig({
-					data: templates.git_push
+					data: templates.git_pull
 				}).render({
 					currentBranchName: main.getCurrentBranchName(),
 					remote: git_remote
@@ -55,7 +58,7 @@ module.exports = function(main, $elms, templates, gitparse79){
 					}
 
 					gitparse79.git(
-						['push', remoteName, main.getCurrentBranchName()+':'+main.getCurrentBranchName()],
+						['pull', remoteName, main.getCurrentBranchName()+':'+main.getCurrentBranchName()],
 						function(result){
 							console.log(result);
 							// alert('refresh');

@@ -1,8 +1,13 @@
 /**
  * page: log
  */
-module.exports = function(main, $elms, templates, gitparse79){
+module.exports = function(main, $elms, gitparse79){
 	var _twig = require('twig');
+	var templates = {
+		"git_show": require('./templates/git_show.html'),
+		"git_log": require('./templates/git_log.html'),
+		"git_log_rows": require('./templates/git_log_rows.html')
+	};
 
 	return function(){
 		$elms.body.innerHTML = '';
