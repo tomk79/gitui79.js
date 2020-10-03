@@ -13,22 +13,22 @@
 %}
 	<ul class="gitui79__list-changes">
 {% for file in status.notStaged.untracked %}
-		<li class="gitui79__list-changes-untracked">{{ file }}</li>
+		<li class="gitui79__list-changes-untracked"><a href="javascript:;" data-file="{{ file }}" data-status="untracked" data-is-staged="noStaged">{{ file }}</a></li>
 {% endfor %}
 {% for file in status.notStaged.modified %}
-		<li class="gitui79__list-changes-modified">{{ file }}</li>
+		<li class="gitui79__list-changes-modified"><a href="javascript:;" data-file="{{ file }}" data-status="modified" data-is-staged="noStaged">{{ file }}</a></li>
 {% endfor %}
 {% for file in status.notStaged.deleted %}
-		<li class="gitui79__list-changes-deleted">{{ file }}</li>
+		<li class="gitui79__list-changes-deleted"><a href="javascript:;" data-file="{{ file }}" data-status="deleted" data-is-staged="noStaged">{{ file }}</a></li>
 {% endfor %}
 {% for file in status.staged.untracked %}
-		<li class="gitui79__list-changes-staged gitui79__list-changes-untracked">{{ file }}</li>
+		<li class="gitui79__list-changes-staged gitui79__list-changes-untracked"><a href="javascript:;" data-file="{{ file }}" data-status="untracked" data-is-staged="staged">{{ file }}</a></li>
 {% endfor %}
 {% for file in status.staged.modified %}
-		<li class="gitui79__list-changes-staged gitui79__list-changes-modified">{{ file }}</li>
+		<li class="gitui79__list-changes-staged gitui79__list-changes-modified"><a href="javascript:;" data-file="{{ file }}" data-status="modified" data-is-staged="staged">{{ file }}</a></li>
 {% endfor %}
 {% for file in status.staged.deleted %}
-		<li class="gitui79__list-changes-staged gitui79__list-changes-deleted">{{ file }}</li>
+		<li class="gitui79__list-changes-staged gitui79__list-changes-deleted"><a href="javascript:;" data-file="{{ file }}" data-status="deleted" data-is-staged="staged">{{ file }}</a></li>
 {% endfor %}
 	</ul>
 	<div class="clearfix px2-p gitui79__btn-block-open-commit-form">

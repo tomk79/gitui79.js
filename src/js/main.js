@@ -12,7 +12,6 @@ module.exports = function($elm, fncCallGit, options){
 
 	var templates = {
 		"mainframe": require('../resources/templates/mainframe.html'),
-		"git_status": require('../resources/templates/git_status.html'),
 		"git_show": require('../resources/templates/git_show.html'),
 		"git_branch": require('../resources/templates/git_branch.html'),
 		"git_push": require('../resources/templates/git_push.html'),

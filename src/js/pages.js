@@ -21,7 +21,7 @@ module.exports = function(main, gitparse79, $elms, templates){
 	/**
 	 * page: status
 	 */
-	this.pages.status = require('./pages/status.js')(main, $elms, templates, gitparse79);
+	this.pages.status = require('../pages/status/page.js')(main, $elms, gitparse79);
 
 	/**
 	 * page: branch
