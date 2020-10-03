@@ -1,8 +1,19 @@
-<table class="px2-table">
-    <tr><th>file</th><td>{{ file }}</td></tr>
-    <tr><th>status</th><td>{{ status }}</td></tr>
-    <tr><th>is staged</th><td>{{ isStaged }}</td></tr>
-</table>
+<div class="px2-p">
+    <table class="px2-table">
+        <tr>
+            <th>file</th>
+            <td>{{ file|e }}</td>
+        </tr>
+        <tr>
+            <th>status</th>
+            <td>{{ status|e }}</td>
+        </tr>
+        <tr>
+            <th>is staged</th>
+            <td>{{ isStaged|e }}</td>
+        </tr>
+    </table>
+</div>
 
 <h2>差分</h2>
 <pre><code>{{ code|e }}</code></pre>

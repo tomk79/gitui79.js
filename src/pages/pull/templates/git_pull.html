@@ -1,18 +1,18 @@
 <section class="gitui79__current-branch-name">
-	<p>Branch: <q>{{ currentBranchName }}</q></p>
+	<p>Branch: <q>{{ currentBranchName|e }}</q></p>
 </section>
 
 <section>
 	{% if remote.remotes.length %}
 		<ul>
 		{% for remote_row in remote.remotes %}
-		<li><label><input type="radio" name="remote_name" value="{{ remote_row.name }}"{% if remote_row.name == "origin" %} checked{% endif %} /> {{ remote_row.name }}</label>
-			<div>{{ remote_row.fetch }}</div>
+		<li><label><input type="radio" name="remote_name" value="{{ remote_row.name|e }}"{% if remote_row.name == "origin" %} checked{% endif %} /> {{ remote_row.name|e }}</label>
+			<div>{{ remote_row.fetch|e }}</div>
 		</li>
 		{% endfor %}
 		</ul>
 	{% else %}
-		<pre><code>{{ remote.stdout }}</code></pre>
+		<pre><code>{{ remote.stdout|e }}</code></pre>
 	{% endif %}
 	<div><button class="px2-btn px2-btn--primary">プルする</button></div>
 	<pre class="gitui79__result-stdout"><code></code></pre>

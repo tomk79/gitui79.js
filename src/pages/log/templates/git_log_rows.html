@@ -1,5 +1,5 @@
 {% for commit in log.logs %}
-<li><h3><a href="javascript:;" data-commit="{{ commit.commit }}">{{ commit.messageTitle }}</a></h3>
-	<p>by {{ commit.author }} &lt;{{ commit.email }}&gt; at {{ commit.date }}</p>
+<li><h3><a href="javascript:;" data-commit="{{ commit.commit|e }}">{{ commit.messageTitle|e }}</a></h3>
+	<p>by {{ commit.author|e }} &lt;{{ commit.email|e }}&gt; at {{ commit.date|e }}</p>
 </li>
 {% endfor %}

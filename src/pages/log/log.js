@@ -9,6 +9,89 @@ module.exports = function(main, $elms, gitparse79){
 		"git_log_rows": require('./templates/git_log_rows.html')
 	};
 
+
+	// --------------------------------------
+	// コミットの詳細を表示する
+	function showCommitDetails( commit ){
+		px2style.loading();
+		gitparse79.git(
+			['show', commit],
+			function(result){
+				console.log(result);
+				var splitedCommitMessage = main.parseCommitMessage(result.message);
+				var src = _twig.twig({
+					data: templates.git_show
+				}).render({
+					commit: result,
+					title: splitedCommitMessage.title,
+					body: splitedCommitMessage.body
+				});
+				var $body = $('<div>').html(src);
+				px2style.modal(
+					{
+						title: splitedCommitMessage.title,
+						body: $body,
+						buttons: [
+							'<button type="submit" class="px2-btn px2-btn--primary">OK</button>'
+						],
+						form: {
+							action: 'javascript:;',
+							method: 'get',
+							submit: function(){
+								px2style.closeModal();
+							}
+						},
+						width: 700
+					},
+					function(){
+						px2style.closeLoading();
+						console.log('done.');
+					}
+				);
+				$body.find('.gitui79__list-changes a')
+					.on('click', function(){
+						var file = $(this).attr('data-file');
+						showCommitFile(file);
+					})
+				;
+			}
+		);
+	}
+
+	// --------------------------------------
+	// コミットに含まれるファイルの情報を表示する
+	function showCommitFile(file){
+		px2style.loading();
+
+		var $body = $('<div>').text(file);
+
+		new Promise(function(rlv){rlv();})
+			.then(function(){ return new Promise(function(rlv, rjt){
+				px2style.modal(
+					{
+						title: file,
+						body: $body,
+						buttons: [
+							'<button type="submit" class="px2-btn px2-btn--primary">OK</button>'
+						],
+						form: {
+							action: 'javascript:;',
+							method: 'get',
+							submit: function(){
+								px2style.closeModal();
+							}
+						},
+						width: 500
+					},
+					function(){
+						px2style.closeLoading();
+						console.log('done.');
+					}
+				);
+			}); })
+		;
+	}
+
 	return function(){
 		$elms.body.innerHTML = '';
 		var git_log;
@@ -30,43 +113,8 @@ module.exports = function(main, $elms, gitparse79){
 			$elms.body.querySelector('.gitui79__list-commit-logs').innerHTML += src_rows;
 			$elms.body.querySelectorAll('.gitui79__list-commit-logs a').forEach(function(elm){
 				elm.addEventListener('click', function(){
-					px2style.loading();
-					gitparse79.git(
-						['show', this.getAttribute('data-commit')],
-						function(result){
-							console.log(result);
-							var splitedCommitMessage = main.parseCommitMessage(result.message);
-							var src = _twig.twig({
-								data: templates.git_show
-							}).render({
-								commit: result,
-								title: splitedCommitMessage.title,
-								body: splitedCommitMessage.body
-							});
-							px2style.modal(
-								{
-									title: splitedCommitMessage.title,
-									body: src,
-									buttons: [
-										'<button type="submit" class="px2-btn px2-btn--primary">OK</button>'
-									],
-									form: {
-										action: 'javascript:;',
-										method: 'get',
-										submit: function(){
-											px2style.closeModal();
-										}
-									},
-									width: 700
-								},
-								function(){
-									px2style.closeLoading();
-									console.log('done.');
-								}
-							);
-						}
-					);
-
+					var commit = this.getAttribute('data-commit');
+					showCommitDetails(commit);
 				});
 			});
 		}

@@ -71,7 +71,7 @@ module.exports = function(main, $elms, gitparse79){
 									rlv();
 								}else{
 									gitparse79.git(
-										['checkout', 'HEAD', '--', file],
+										['checkout', 'HEAD', file],
 										function(result){
 											// console.log(result);
 											rlv();

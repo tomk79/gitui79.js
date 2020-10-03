@@ -6,15 +6,15 @@
 		<tbody>
 			<tr>
 				<th>commit:</th>
-				<td>{{ commit.commit }}</td>
+				<td>{{ commit.commit|e }}</td>
 			</tr>
 			<tr>
 				<th>committer:</th>
-				<td>{{ commit.author }} &lt;{{ commit.email }}&gt;</td>
+				<td>{{ commit.author|e }} &lt;{{ commit.email|e }}&gt;</td>
 			</tr>
 			<tr>
 				<th>date:</th>
-				<td>{{ commit.date }}</td>
+				<td>{{ commit.date|e }}</td>
 			</tr>
 		</tbody>
 	</table>
@@ -24,6 +24,6 @@
 <h2>変更履歴</h2>
 <ul class="gitui79__list-changes">
 	{% for file in commit.files %}
-	<li class="gitui79__list-changes-{{ file.type }}">{{ file.filename }}</li>
+	<li class="gitui79__list-changes-{{ file.type }}"><a href="javascript:;" data-file="{{ file.filename|e }}" data-status="{{ file.type|e }}">{{ file.filename|e }}</a></li>
 	{% endfor %}
 </ul>

@@ -4,16 +4,16 @@
 		{% for row in branch.localBranches %}
 		<li>
 			{% if row == currentBranchName %}
-			{{ row }}
+			{{ row|e }}
 			<ul class="gitui79__menu-list">
 				<li><button class="px2-btn" disabled>マージ</button></li>
 				<li><button class="px2-btn" disabled>削除</button></li>
 			</ul>
 			{% else %}
-			<a href="javascript:;" data-branch-name="{{ row }}">{{ row }}</a>
+			<a href="javascript:;" data-branch-name="{{ row|e }}">{{ row|e }}</a>
 			<ul class="gitui79__menu-list">
-				<li><button class="px2-btn px2-btn--default" data-branch-name="{{ row }}" data-method="merge">マージ</button></li>
-				<li><button class="px2-btn px2-btn--danger" data-branch-name="{{ row }}" data-method="delete">削除</button></li>
+				<li><button class="px2-btn px2-btn--default" data-branch-name="{{ row|e }}" data-method="merge">マージ</button></li>
+				<li><button class="px2-btn px2-btn--danger" data-branch-name="{{ row|e }}" data-method="delete">削除</button></li>
 			</ul>
 			{% endif %}
 		</li>
@@ -27,13 +27,13 @@
 		{% for row in branch.remoteBranches %}
 		<li>
 			{% if checkoutedRemoteBranches[row] %}
-			{{ row }}
+			{{ row|e }}
 			{% else %}
-			<a href="javascript:;" data-branch-name="remotes/{{ row }}">{{ row }}</a>
+			<a href="javascript:;" data-branch-name="remotes/{{ row|e }}">{{ row|e }}</a>
 			{% endif %}
 			<ul class="gitui79__menu-list">
-				<li><button class="px2-btn px2-btn--default" data-branch-name="remotes/{{ row }}" data-method="merge">マージ</button></li>
-				<li><button class="px2-btn px2-btn--danger" data-branch-name="remotes/{{ row }}" data-method="delete">削除</button></li>
+				<li><button class="px2-btn px2-btn--default" data-branch-name="remotes/{{ row|e }}" data-method="merge">マージ</button></li>
+				<li><button class="px2-btn px2-btn--danger" data-branch-name="remotes/{{ row|e }}" data-method="delete">削除</button></li>
 			</ul>
 		</li>
 		{% endfor %}
