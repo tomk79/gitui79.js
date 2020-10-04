@@ -132,52 +132,35 @@ module.exports = function(main, $elms, gitparse79){
 	// すべてのファイルをコミット時点の状態までロールバックする
 	function rollbackAll(commit){
 		px2style.loading();
-		console.log(commit);
+		// console.log(commit);
+		var diffFileList = [];
 
 		new Promise(function(rlv){rlv();})
-			// .then(function(){ return new Promise(function(rlv, rjt){
-			// 	// rollback
-			// 	if( status == 'deleted' ){
-			// 		gitparse79.git(
-			// 			['rm', file],
-			// 			function(result){
-			// 				// console.log(result);
-			// 				rlv();
-			// 				return;
-			// 			}
-			// 		);
-			// 		return;
-			// 	}else{
-			// 		gitparse79.git(
-			// 			['checkout', commit, file],
-			// 			function(result){
-			// 				// console.log(result);
-			// 				rlv();
-			// 				return;
-			// 			}
-			// 		);
-			// 	}
-			// }); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				gitparse79.git(
-					['checkout', commit, './'],
+					['diff', '--name-status', commit+'...HEAD'],
 					function(result){
-						// console.log(result);
+						console.log(result);
+						// TODO: ここで得たファイルの一覧を `diffFileList` に記憶する
+						// diffFileList = result.files;
 						rlv();
 						return;
 					}
 				);
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
-				// unstage
-				gitparse79.git(
-					['reset', 'HEAD', './'],
-					function(result){
-						// console.log(result);
-						rlv();
-						return;
-					}
-				);
+				console.log('TODO: 未実装; git diff から得たファイルの一覧を元に、1つずつ復元していく。');
+				// diffFileList.forEach(function(){
+				// 	gitparse79.git(
+				// 		['checkout', commit, './'],
+				// 		function(result){
+				// 			// console.log(result);
+				// 			return;
+				// 		}
+				// 	);
+				// });
+				rlv();
+				return;
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				px2style.closeLoading();
