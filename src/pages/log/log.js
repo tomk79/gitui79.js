@@ -16,7 +16,7 @@ module.exports = function(main, $elms, gitparse79){
 	function showCommitDetails( commit ){
 		px2style.loading();
 		gitparse79.git(
-			['show', commit],
+			['show', '--name-status', commit],
 			function(result){
 				console.log(result);
 				var splitedCommitMessage = main.parseCommitMessage(result.message);
@@ -271,7 +271,7 @@ module.exports = function(main, $elms, gitparse79){
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
 				gitparse79.git(
-					['log', '--max-count='+(dpp), '--skip='+(dpp*currentPage)],
+					['log', '--name-status', '--max-count='+(dpp), '--skip='+(dpp*currentPage)],
 					function(result){
 						console.log(result);
 						git_log = result;
