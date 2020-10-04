@@ -6,7 +6,8 @@ module.exports = function(main, $elms, gitparse79){
 	var templates = {
 		"git_show": require('./templates/git_show.html'),
 		"git_log": require('./templates/git_log.html'),
-		"git_log_rows": require('./templates/git_log_rows.html')
+		"git_log_rows": require('./templates/git_log_rows.html'),
+		"show_fileinfo": require('./templates/show_fileinfo.html')
 	};
 
 
@@ -33,6 +34,18 @@ module.exports = function(main, $elms, gitparse79){
 						body: $body,
 						buttons: [
 							'<button type="submit" class="px2-btn px2-btn--primary">OK</button>'
+						],
+						buttonsSecondary: [
+							$('<button>')
+								.text('このバージョンに戻す')
+								.addClass('px2-btn')
+								.attr('type', 'button')
+								.on('click', function(){
+									if( !confirm('すべてのファイルのバージョンを戻します。コミットされていない変更がある場合は、破棄されます。続けますか？') ){
+										return;
+									}
+									rollbackAll(commit);
+								})
 						],
 						form: {
 							action: 'javascript:;',
@@ -64,13 +77,22 @@ module.exports = function(main, $elms, gitparse79){
 	function showCommitFile(commit, file, status){
 		px2style.loading();
 
-		var $body = $('<div>').text(file);
+		var src = _twig.twig({
+			data: templates.show_fileinfo
+		}).render({
+			file: file,
+			status: status
+		});
+
+		var $body = $('<div>').append(src);
+		var modalTitle = file;
+		modalTitle = modalTitle.replace(/^[\s\S]*?([^\/]*)$/, '$1');
 
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
 				px2style.modal(
 					{
-						title: file,
+						title: modalTitle,
 						body: $body,
 						buttons: [
 							'<button type="submit" class="px2-btn px2-btn--primary">OK</button>'
@@ -105,8 +127,70 @@ module.exports = function(main, $elms, gitparse79){
 		;
 	}
 
+
 	// --------------------------------------
-	// ファイルをコミット時点の状態までロールバックする
+	// すべてのファイルをコミット時点の状態までロールバックする
+	function rollbackAll(commit){
+		px2style.loading();
+		console.log(commit);
+
+		new Promise(function(rlv){rlv();})
+			// .then(function(){ return new Promise(function(rlv, rjt){
+			// 	// rollback
+			// 	if( status == 'deleted' ){
+			// 		gitparse79.git(
+			// 			['rm', file],
+			// 			function(result){
+			// 				// console.log(result);
+			// 				rlv();
+			// 				return;
+			// 			}
+			// 		);
+			// 		return;
+			// 	}else{
+			// 		gitparse79.git(
+			// 			['checkout', commit, file],
+			// 			function(result){
+			// 				// console.log(result);
+			// 				rlv();
+			// 				return;
+			// 			}
+			// 		);
+			// 	}
+			// }); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				gitparse79.git(
+					['checkout', commit, './'],
+					function(result){
+						// console.log(result);
+						rlv();
+						return;
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				// unstage
+				gitparse79.git(
+					['reset', 'HEAD', './'],
+					function(result){
+						// console.log(result);
+						rlv();
+						return;
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				px2style.closeLoading();
+				console.log('done.');
+				alert('バージョンを戻しました。');
+				rlv();
+			}); })
+		;
+
+	}
+
+	// --------------------------------------
+	// 指定のファイルをコミット時点の状態までロールバックする
 	function rollbackFile(commit, file, status){
 		px2style.loading();
 		console.log(commit, file, status);
