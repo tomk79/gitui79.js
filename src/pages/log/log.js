@@ -9,6 +9,7 @@ module.exports = function(main, $elms, gitparse79){
 		"git_log_rows": require('./templates/git_log_rows.html'),
 		"show_fileinfo": require('./templates/show_fileinfo.html')
 	};
+	var it79 = require('iterate79');
 
 
 	// --------------------------------------
@@ -140,27 +141,55 @@ module.exports = function(main, $elms, gitparse79){
 				gitparse79.git(
 					['diff', '--name-status', commit+'...HEAD'],
 					function(result){
-						console.log(result);
-						// TODO: ここで得たファイルの一覧を `diffFileList` に記憶する
-						// diffFileList = result.files;
+						// console.log(result);
+						diffFileList = result.diff;
 						rlv();
 						return;
 					}
 				);
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
-				console.log('TODO: 未実装; git diff から得たファイルの一覧を元に、1つずつ復元していく。');
-				// diffFileList.forEach(function(){
-				// 	gitparse79.git(
-				// 		['checkout', commit, './'],
-				// 		function(result){
-				// 			// console.log(result);
-				// 			return;
-				// 		}
-				// 	);
-				// });
-				rlv();
+				it79.ary(
+					diffFileList,
+					function(itAry1, diffRow, diffIdx){
+						console.log(diffRow, diffIdx);
+						if( diffRow.type == 'added' ){
+							gitparse79.git(
+								['rm', diffRow.filename],
+								function(result){
+									// console.log(result);
+									itAry1.next();
+									return;
+								}
+							);
+							return;
+						}else{
+							gitparse79.git(
+								['checkout', commit, diffRow.filename],
+								function(result){
+									// console.log(result);
+									itAry1.next();
+									return;
+								}
+							);
+						}
+					},
+					function(){
+						rlv();
+					}
+				);
 				return;
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				// unstage
+				gitparse79.git(
+					['reset', 'HEAD', './'],
+					function(result){
+						// console.log(result);
+						rlv();
+						return;
+					}
+				);
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				px2style.closeLoading();
