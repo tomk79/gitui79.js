@@ -7,120 +7,12 @@ module.exports = function(main, $elms, gitparse79){
 		"git_status": require('./templates/git_status.html'),
 		"diff": require('./templates/diff.html')
 	};
+	var it79 = require('iterate79');
+
 
 	// --------------------------------------
-	// 差分を表示する
-	function showDiff( file, status, isStaged ){
-		var diffInfo;
-		px2style.loading();
-
-		new Promise(function(rlv){rlv();})
-			.then(function(){ return new Promise(function(rlv, rjt){
-				gitparse79.git(
-					['diff', file],
-					function(result){
-						// console.log('=-=-=-=-=-=-=', result);
-						diffInfo = result;
-						rlv();
-					}
-				);
-			}); })
-			.then(function(){ return new Promise(function(rlv, rjt){
-				var src = _twig.twig({
-					data: templates.diff
-				}).render({
-					file: file,
-					status: status,
-					isStaged: isStaged,
-					code: diffInfo.stdout
-				});
-				var $body = $('<div>').addClass('gitui79').append(src);
-				var $rollbackButton = $('<button>')
-					.text('この変更を取り消す')
-					.addClass('px2-btn')
-					.attr('type', 'button')
-					.on('click', function(){
-						if( !confirm('変更を取り消し、元に戻します。よろしいですか？') ){
-							return;
-						}
-						new Promise(function(rlv){rlv();})
-							.then(function(){ return new Promise(function(rlv, rjt){
-								if( status != 'untracked' || isStaged != 'staged' ){
-									rlv();
-									return;
-								}
-								// ステージング済みの新規ファイルは、
-								// 一旦 unstage する。
-								gitparse79.git(
-									['reset', 'HEAD', file],
-									function(result){
-										// console.log(result);
-										rlv();
-									}
-								);
-							}); })
-							.then(function(){ return new Promise(function(rlv, rjt){
-								if( status == 'untracked' ){
-									gitparse79.git(
-										['clean', '-f', file],
-										function(result){
-											// console.log(result);
-											rlv();
-										}
-									);
-									rlv();
-								}else{
-									gitparse79.git(
-										['checkout', 'HEAD', file],
-										function(result){
-											// console.log(result);
-											rlv();
-										}
-									);
-								}
-							}); })
-							.then(function(){ return new Promise(function(rlv, rjt){
-								px2style.closeModal();
-								main.pages.load('status');
-							}); })
-						;
-					})
-				;
-
-				px2style.modal(
-					{
-						title: '詳細',
-						body: $body,
-						buttons: [
-							'<button type="submit" class="px2-btn px2-btn--primary">OK</button>'
-						],
-						buttonsSecondary: [
-							$rollbackButton
-						],
-						form: {
-							action: 'javascript:;',
-							method: 'get',
-							submit: function(){
-								px2style.closeModal();
-							}
-						},
-						width: 700
-					},
-					function(){
-						px2style.closeLoading();
-					}
-				);
-
-			}); })
-		;
-		return;
-	}
-
-
-
-
-
-	return function(){
+	// 画面を初期化
+	function init(){
 		$elms.body.innerHTML = '';
 		var git_status;
 		px2style.loading();
@@ -171,7 +63,8 @@ module.exports = function(main, $elms, gitparse79){
 				// --------------------------------------
 				// コミットボタンの処理
 				var blockOpenCommitForm = document.querySelector('.gitui79__btn-block-open-commit-form');
-				var btnOpenCommitForm = document.querySelector('.gitui79__btn-block-open-commit-form button');
+				var btnOpenCommitForm = document.querySelector('.gitui79__btn-block-open-commit-form button.gitui79__cont-btn-commit');
+				var btnDiscardAll = document.querySelector('.gitui79__btn-block-open-commit-form button.gitui79__cont-btn-discard');
 				var blockCommitForm = document.querySelector('.gitui79__commit-form');
 				var commitForm = document.querySelector('.gitui79__commit-form form');
 
@@ -181,46 +74,36 @@ module.exports = function(main, $elms, gitparse79){
 					return;
 				}
 
+				// コミットボタン
 				btnOpenCommitForm.addEventListener('click', function(){
 					blockOpenCommitForm.style.display = 'none';
 					blockCommitForm.style.display = 'block';
 				});
 				commitForm.addEventListener('submit', function(){
-					var message = this.querySelector('textarea').value;
-					if(!message){
+					var messageInput = this.querySelector('textarea');
+					var message = messageInput.value;
+					if( !message ){
 						alert('コミットメッセージを入力してください。');
-						this.querySelector('textarea').focus();
+						messageInput.focus();
 						return;
 					}
 					commitForm.querySelectorAll('input, button, select, textarea').forEach(function(elm){
 						elm.disabled = true;
 					});
+					commitAll( message );
+				});
+
+				// 変更を破棄するボタン
+				btnDiscardAll.addEventListener('click', function(){
+					if( !confirm('すべての変更を破棄し、元に戻します。コミットされていない情報は永久に失われます。続けてよろしいですか？') ){
+						return;
+					}
 					px2style.loading();
-					px2style.loadingMessage('コミットしています...');
-
-					gitparse79.git(
-						['add', './'],
-						function(result){
-							// console.log(result);
-							gitparse79.git(
-								[
-									'commit',
-									'-m', message,
-									'--author='+main.getCommitter().name+' <'+main.getCommitter().email+'>'
-								],
-								function(result){
-									console.log(result);
-									main.flashMessage('コミットしました。');
-									px2style.loadingMessage('コミットしました。');
-									setTimeout(function(){
-										px2style.closeLoading();
-										main.pages.load('status');
-									}, 500);
-								}
-							);
-						}
-					);
-
+					discardAll( function(){
+						px2style.closeLoading();
+						alert('破棄しました。');
+						main.pages.load('status');
+					} );
 				});
 				rlv();
 			}); })
@@ -230,4 +113,225 @@ module.exports = function(main, $elms, gitparse79){
 			}); })
 		;
 	}
+
+	// --------------------------------------
+	// 差分を表示する
+	function showDiff( file, status, isStaged ){
+		var diffInfo;
+		px2style.loading();
+
+		new Promise(function(rlv){rlv();})
+			.then(function(){ return new Promise(function(rlv, rjt){
+				var diffCmd = [];
+				diffCmd.push('diff');
+				if( isStaged == 'staged' ){
+					diffCmd.push('--cached');
+				}
+				diffCmd.push(file);
+				gitparse79.git(
+					diffCmd,
+					function(result){
+						// console.log(result);
+						diffInfo = result;
+						rlv();
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				var src = _twig.twig({
+					data: templates.diff
+				}).render({
+					file: file,
+					status: status,
+					isStaged: isStaged,
+					code: diffInfo.stdout
+				});
+				var $body = $('<div>').addClass('gitui79').append(src);
+				var $rollbackButton = $('<button>')
+					.text('この変更を取り消す')
+					.addClass('px2-btn')
+					.attr('type', 'button')
+					.on('click', function(){
+						if( !confirm('変更を取り消し、元に戻します。よろしいですか？') ){
+							callback();
+							return;
+						}
+						px2style.loading();
+						discardFile( file, status, isStaged, function(){
+							px2style.closeLoading();
+							px2style.closeModal();
+							main.pages.load('status');
+						} );
+					})
+				;
+
+				px2style.modal(
+					{
+						title: '詳細',
+						body: $body,
+						buttons: [
+							'<button type="submit" class="px2-btn px2-btn--primary">OK</button>'
+						],
+						buttonsSecondary: [
+							$rollbackButton
+						],
+						form: {
+							action: 'javascript:;',
+							method: 'get',
+							submit: function(){
+								px2style.closeModal();
+							}
+						},
+						width: 700
+					},
+					function(){
+						px2style.closeLoading();
+					}
+				);
+
+			}); })
+		;
+		return;
+	}
+
+
+	/**
+	 * コミットする
+	 */
+	function commitAll( message ){
+		if( !message ){
+			return false;
+		}
+		px2style.loading();
+		px2style.loadingMessage('コミットしています...');
+
+		gitparse79.git(
+			['add', './'],
+			function(result){
+				// console.log(result);
+				gitparse79.git(
+					[
+						'commit',
+						'-m', message,
+						'--author='+main.getCommitter().name+' <'+main.getCommitter().email+'>'
+					],
+					function(result){
+						console.log(result);
+						main.flashMessage('コミットしました。');
+						px2style.loadingMessage('コミットしました。');
+						setTimeout(function(){
+							px2style.closeLoading();
+							main.pages.load('status');
+						}, 500);
+					}
+				);
+			}
+		);
+	}
+
+
+	/**
+	 * 単ファイルの変更を破棄する
+	 */
+	function discardFile( file, status, isStaged, callback ){
+		new Promise(function(rlv){rlv();})
+			.then(function(){ return new Promise(function(rlv, rjt){
+				if( status != 'untracked' || isStaged != 'staged' ){
+					rlv();
+					return;
+				}
+				// ステージング済みの新規ファイルは、
+				// 一旦 unstage する。
+				gitparse79.git(
+					['reset', 'HEAD', file],
+					function(result){
+						// console.log(result);
+						rlv();
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				if( status == 'untracked' ){
+					gitparse79.git(
+						['clean', '-f', file],
+						function(result){
+							console.log(result);
+							rlv();
+						}
+					);
+				}else{
+					gitparse79.git(
+						['checkout', 'HEAD', file],
+						function(result){
+							console.log(result);
+							rlv();
+						}
+					);
+				}
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				callback();
+			}); })
+		;
+	}
+
+	/**
+	 * 変更を破棄する
+	 */
+	function discardAll( callback ){
+		var git_status;
+
+		new Promise(function(rlv){rlv();})
+			.then(function(){ return new Promise(function(rlv, rjt){
+				gitparse79.git(
+					['status', '-u'],
+					function(result){
+						console.log(result);
+						git_status = result;
+						main.setCurrentBranchName(git_status.currentBranchName);
+						rlv();
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				it79.ary(
+					['staged', 'notStaged'],
+					function( it1, isStaged, idx1 ){
+						it79.ary(
+							['deleted', 'modified', 'untracked'],
+							function( it2, status, idx2 ){
+								var files = git_status[isStaged][status];
+								it79.ary(
+									files,
+									function( it3, file, idx3 ){
+										console.log( file, status, isStaged );
+										discardFile( file, status, isStaged, function(){
+											it3.next();
+										} );
+									},
+									function(){
+										it2.next();
+									}
+								);
+							},
+							function(){
+								it1.next();
+							}
+						);
+					},
+					function(){
+						rlv();
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				callback();
+			}); })
+		;
+
+	}
+
+
+
+	return init;
 }
