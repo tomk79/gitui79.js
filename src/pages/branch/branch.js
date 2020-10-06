@@ -141,7 +141,19 @@ module.exports = function(main, $elms, gitparse79){
 									function(result){
 										console.log(result);
 										if(result.code){
-											alert(result.stdout);
+											if( confirm(result.stdout+"\n\n"+'強制的に削除しますか？') ){
+												gitparse79.git(
+													['branch', '-f', '--delete', branchName],
+													function(result){
+														console.log(result);
+														if(result.code){
+															alert(result.code);
+														}
+														main.pages.load('branch');
+													}
+												);
+												return;
+											}
 										}
 										main.pages.load('branch');
 									}
