@@ -57,8 +57,22 @@ module.exports = function(main, $elms, gitparse79){
 						return;
 					}
 
+					var gitCmd = [];
+					gitCmd.push('pull');
+					if( $elms.body.querySelector('input[type=checkbox][name=force]:checked') ){
+						if( !confirm('強制的にプルします。この操作は、ローカルブランチを上書きします。続けますか？') ){
+							formElements.forEach(function(elm){
+								elm.disabled = false;
+							});
+							px2style.closeLoading();
+							return;
+						}
+						gitCmd.push('-f');
+					}
+					gitCmd.push(remoteName);
+					gitCmd.push(main.getCurrentBranchName()+':'+main.getCurrentBranchName());
 					gitparse79.git(
-						['pull', remoteName, main.getCurrentBranchName()+':'+main.getCurrentBranchName()],
+						gitCmd,
 						function(result){
 							console.log(result);
 							// alert('refresh');

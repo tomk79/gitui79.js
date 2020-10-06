@@ -14,6 +14,9 @@
 	{% else %}
 		<pre><code>{{ remote.stdout|e }}</code></pre>
 	{% endif %}
-	<div><button class="px2-btn px2-btn--primary">プッシュする</button></div>
+	<div class="px2-p">
+		<button class="px2-btn px2-btn--primary">プッシュする</button>
+		<label><input type="checkbox" name="force" value="1" /> 強制的にプッシュする</label>
+	</div>
 	<pre class="gitui79__result-stdout"><code></code></pre>
 </section>
