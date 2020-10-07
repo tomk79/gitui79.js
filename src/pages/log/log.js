@@ -283,7 +283,7 @@ module.exports = function(main, $elms, gitparse79){
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
 				gitparse79.git(
-					['log', '--name-status', '--max-count='+(dpp), '--skip='+(dpp*currentPage)],
+					['log', '--max-count='+(dpp), '--skip='+(dpp*currentPage)],
 					function(result){
 						console.log(result);
 						git_log = result;
