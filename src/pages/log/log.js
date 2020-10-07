@@ -153,6 +153,7 @@ module.exports = function(main, $elms, gitparse79){
 					diffFileList,
 					function(itAry1, diffRow, diffIdx){
 						console.log(diffRow, diffIdx);
+						px2style.loadingMessage( diffRow.filename );
 						if( diffRow.type == 'added' ){
 							gitparse79.git(
 								['rm', diffRow.filename],
@@ -182,6 +183,7 @@ module.exports = function(main, $elms, gitparse79){
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				// unstage
+				px2style.loadingMessage( 'Unstaging...' );
 				gitparse79.git(
 					['reset', 'HEAD', './'],
 					function(result){

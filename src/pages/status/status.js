@@ -304,6 +304,7 @@ module.exports = function(main, $elms, gitparse79){
 								it79.ary(
 									files,
 									function( it3, file, idx3 ){
+										px2style.loadingMessage( file );
 										console.log( file, status, isStaged );
 										discardFile( file, status, isStaged, function(){
 											it3.next();
