@@ -15,6 +15,10 @@ module.exports = function(main, $elms, gitparse79){
 
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
+				px2style.loading();
+				rlv();
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
 				gitparse79.git(
 					['branch', '-a'],
 					function(result){
@@ -55,6 +59,8 @@ module.exports = function(main, $elms, gitparse79){
 
 							var remoteBranchName = branchName.replace(/^remotes\//, '');
 							var localBranchName = branchName.replace(/^remotes\/[^\/]*?\//, '');
+
+							px2style.loading();
 							gitparse79.git(
 								['checkout', '-b', localBranchName, remoteBranchName],
 								function(result){
@@ -65,12 +71,15 @@ module.exports = function(main, $elms, gitparse79){
 									}else{
 										alert('Failed.');
 									}
+									px2style.closeLoading();
 								}
 							);
+							return;
 						}else{
 							// --------------------
 							// ローカルブランチをチェックアウトする
 
+							px2style.loading();
 							gitparse79.git(
 								['checkout', branchName],
 								function(result){
@@ -81,8 +90,10 @@ module.exports = function(main, $elms, gitparse79){
 									}else{
 										alert('Failed.');
 									}
+									px2style.closeLoading();
 								}
 							);
+							return;
 						}
 					});
 				});
@@ -98,6 +109,7 @@ module.exports = function(main, $elms, gitparse79){
 							if( !confirm('ブランチ '+branchName+' を、 ' + main.getCurrentBranchName() + ' にマージしようとしています。' + "\n" + 'よろしいですか？') ){
 								return;
 							}
+							px2style.loading();
 							gitparse79.git(
 								['merge', branchName],
 								function(result){
@@ -108,14 +120,17 @@ module.exports = function(main, $elms, gitparse79){
 										alert('Success!');
 									}
 									main.pages.load('branch');
+									px2style.closeLoading();
 								}
 							);
+							return;
 						}else if( method == 'delete' ){
 							// --------------------
 							// ブランチを削除する
 							if( !confirm('ブランチ '+branchName+' を、削除してもよろしいですか？') ){
 								return;
 							}
+							px2style.loading();
 							if( branchName.match(/^remotes\//) ){
 								// リモートブランチを削除する
 
@@ -131,11 +146,14 @@ module.exports = function(main, $elms, gitparse79){
 											alert(result.stdout);
 										}
 										main.pages.load('branch');
+										px2style.closeLoading();
 									}
 								);
+								return;
 							}else{
 								// ローカルブランチを削除する
 
+								px2style.loading();
 								gitparse79.git(
 									['branch', '--delete', branchName],
 									function(result){
@@ -150,15 +168,19 @@ module.exports = function(main, $elms, gitparse79){
 															alert(result.code);
 														}
 														main.pages.load('branch');
+														px2style.closeLoading();
 													}
 												);
 												return;
 											}
 										}
 										main.pages.load('branch');
+										px2style.closeLoading();
+										return;
 									}
 								);
 							}
+							return;
 						}
 					});
 				});
@@ -174,19 +196,31 @@ module.exports = function(main, $elms, gitparse79){
 						return;
 					}
 					// alert(newBranchName);
+
+					px2style.loading();
+
 					gitparse79.git(
 						['checkout', '-b', newBranchName],
 						function(result){
-							console.log(result);
+							// console.log(result);
 							if( result.result ){
 								main.setCurrentBranchName(result.currentBranchName);
 								main.pages.load('branch');
 							}else{
 								alert('Failed.');
 							}
+							px2style.closeLoading();
 						}
 					);
+					return;
 				});
+
+				rlv();
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				// Standby OK.
+				px2style.closeLoading();
+				rlv();
 			}); })
 		;
 	}
