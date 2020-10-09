@@ -11,7 +11,7 @@
 		</li>
 		{% endfor %}
 		</ul>
-	{% else %}
+	{% elseif remote.stdout  %}
 		<pre><code>{{ remote.stdout|e }}</code></pre>
 	{% endif %}
 	<div class="px2-p">
