@@ -6,6 +6,7 @@ module.exports = function(main, $elms, gitparse79){
 	var templates = {
 		"git_pull": require('./templates/git_pull.html')
 	};
+	var px2style = main.px2style;
 
 	return function(){
 		$elms.body.innerHTML = '';

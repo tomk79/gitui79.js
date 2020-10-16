@@ -8,7 +8,7 @@ module.exports = function(main, $elms, gitparse79){
 		"diff": require('./templates/diff.html')
 	};
 	var it79 = require('iterate79');
-
+	var px2style = main.px2style;
 
 	// --------------------------------------
 	// 画面を初期化

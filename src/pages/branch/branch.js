@@ -6,6 +6,7 @@ module.exports = function(main, $elms, gitparse79){
 	var templates = {
 		"git_branch": require('./templates/git_branch.html')
 	};
+	var px2style = main.px2style;
 
 	return function(){
 

@@ -4,7 +4,7 @@
 		{% for row in branch.localBranches %}
 		<li>
 			{% if row == currentBranchName %}
-			{{ row|e }}
+			<strong class="gitui79__branch-list-current-branch">{{ row|e }}</strong>
 			<ul class="gitui79__menu-list">
 				<li><button class="px2-btn" disabled>マージ</button></li>
 				<li><button class="px2-btn" disabled>削除</button></li>

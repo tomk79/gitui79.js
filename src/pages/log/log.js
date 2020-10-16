@@ -10,6 +10,7 @@ module.exports = function(main, $elms, gitparse79){
 		"show_fileinfo": require('./templates/show_fileinfo.html')
 	};
 	var it79 = require('iterate79');
+	var px2style = main.px2style;
 
 
 	// --------------------------------------
