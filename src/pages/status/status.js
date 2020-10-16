@@ -326,6 +326,30 @@ module.exports = function(main, $elms, gitparse79){
 				);
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
+				it79.ary(
+					['bothAdded', 'bothModified'],
+					function( it2, status, idx2 ){
+						var files = git_status.unmerged[status];
+						it79.ary(
+							files,
+							function( it3, file, idx3 ){
+								px2style.loadingMessage( file );
+								console.log( file, status );
+								discardFile( file, status, 'noStaged', function(){
+									it3.next();
+								} );
+							},
+							function(){
+								it2.next();
+							}
+						);
+					},
+					function(){
+						rlv();
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
 				callback();
 			}); })
 		;
