@@ -41,7 +41,7 @@
 	</ul>
 	<div class="clearfix px2-p gitui79__btn-block-open-commit-form">
 		<div class="float-left"><button class="px2-btn gitui79__cont-btn-discard" type="button">変更を破棄する</button></div>
-		<div class="float-right"><button class="px2-btn px2-btn--primary gitui79__cont-btn-commit" type="button">コミットする</button></div>
+		<div class="float-right"><button class="px2-btn px2-btn--primary gitui79__cont-btn-commit" type="button"{% if status.isUnmerged %} disabled="disabled"{% endif %}>コミットする</button></div>
 	</div>
 	<div class="gitui79__commit-form" style="display: none;">
 		<form action="javascript:;" method="post">
