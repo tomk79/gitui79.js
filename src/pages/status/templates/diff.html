@@ -15,6 +15,14 @@
     </table>
 </div>
 
+{% if status == "unmerged" %}
+<div class="px2-p">
+    <p>このファイルはコンフリクトしています。</p>
+    <button class="px2-btn gitui79__resolve-ours" type="button">自分の変更を採用</button>
+    <button class="px2-btn gitui79__resolve-theirs" type="button">相手の変更を採用</button>
+</div>
+{% endif %}
+
 {% if code %}
 <h2>差分</h2>
 <pre><code>{{ code|e }}</code></pre>

@@ -147,6 +147,24 @@ module.exports = function(main, $elms, gitparse79){
 					code: diffInfo.stdout
 				});
 				var $body = $('<div>').addClass('gitui79').append(src);
+				$body.find('.gitui79__resolve-ours').on('click', function(){
+					alert('自分の変更を使って競合を解決します。');
+					px2style.loading();
+					resolveFile(file, 'ours', function(){
+						px2style.closeLoading();
+						px2style.closeModal();
+						main.pages.load('status');
+					});
+				});
+				$body.find('.gitui79__resolve-theirs').on('click', function(){
+					alert('相手の変更を使って競合を解決します。');
+					px2style.loading();
+					resolveFile(file, 'theirs', function(){
+						px2style.closeLoading();
+						px2style.closeModal();
+						main.pages.load('status');
+					});
+				});
 				var $rollbackButton = $('<button>')
 					.text('この変更を取り消す')
 					.addClass('px2-btn')
@@ -228,6 +246,36 @@ module.exports = function(main, $elms, gitparse79){
 			}
 		);
 	}
+
+
+	/**
+	 * 単ファイルの競合状態を解決する
+	 */
+	function resolveFile( file, direction, callback ){
+		new Promise(function(rlv){rlv();})
+			.then(function(){ return new Promise(function(rlv, rjt){
+				gitparse79.git(
+					['checkout', '--'+direction, file],
+					function(result){
+						// console.log(result);
+						rlv();
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				gitparse79.git(
+					['add', file],
+					function(result){
+						rlv();
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				callback();
+			}); })
+		;
+	}
+
 
 
 	/**
