@@ -10,6 +10,8 @@
  or status.staged.untracked.length
  or status.staged.modified.length
  or status.staged.deleted.length
+ or status.unmerged.bothAdded.length
+ or status.unmerged.bothModified.length
 %}
 	<ul class="gitui79__list-changes">
 {% for file in status.notStaged.untracked %}
@@ -29,6 +31,12 @@
 {% endfor %}
 {% for file in status.staged.deleted %}
 		<li class="gitui79__list-changes-staged gitui79__list-changes-deleted"><a href="javascript:;" data-file="{{ file|e }}" data-status="deleted" data-is-staged="staged">{{ file|e }}</a></li>
+{% endfor %}
+{% for file in status.unmerged.bothAdded %}
+		<li class="gitui79__list-changes-staged gitui79__list-changes-unmerged"><a href="javascript:;" data-file="{{ file|e }}" data-status="unmerged" data-is-staged="noStaged">{{ file|e }}</a></li>
+{% endfor %}
+{% for file in status.unmerged.bothModified %}
+		<li class="gitui79__list-changes-staged gitui79__list-changes-unmerged"><a href="javascript:;" data-file="{{ file|e }}" data-status="unmerged" data-is-staged="noStaged">{{ file|e }}</a></li>
 {% endfor %}
 	</ul>
 	<div class="clearfix px2-p gitui79__btn-block-open-commit-form">

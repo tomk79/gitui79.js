@@ -96,6 +96,11 @@
 		color: #e55454;
 		margin-right: 0.5em;
 	}
+	&__list-changes-unmerged:before{
+		content: "▲";
+		color: #aaaa00;
+		margin-right: 0.5em;
+	}
 
 	&__commit-form{
 		margin: 1em;

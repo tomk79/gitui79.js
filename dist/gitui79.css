@@ -71,6 +71,10 @@
     content: "■";
     color: #e55454;
     margin-right: 0.5em; }
+  .gitui79__list-changes-unmerged:before {
+    content: "▲";
+    color: #aaaa00;
+    margin-right: 0.5em; }
   .gitui79__commit-form {
     margin: 1em;
     padding: 1em;
