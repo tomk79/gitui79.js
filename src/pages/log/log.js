@@ -140,7 +140,17 @@ module.exports = function(main, $elms, gitparse79){
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
 				gitparse79.git(
-					['diff', '--name-status', commit+'...HEAD'],
+					['checkout', commit, './'],
+					function(result){
+						// console.log(result);
+						rlv();
+						return;
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				gitparse79.git(
+					['diff', '--name-status', commit],
 					function(result){
 						// console.log(result);
 						diffFileList = result.diff;

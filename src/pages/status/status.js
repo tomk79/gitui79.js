@@ -331,6 +331,24 @@ module.exports = function(main, $elms, gitparse79){
 
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
+				// 一旦ぜんぶを unstage する。
+				gitparse79.git(
+					['reset', 'HEAD', './'],
+					function(result){
+						// console.log(result);
+
+						// 戻せるものは全部戻す
+						gitparse79.git(
+							['checkout', 'HEAD', './'],
+							function(result){
+								// console.log(result);
+								rlv();
+							}
+						);
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
 				gitparse79.git(
 					['status', '-u'],
 					function(result){
