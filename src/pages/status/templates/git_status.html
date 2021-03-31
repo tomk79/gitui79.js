@@ -46,9 +46,18 @@
 	<div class="gitui79__commit-form" style="display: none;">
 		<form action="javascript:;" method="post">
 			<h3>コミットコメント</h3>
-			<p><textarea class="form-control"></textarea></p>
+			<p><textarea name="commitcomment" class="form-control"></textarea></p>
 			<h3>コミッター</h3>
+			{% if committer.name and committer.email %}
 			<p>{{ committer.name }} &lt;{{ committer.email }}&gt;</p>
+			<input type="hidden" name="committer.name" value="{{ committer.name }}" />
+			<input type="hidden" name="committer.email" value="{{ committer.email }}" />
+			{% else %}
+			<p>
+				<input type="text" name="committer.name" value="{{ committer.name }}" style="width: 35%;" placeholder="Name" />
+				&lt;<input type="text" name="committer.email" value="{{ committer.email }}" style="width: 35%;" placeholder="E-mail" />&gt;
+			</p>
+			{% endif %}
 			<div class="text-center"><button class="px2-btn px2-btn--primary gitui79__btn-do-commit" type="submit">コミットする</button></div>
 		</form>
 	</div>

@@ -87,10 +87,26 @@ module.exports = function(main, $elms, gitparse79){
 						messageInput.focus();
 						return;
 					}
+
+					var committerNameInput = this.querySelector('input[name="committer.name"]');
+					var committerName = committerNameInput.value;
+					if( !committerName ){
+						alert('コミッターの名前を入力してください。');
+						committerNameInput.focus();
+						return;
+					}
+
+					var committerEmailInput = this.querySelector('input[name="committer.email"]');
+					var committerEmail = committerEmailInput.value;
+					if( !committerEmail ){
+						alert('コミッターのメールアドレスを入力してください。');
+						committerEmailInput.focus();
+						return;
+					}
 					commitForm.querySelectorAll('input, button, select, textarea').forEach(function(elm){
 						elm.disabled = true;
 					});
-					commitAll( message );
+					commitAll( message, {name: committerName, email: committerEmail} );
 				});
 
 				// 変更を破棄するボタン
@@ -216,10 +232,15 @@ module.exports = function(main, $elms, gitparse79){
 	/**
 	 * コミットする
 	 */
-	function commitAll( message ){
+	function commitAll( message, committer ){
 		if( !message ){
 			return false;
 		}
+		committer = committer || main.getCommitter();
+		if( !committer.name || !committer.email ){
+			return false;
+		}
+
 		px2style.loading();
 		px2style.loadingMessage('コミットしています...');
 
@@ -231,7 +252,7 @@ module.exports = function(main, $elms, gitparse79){
 					[
 						'commit',
 						'-m', message,
-						'--author='+main.getCommitter().name+' <'+main.getCommitter().email+'>'
+						'--author='+committer.name+' <'+committer.email+'>'
 					],
 					function(result){
 						console.log(result);
