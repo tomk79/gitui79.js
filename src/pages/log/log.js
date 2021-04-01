@@ -274,6 +274,9 @@ module.exports = function(main, $elms, gitparse79){
 		px2style.loading();
 
 		function appendLogList(git_log){
+			if( !git_log || !git_log.logs || !git_log.logs.length ){
+				return;
+			}
 			git_log.logs.forEach(function(log){
 				var parsedCommitMessage = main.parseCommitMessage(log.message);
 				log.messageTitle = parsedCommitMessage.title;
@@ -317,13 +320,13 @@ module.exports = function(main, $elms, gitparse79){
 
 				appendLogList(git_log);
 
-				if( !git_log.logs.length || git_log.logs.length < dpp ){
-					document.querySelector('.gitui79__btn-block-next-page').style.display = 'none';
-				}
-
 				rlv();
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
+				if( !git_log || !git_log.logs || !git_log.logs.length || git_log.logs.length < dpp ){
+					rlv();
+				}
+
 				var $btnNext = document.querySelector('.gitui79__btn-block-next-page button');
 				$btnNext.addEventListener('click', function(){
 					px2style.loading();
