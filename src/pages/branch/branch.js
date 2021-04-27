@@ -21,6 +21,15 @@ module.exports = function(main, $elms, gitparse79){
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				gitparse79.git(
+					['fetch'],
+					function(result){
+						console.log(result);
+						rlv();
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				gitparse79.git(
 					['branch', '-a'],
 					function(result){
 						console.log(result);

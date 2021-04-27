@@ -15,9 +15,21 @@ module.exports = function(main, $elms, gitparse79){
 	function init(){
 		$elms.body.innerHTML = '';
 		var git_status;
-		px2style.loading();
 
 		new Promise(function(rlv){rlv();})
+			.then(function(){ return new Promise(function(rlv, rjt){
+				px2style.loading();
+				rlv();
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				gitparse79.git(
+					['fetch'],
+					function(result){
+						console.log(result);
+						rlv();
+					}
+				);
+			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				// --------------------------------------
 				// 状態情報を取得
