@@ -254,6 +254,7 @@
 
 .px2-table th,
 .px2-table td {
+  vertical-align: top;
   border: 1px solid #999999;
   background: #f9f9f9;
   padding: 10px; }
@@ -1033,6 +1034,7 @@ input[type=month].px2-input,
 input[type=week].px2-input,
 input[type=time].px2-input,
 input[type=color].px2-input,
+input[type=file].px2-input,
 input[type=datetime-local].px2-input,
 textarea.px2-input,
 select.px2-input {
@@ -1065,6 +1067,7 @@ input[type=month].px2-input:focus,
 input[type=week].px2-input:focus,
 input[type=time].px2-input:focus,
 input[type=color].px2-input:focus,
+input[type=file].px2-input:focus,
 input[type=datetime-local].px2-input:focus,
 textarea.px2-input:focus,
 select.px2-input:focus {
@@ -1087,6 +1090,7 @@ input[type=month].px2-input[readonly],
 input[type=week].px2-input[readonly],
 input[type=time].px2-input[readonly],
 input[type=color].px2-input[readonly],
+input[type=file].px2-input[readonly],
 input[type=datetime-local].px2-input[readonly],
 textarea.px2-input[readonly],
 select.px2-input[readonly] {
@@ -1105,6 +1109,7 @@ input[type=month].px2-input[readonly]:focus,
 input[type=week].px2-input[readonly]:focus,
 input[type=time].px2-input[readonly]:focus,
 input[type=color].px2-input[readonly]:focus,
+input[type=file].px2-input[readonly]:focus,
 input[type=datetime-local].px2-input[readonly]:focus,
 textarea.px2-input[readonly]:focus,
 select.px2-input[readonly]:focus {
@@ -1124,6 +1129,7 @@ input[type=month].px2-input[disabled],
 input[type=week].px2-input[disabled],
 input[type=time].px2-input[disabled],
 input[type=color].px2-input[disabled],
+input[type=file].px2-input[disabled],
 input[type=datetime-local].px2-input[disabled],
 textarea.px2-input[disabled],
 select.px2-input[disabled] {
@@ -1143,11 +1149,33 @@ input[type=month].px2-input--block,
 input[type=week].px2-input--block,
 input[type=time].px2-input--block,
 input[type=color].px2-input--block,
+input[type=file].px2-input--block,
 input[type=datetime-local].px2-input--block,
 textarea.px2-input--block,
 select.px2-input--block {
   display: block;
   width: 100%; }
+
+input[type=text].px2-input--error,
+input[type=password].px2-input--error,
+input[type=number].px2-input--error,
+input[type=search].px2-input--error,
+input[type=tel].px2-input--error,
+input[type=url].px2-input--error,
+input[type=email].px2-input--error,
+input[type=datetime].px2-input--error,
+input[type=date].px2-input--error,
+input[type=month].px2-input--error,
+input[type=week].px2-input--error,
+input[type=time].px2-input--error,
+input[type=color].px2-input--error,
+input[type=file].px2-input--error,
+input[type=datetime-local].px2-input--error,
+textarea.px2-input--error,
+select.px2-input--error {
+  border-color: #721c24;
+  color: #721c24;
+  background-color: #f8d7da; }
 
 .px2-input-group {
   display: -ms-inline-flexbox;
@@ -1195,6 +1223,114 @@ select.px2-input--block {
   display: -ms-flexbox;
   display: flex;
   width: 100%; }
+
+.px2-form-input-list {
+  margin-top: 1em;
+  margin-bottom: 1em; }
+
+.px2-form-input-list ul.px2-form-input-list__ul {
+  display: table;
+  border-collapse: collapse;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #999999;
+  margin: 0;
+  padding: 0; }
+
+.px2-form-input-list ul.px2-form-input-list__ul li.px2-form-input-list__li {
+  display: table-row;
+  list-style-type: none;
+  margin: 0;
+  padding: 0; }
+
+.px2-form-input-list ul.px2-form-input-list__ul li.px2-form-input-list__li .px2-form-input-list__label {
+  display: table-cell;
+  vertical-align: top;
+  background-color: #e7e7e7;
+  font-weight: bold;
+  padding: 0.4em 1em;
+  width: 30%;
+  border: 1px solid #999999; }
+
+.px2-form-input-list ul.px2-form-input-list__ul li.px2-form-input-list__li .px2-form-input-list__input {
+  display: table-cell;
+  vertical-align: top;
+  background-color: #f9f9f9;
+  padding: 0.4em 1em;
+  width: 70%;
+  border: 1px solid #999999; }
+
+.px2-form-input-list ul.px2-form-input-list__ul li.px2-form-input-list__li--required .px2-form-input-list__label::after {
+  content: "*";
+  color: #e11;
+  font-weight: bold;
+  margin: 0 0 0 0.7em; }
+
+.px2-form-input-list ul.px2-form-input-list__ul li.px2-form-input-list__li--error .px2-form-input-list__label {
+  color: #721c24; }
+
+.px2-form-input-list ul.px2-form-input-list__ul li.px2-form-input-list__li--error .px2-form-input-list__label::before {
+  content: "!!!";
+  color: #e11;
+  margin: 0 0.7em 0 0; }
+
+@media all and (max-width: 544px) {
+  .px2-form-input-list ul.px2-form-input-list__ul {
+    display: block;
+    border-bottom: 0 none; }
+  .px2-form-input-list ul.px2-form-input-list__ul li.px2-form-input-list__li {
+    display: block; }
+  .px2-form-input-list ul.px2-form-input-list__ul li.px2-form-input-list__li .px2-form-input-list__label {
+    display: block;
+    border-left: 0 none;
+    border-top: 0 none;
+    border-right: 0 none;
+    padding: 0.4em 1em;
+    width: auto; }
+  .px2-form-input-list ul.px2-form-input-list__ul li.px2-form-input-list__li .px2-form-input-list__input {
+    display: block;
+    border-left: 0 none;
+    border-top: 0 none;
+    border-right: 0 none;
+    padding: 0.4em 1em;
+    width: auto; } }
+
+.px2-form-submit-area {
+  margin: 1em 0;
+  padding: 0;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row-reverse;
+  flex-direction: row-reverse;
+  -ms-flex-pack: justify;
+  justify-content: space-between; }
+
+.px2-form-submit-area__btns, .px2-form-submit-area__backward-btns {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row-reverse;
+  flex-direction: row-reverse;
+  margin: 0;
+  padding: 0; }
+
+.px2-form-submit-area__btns > li, .px2-form-submit-area__backward-btns > li {
+  margin: 0;
+  padding: 0;
+  list-style-type: none; }
+
+@media all and (max-width: 544px) {
+  .px2-form-submit-area {
+    -ms-flex-direction: column;
+    flex-direction: column; }
+  .px2-form-submit-area__btns, .px2-form-submit-area__backward-btns {
+    -ms-flex-direction: column;
+    flex-direction: column; }
+  .px2-form-submit-area__btns > li, .px2-form-submit-area__backward-btns > li {
+    margin: 0.2em auto; }
+  .px2-form-submit-area__backward-btns {
+    margin-top: 1em; }
+  .px2-form-submit-area__backward-btns > li {
+    margin: 0.2em auto 0.2em 0; } }
 
 .px2-grid {
   display: -ms-flexbox;
@@ -1617,6 +1753,7 @@ select.px2-input--block {
 .px2-darkmode input[type=week].px2-input,
 .px2-darkmode input[type=time].px2-input,
 .px2-darkmode input[type=color].px2-input,
+.px2-darkmode input[type=file].px2-input,
 .px2-darkmode input[type=datetime-local].px2-input,
 .px2-darkmode textarea.px2-input,
 .px2-darkmode select.px2-input {
@@ -1637,6 +1774,7 @@ select.px2-input--block {
 .px2-darkmode input[type=week].px2-input:focus,
 .px2-darkmode input[type=time].px2-input:focus,
 .px2-darkmode input[type=color].px2-input:focus,
+.px2-darkmode input[type=file].px2-input:focus,
 .px2-darkmode input[type=datetime-local].px2-input:focus,
 .px2-darkmode textarea.px2-input:focus,
 .px2-darkmode select.px2-input:focus {
@@ -1658,6 +1796,7 @@ select.px2-input--block {
 .px2-darkmode input[type=week].px2-input[readonly],
 .px2-darkmode input[type=time].px2-input[readonly],
 .px2-darkmode input[type=color].px2-input[readonly],
+.px2-darkmode input[type=file].px2-input[readonly],
 .px2-darkmode input[type=datetime-local].px2-input[readonly],
 .px2-darkmode textarea.px2-input[readonly],
 .px2-darkmode select.px2-input[readonly] {
@@ -1677,6 +1816,7 @@ select.px2-input--block {
 .px2-darkmode input[type=week].px2-input[readonly]:focus,
 .px2-darkmode input[type=time].px2-input[readonly]:focus,
 .px2-darkmode input[type=color].px2-input[readonly]:focus,
+.px2-darkmode input[type=file].px2-input[readonly]:focus,
 .px2-darkmode input[type=datetime-local].px2-input[readonly]:focus,
 .px2-darkmode textarea.px2-input[readonly]:focus,
 .px2-darkmode select.px2-input[readonly]:focus {
@@ -1696,16 +1836,52 @@ select.px2-input--block {
 .px2-darkmode input[type=week].px2-input[disabled],
 .px2-darkmode input[type=time].px2-input[disabled],
 .px2-darkmode input[type=color].px2-input[disabled],
+.px2-darkmode input[type=file].px2-input[disabled],
 .px2-darkmode input[type=datetime-local].px2-input[disabled],
 .px2-darkmode textarea.px2-input[disabled],
 .px2-darkmode select.px2-input[disabled] {
   color: #8e959c;
   background-color: #333; }
 
+.px2-darkmode input[type=text].px2-input--error,
+.px2-darkmode input[type=password].px2-input--error,
+.px2-darkmode input[type=number].px2-input--error,
+.px2-darkmode input[type=search].px2-input--error,
+.px2-darkmode input[type=tel].px2-input--error,
+.px2-darkmode input[type=url].px2-input--error,
+.px2-darkmode input[type=email].px2-input--error,
+.px2-darkmode input[type=datetime].px2-input--error,
+.px2-darkmode input[type=date].px2-input--error,
+.px2-darkmode input[type=month].px2-input--error,
+.px2-darkmode input[type=week].px2-input--error,
+.px2-darkmode input[type=time].px2-input--error,
+.px2-darkmode input[type=color].px2-input--error,
+.px2-darkmode input[type=file].px2-input--error,
+.px2-darkmode input[type=datetime-local].px2-input--error,
+.px2-darkmode textarea.px2-input--error,
+.px2-darkmode select.px2-input--error {
+  border-color: #721c24;
+  color: #721c24;
+  background-color: #f8d7da; }
+
 .px2-darkmode .px2-input-group__text {
   color: #ccc;
   background-color: #333;
   border: 1px solid #555; }
+
+.px2-darkmode .px2-form-input-list {
+  color: #ccc; }
+
+.px2-darkmode .px2-form-input-list ul.px2-form-input-list__ul {
+  border: 1px solid #666; }
+
+.px2-darkmode .px2-form-input-list ul.px2-form-input-list__ul li.px2-form-input-list__li .px2-form-input-list__label {
+  background-color: #191919;
+  border: 1px solid #666; }
+
+.px2-darkmode .px2-form-input-list ul.px2-form-input-list__ul li.px2-form-input-list__li .px2-form-input-list__input {
+  background-color: #242424;
+  border: 1px solid #666; }
 
 .gitui79 {
   display: -ms-flexbox;
