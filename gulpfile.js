@@ -46,8 +46,9 @@ gulp.task('.css.scss', function(){
 // gitui79.js (frontend) を処理
 gulp.task("gitui79.js", function() {
 	return webpackStream({
-		mode: 'development',
+		mode: 'production',
 		entry: "./src/gitui79.js",
+		devtool: 'source-map',
 		output: {
 			filename: "gitui79.js"
 		},
@@ -62,8 +63,28 @@ gulp.task("gitui79.js", function() {
 	}, webpack)
 		.pipe(plumber())
 		.pipe(gulp.dest( './dist/' ))
-		.pipe(concat('gitui79.min.js'))
-		.pipe(uglify())
+	;
+});
+
+// gitui79.js (frontend) を処理
+gulp.task("gitui79.min.js", function() {
+	return webpackStream({
+		mode: 'production',
+		entry: "./src/gitui79.js",
+		devtool: 'source-map',
+		output: {
+			filename: "gitui79.min.js"
+		},
+		module:{
+			rules:[
+				{
+					test:/\.html$/,
+					use:['html-loader']
+				}
+			]
+		}
+	}, webpack)
+		.pipe(plumber())
 		.pipe(gulp.dest( './dist/' ))
 	;
 });
@@ -79,6 +100,7 @@ gulp.task("preview", function(callback) {
 let _tasks = gulp.parallel(
 	'client-libs',
 	'gitui79.js',
+	'gitui79.min.js',
 	'.css.scss'
 );
 
