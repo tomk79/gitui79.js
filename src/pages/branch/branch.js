@@ -21,7 +21,7 @@ module.exports = function(main, $elms, gitparse79){
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				gitparse79.git(
-					['fetch'],
+					['fetch', '--prune'],
 					function(result){
 						console.log(result);
 						rlv();
