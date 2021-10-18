@@ -1,5 +1,6 @@
-@import "../node_modules/px2style/dist/styles"; // Px2Style
 .gitui79{
+	@import "../node_modules/px2style/src/px2style.css.scss"; // Px2Style
+
 	display: flex;
 	flex-direction: column;
 	font-size: medium;
@@ -109,12 +110,18 @@
 		border: 1px solid #00a0e6;
 		border-radius: 5px;
 		background-color: #f2fbff;
+		color: #0d435a;
 		h3{
 			margin: 0;
 		}
 		p{
 			margin: 0 0 0.4em;
 		}
+	}
+	.px2-darkmode &__commit-form{
+		border: 1px solid #7898a7;
+		background-color: #0c3c50;
+		color: #7898a7;
 	}
 
 	&__branch-list{
@@ -146,4 +153,7 @@
 			padding: 0;
 		}
 	}
+}
+.px2-darkmode .gitui79{
+	@import "../node_modules/px2style/src/themes/darkmode/darkmode.css.scss"; // Px2Style
 }
