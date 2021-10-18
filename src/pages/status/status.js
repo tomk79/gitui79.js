@@ -146,12 +146,15 @@ module.exports = function(main, $elms, gitparse79){
 	// 差分を表示する
 	function showDiff( file, status, isStaged ){
 		var diffInfo;
+		var diffHtml;
 		px2style.loading();
 
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
 				var diffCmd = [];
 				diffCmd.push('diff');
+				// diffCmd.push('-C');
+				// diffCmd.push('12');
 				if( isStaged == 'staged' ){
 					diffCmd.push('--cached');
 				}
@@ -166,13 +169,30 @@ module.exports = function(main, $elms, gitparse79){
 				);
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
+				// --------------------------------------
+				// diff2html
+				const Diff2html = require('diff2html');
+				diffHtml = Diff2html.html(
+					Diff2html.parse( diffInfo.stdout ),
+					{
+						drawFileList: false,
+						outputFormat: 'side-by-side',
+					}
+				);
+				// / diff2html
+				// --------------------------------------
+
+				rlv();
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
 				var src = _twig.twig({
 					data: templates.diff
 				}).render({
 					file: file,
 					status: status,
 					isStaged: isStaged,
-					code: diffInfo.stdout
+					code: diffInfo.stdout,
+					diffHtml: diffHtml,
 				});
 				var $body = $('<div>').addClass('gitui79').append(src);
 				$body.find('.gitui79__resolve-ours').on('click', function(){

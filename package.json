@@ -21,19 +21,21 @@
   },
   "homepage": "https://github.com/tomk79/gitui79.js#readme",
   "dependencies": {
+    "bootstrap": "^4.3.1",
+    "diff2html": "^3.4.13",
     "es6-promise": "^4.1.0",
     "fs-extra": "^7.0.1",
     "gitparse79": "git+https://github.com/tomk79/node-git-parser.git#develop",
     "iterate79": "^1.0.0",
     "jquery": "^3.6.0",
     "px2style": "git+https://github.com/pickles2/px2style.git#develop",
+    "twig": "^1.15.4",
     "utils79": "0.0.4"
   },
   "devDependencies": {
     "body-parser": "^1.17.1",
-    "bootstrap": "^4.3.1",
     "express": "^4.15.2",
-    "express-session": "^1.15.2",
+    "express-session": "^1.17.2",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^3.1.1",
     "gulp-concat": "^2.6.1",
@@ -44,7 +46,6 @@
     "gulp-uglify": "^3.0.2",
     "html-loader": "^0.5.5",
     "mocha": "^3.2.0",
-    "twig": "^1.13.3",
     "webpack": "^4.39.2",
     "webpack-stream": "^5.2.1"
   }

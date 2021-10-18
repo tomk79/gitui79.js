@@ -1,5 +1,10 @@
 .gitui79{
-	@import "../node_modules/px2style/src/px2style.css.scss"; // Px2Style
+	// Px2Style
+	@import "../node_modules/px2style/src/px2style.css.scss";
+
+	// diff2html
+	@import "../node_modules/diff2html/bundles/css/diff2html.min";
+
 
 	display: flex;
 	flex-direction: column;

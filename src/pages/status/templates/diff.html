@@ -23,7 +23,12 @@
 </div>
 {% endif %}
 
-{% if code %}
+{% if code or diffHtml %}
 <h2>差分</h2>
-<pre><code>{{ code|e }}</code></pre>
+{% if diffHtml %}
+<div>{{ diffHtml }}</div>
+{% endif %}
+{% if code %}
+<!-- <pre><code>{{ code|e }}</code></pre> -->
+{% endif %}
 {% endif %}
