@@ -153,8 +153,7 @@ module.exports = function(main, $elms, gitparse79){
 			.then(function(){ return new Promise(function(rlv, rjt){
 				var diffCmd = [];
 				diffCmd.push('diff');
-				// diffCmd.push('-C');
-				// diffCmd.push('12');
+				diffCmd.push('-U12');
 				if( isStaged == 'staged' ){
 					diffCmd.push('--cached');
 				}
