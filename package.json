@@ -3,7 +3,7 @@
   "version": "0.2.2",
   "private": false,
   "description": "",
-  "main": "src/gitui79.js",
+  "main": "src/js/main.js",
   "scripts": {
     "start": "node ./tests/app/server/server.js;",
     "up": "node ./tests/app/server/server.js;",
