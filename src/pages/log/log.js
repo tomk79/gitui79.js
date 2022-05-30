@@ -4,10 +4,10 @@
 module.exports = function(main, $elms, gitparse79){
 	var _twig = require('twig');
 	var templates = {
-		"git_show": require('./templates/git_show.html'),
-		"git_log": require('./templates/git_log.html'),
-		"git_log_rows": require('./templates/git_log_rows.html'),
-		"show_fileinfo": require('./templates/show_fileinfo.html')
+		"git_show": require('./templates/git_show.twig'),
+		"git_log": require('./templates/git_log.twig'),
+		"git_log_rows": require('./templates/git_log_rows.twig'),
+		"show_fileinfo": require('./templates/show_fileinfo.twig')
 	};
 	var it79 = require('iterate79');
 	var px2style = main.px2style;
@@ -22,9 +22,7 @@ module.exports = function(main, $elms, gitparse79){
 			function(result){
 				console.log(result);
 				var splitedCommitMessage = main.parseCommitMessage(result.message);
-				var src = _twig.twig({
-					data: templates.git_show
-				}).render({
+				var src = templates.git_show({
 					commit: result,
 					title: splitedCommitMessage.title,
 					body: splitedCommitMessage.body
@@ -79,9 +77,7 @@ module.exports = function(main, $elms, gitparse79){
 	function showCommitFile(commit, file, status){
 		px2style.loading();
 
-		var src = _twig.twig({
-			data: templates.show_fileinfo
-		}).render({
+		var src = templates.show_fileinfo({
 			file: file,
 			status: status
 		});
@@ -282,11 +278,10 @@ module.exports = function(main, $elms, gitparse79){
 				log.messageTitle = parsedCommitMessage.title;
 				log.messageBody = parsedCommitMessage.body;
 			});
-			var src_rows = _twig.twig({
-				data: templates.git_log_rows
-			}).render({
+			var src_rows = templates.git_log_rows({
 				log: git_log
 			});
+
 			$elms.body.querySelector('.gitui79__list-commit-logs').innerHTML += src_rows;
 			$elms.body.querySelectorAll('.gitui79__list-commit-logs a').forEach(function(elm){
 				elm.addEventListener('click', function(){
@@ -308,9 +303,7 @@ module.exports = function(main, $elms, gitparse79){
 				);
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
-				var src = _twig.twig({
-					data: templates.git_log
-				}).render({
+				var src = templates.git_log({
 					currentBranchName: main.getCurrentBranchName(),
 					log: git_log,
 					committer: main.getCommitter(),
@@ -347,7 +340,6 @@ module.exports = function(main, $elms, gitparse79){
 							main.disabled = false;
 
 							px2style.closeLoading();
-							rlv();
 						}
 					);
 				});

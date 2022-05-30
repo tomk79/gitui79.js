@@ -4,7 +4,7 @@
 module.exports = function(main, $elms, gitparse79){
 	var _twig = require('twig');
 	var templates = {
-		"git_push": require('./templates/git_push.html')
+		"git_push": require('./templates/git_push.twig')
 	};
 	var px2style = main.px2style;
 
@@ -25,9 +25,7 @@ module.exports = function(main, $elms, gitparse79){
 				);
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
-				var src = _twig.twig({
-					data: templates.git_push
-				}).render({
+				var src = templates.git_push({
 					currentBranchName: main.getCurrentBranchName(),
 					remote: git_remote
 				});

@@ -15,7 +15,7 @@ module.exports = function($elm, fncCallGit, options){
 	var $elms = {};
 
 	var templates = {
-		"mainframe": require('../resources/templates/mainframe.html')
+		"mainframe": require('../resources/templates/mainframe.twig')
 	};
 
 	var committer = {
@@ -65,7 +65,7 @@ module.exports = function($elm, fncCallGit, options){
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				$elm.classList.add("gitui79");
-				$elm.innerHTML = templates.mainframe;
+				$elm.innerHTML = templates.mainframe();
 
 				// buttons
 				$elm.querySelector('.gitui79__btn--status').addEventListener('click', function(e){
