@@ -1,9 +1,9 @@
+// Px2Style
+@import "../node_modules/px2style/dist/px2style";
+
 .gitui79{
 	// Bootstrap 4
 	@import "../node_modules/bootstrap/dist/css/bootstrap";
-
-	// Px2Style
-	@import "../node_modules/px2style/dist/px2style";
 
 	// diff2html
 	@import "../node_modules/diff2html/bundles/css/diff2html.min";
@@ -162,6 +162,6 @@
 		}
 	}
 }
-.px2-darkmode .gitui79{
-	@import "../node_modules/px2style/src/themes/darkmode/darkmode.css.scss"; // Px2Style
+.px2-darkmode {
+	@import "../node_modules/px2style/dist/themes/darkmode"; // Px2Style
 }
