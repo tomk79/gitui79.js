@@ -7,7 +7,8 @@ module.exports = function($elm, fncCallGit, options){
 	options.committer = options.committer || {};
 
 	var gitparse79 = new (require('gitparse79'))(fncCallGit);
-	var px2style = require('px2style/dist/px2style.js');
+	require('px2style/src_px2style/px2style.js');
+	var px2style = window.px2style;
 	this.px2style = px2style;
 
 	var $elms = {};
