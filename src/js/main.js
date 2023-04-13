@@ -2,12 +2,13 @@
  * main.js
  */
 module.exports = function($elm, fncCallGit, options){
+	var Twig = require('twig');
 	var main = this;
 	options = options || {};
 	options.committer = options.committer || {};
 
 	var gitparse79 = new (require('gitparse79'))(fncCallGit);
-	require('px2style/src_px2style/px2style.js');
+	require('px2style/dist/px2style.js');
 	var px2style = window.px2style;
 	this.px2style = px2style;
 
@@ -155,5 +156,15 @@ module.exports = function($elm, fncCallGit, options){
 		// 	$elms.statusbar.innerText = '';
 		// }, 5000);
 		callback();
+	}
+
+	/**
+	 * Twig テンプレートを処理する
+	 */
+	this.bindTwig = function( templateSrc, bindData ){
+		var template = Twig.twig({
+			data: templateSrc,
+		});
+		return template.render(bindData);
 	}
 }

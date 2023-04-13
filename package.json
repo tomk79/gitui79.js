@@ -56,6 +56,8 @@
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.49.9",
     "sass-loader": "^12.6.0",
+    "text-loader": "^0.0.1",
+    "twig": "^1.16.0",
     "twig-loader": "^0.5.5",
     "url-parse": "^1.5.10",
     "utils79": "^0.0.5"

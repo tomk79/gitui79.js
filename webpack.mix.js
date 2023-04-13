@@ -16,6 +16,10 @@ mix
 		module: {
 			rules:[
 				{
+					test: /\.txt$/i,
+					use: ['raw-loader'],
+				},
+				{
 					test:/\.twig$/,
 					use:['twig-loader']
 				}

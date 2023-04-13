@@ -5,7 +5,7 @@ module.exports = function(main, $elms, gitparse79){
 	var _twig = require('twig');
 	var templates = {
 		"git_status": require('./templates/git_status.twig'),
-		"diff": require('./templates/diff.twig')
+		"diff": require('./templates/diff.twig'),
 	};
 	var it79 = require('iterate79');
 	var px2style = main.px2style;
@@ -182,15 +182,16 @@ module.exports = function(main, $elms, gitparse79){
 				rlv();
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
-				var src = _twig.twig({
-					data: templates.diff()
-				}).render({
-					file: file,
-					status: status,
-					isStaged: isStaged,
-					code: diffInfo.stdout,
-					diffHtml: diffHtml,
-				});
+				var src = main.bindTwig(
+					require('-!text-loader!./templates/diff.twig'),
+					{
+						file: file,
+						status: status,
+						isStaged: isStaged,
+						code: diffInfo.stdout,
+						diffHtml: diffHtml,
+					}
+				);
 				var $body = $('<div>').addClass('gitui79').append(src);
 				$body.find('.gitui79__resolve-ours').on('click', function(){
 					alert('自分の変更を使って競合を解決します。');
