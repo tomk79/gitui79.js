@@ -17,6 +17,7 @@ module.exports = function(main, $elms, gitparse79){
 	// コミットの詳細を表示する
 	function showCommitDetails( commit ){
 		px2style.loading();
+
 		gitparse79.git(
 			['show', '--name-status', commit],
 			function(result){
@@ -25,7 +26,7 @@ module.exports = function(main, $elms, gitparse79){
 				var src = templates.git_show({
 					commit: result,
 					title: splitedCommitMessage.title,
-					body: splitedCommitMessage.body
+					body: splitedCommitMessage.body,
 				});
 				var $body = $('<div>').html(src);
 				px2style.modal(
@@ -77,17 +78,47 @@ module.exports = function(main, $elms, gitparse79){
 	function showCommitFile(commit, file, status){
 		px2style.loading();
 
-		var src = templates.show_fileinfo({
-			file: file,
-			status: status
-		});
-
-		var $body = $('<div>').append(src);
+		var $body;
 		var modalTitle = file;
 		modalTitle = modalTitle.replace(/^[\s\S]*?([^\/]*)$/, '$1');
 
+		var diffHtml;
+
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
+				gitparse79.git(
+					['diff', commit+'~', commit, file],
+					function(result){
+						// --------------------------------------
+						// diff2html
+						const Diff2html = require('diff2html');
+						diffHtml = Diff2html.html(
+							Diff2html.parse( result.stdout ),
+							{
+								drawFileList: false,
+								outputFormat: 'side-by-side',
+							}
+						);
+						// / diff2html
+						// --------------------------------------
+
+						rlv();
+					}
+				);
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+				var src = templates.show_fileinfo({
+					file: file,
+					status: status,
+					diffHtml: diffHtml,
+				});
+
+				$body = $('<div>').addClass('gitui79').append(src);
+				rlv();
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
+
+
 				px2style.modal(
 					{
 						title: modalTitle,

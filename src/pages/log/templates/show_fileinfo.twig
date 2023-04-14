@@ -2,11 +2,18 @@
     <table class="px2-table">
         <tr>
             <th>file</th>
-            <td>{{ file }}</td>
+            <td>{{ file|e }}</td>
         </tr>
         <tr>
             <th>status</th>
-            <td>{{ status }}</td>
+            <td>{{ status|e }}</td>
         </tr>
     </table>
 </div>
+
+{% if code or diffHtml %}
+<h2>差分</h2>
+{% if diffHtml %}
+<div>{{ diffHtml }}</div>
+{% endif %}
+{% endif %}
