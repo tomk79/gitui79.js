@@ -39,9 +39,15 @@
 		<li class="gitui79__list-changes-staged gitui79__list-changes-unmerged"><a href="javascript:;" data-file="{{ file|e }}" data-status="unmerged" data-is-staged="noStaged">{{ file|e }}</a></li>
 {% endfor %}
 	</ul>
-	<div class="clearfix px2-p gitui79__btn-block-open-commit-form">
-		<div class="float-left"><button class="px2-btn gitui79__cont-btn-discard" type="button">変更を破棄する</button></div>
-		<div class="float-right"><button class="px2-btn px2-btn--primary gitui79__cont-btn-commit" type="button"{% if status.isUnmerged %} disabled="disabled"{% endif %}>コミットする</button></div>
+	<div class="gitui79__btn-block-open-commit-form">
+		<div class="px2-form-submit-area">
+			<ul class="px2-form-submit-area__btns">
+				<li><button type="button" class="px2-btn px2-btn--primary gitui79__cont-btn-commit"{% if status.isUnmerged %} disabled="disabled"{% endif %}>コミットする</button></li>
+			</ul>
+			<ul class="px2-form-submit-area__backward-btns">
+				<li><button type="button" class="px2-btn gitui79__cont-btn-discard">変更を破棄する</button></li>
+			</ul>
+		</div>
 	</div>
 	<div class="gitui79__commit-form" style="display: none;">
 		<form action="javascript:;" method="post">
@@ -58,7 +64,7 @@
 				&lt;<input type="text" name="committer.email" value="{{ committer.email }}" style="width: 35%;" placeholder="E-mail" />&gt;
 			</p>
 			{% endif %}
-			<div class="text-center"><button class="px2-btn px2-btn--primary gitui79__btn-do-commit" type="submit">コミットする</button></div>
+			<div class="px2-text-align-center"><button type="submit" class="px2-btn px2-btn--primary gitui79__btn-do-commit">コミットする</button></div>
 		</form>
 	</div>
 

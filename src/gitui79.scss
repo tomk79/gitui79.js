@@ -80,33 +80,41 @@
 
 	&__list-changes{
 		padding: 0;
-		margin: 0.2em 2em;
+		margin: 0.7em 0;
 		border-top: 1px solid #ddd;
 		> li{
 			list-style-type: none;
-			padding: 0.2em 1em;
 			border-bottom: 1px solid #ddd;
+			a {
+				text-decoration: none;
+				display: block;
+				padding: 0.4em 15px;
+				&:hover {
+					opacity: 0.9;
+					background-color: #fffc;
+				}
+			}
 		}
 	}
 
-	&__list-changes-added:before,
-	&__list-changes-untracked:before{
+	&__list-changes-added a::before,
+	&__list-changes-untracked a::before {
 		content: "■";
 		color: #15c118;
 		margin-right: 0.5em;
 	}
-	&__list-changes-changed:before,
-	&__list-changes-modified:before{
+	&__list-changes-changed a::before,
+	&__list-changes-modified a::before {
 		content: "■";
 		color: #edbc42;
 		margin-right: 0.5em;
 	}
-	&__list-changes-deleted:before{
+	&__list-changes-deleted a::before {
 		content: "■";
 		color: #e55454;
 		margin-right: 0.5em;
 	}
-	&__list-changes-unmerged:before{
+	&__list-changes-unmerged a::before {
 		content: "▲";
 		color: #aaaa00;
 		margin-right: 0.5em;

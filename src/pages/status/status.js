@@ -233,8 +233,9 @@ module.exports = function(main, $elms, gitparse79){
 					{
 						title: '詳細',
 						body: $body,
+						width: '100%',
 						buttons: [
-							'<button type="submit" class="px2-btn px2-btn--primary">OK</button>'
+							'<button type="submit" class="px2-btn px2-btn--primary">閉じる</button>'
 						],
 						buttonsSecondary: [
 							$rollbackButton
@@ -246,7 +247,6 @@ module.exports = function(main, $elms, gitparse79){
 								px2style.closeModal();
 							}
 						},
-						width: 700
 					},
 					function(){
 						px2style.closeLoading();

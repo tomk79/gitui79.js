@@ -34,7 +34,7 @@ module.exports = function(main, $elms, gitparse79){
 						title: splitedCommitMessage.title,
 						body: $body,
 						buttons: [
-							'<button type="submit" class="px2-btn px2-btn--primary">OK</button>'
+							'<button type="submit" class="px2-btn px2-btn--primary">閉じる</button>'
 						],
 						buttonsSecondary: [
 							$('<button>')
@@ -118,13 +118,13 @@ module.exports = function(main, $elms, gitparse79){
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 
-
 				px2style.modal(
 					{
 						title: modalTitle,
 						body: $body,
+						width: '100%',
 						buttons: [
-							'<button type="submit" class="px2-btn px2-btn--primary">OK</button>'
+							'<button type="submit" class="px2-btn px2-btn--primary">閉じる</button>'
 						],
 						buttonsSecondary: [
 							$('<button>')
@@ -145,7 +145,6 @@ module.exports = function(main, $elms, gitparse79){
 								px2style.closeModal();
 							}
 						},
-						width: 500
 					},
 					function(){
 						px2style.closeLoading();
