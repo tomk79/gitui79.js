@@ -14,7 +14,7 @@
 			</tr>
 			<tr>
 				<th>date:</th>
-				<td>{{ commit.date|e }}</td>
+				<td>{{ commit.date|date("Y-m-d(D) H:i:s") }}</td>
 			</tr>
 		</tbody>
 	</table>

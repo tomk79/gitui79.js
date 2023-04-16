@@ -12,9 +12,10 @@ module.exports = function(main, gitparse79, $elms, templates){
 	 */
 	this.load = function(pageName){
 		$elms.elm.querySelectorAll('.gitui79__toolbar a').forEach(function(elm){
-			elm.classList.remove('active');
+			elm.classList.remove('current');
 		});
-		$elms.elm.querySelector('.gitui79__btn--'+pageName).classList.add('active');
+		$elms.elm.querySelector('.gitui79__btn--'+pageName).classList.add('current');
+		$elms.body.setAttribute('data-page-name', pageName);
 		this.pages[pageName]();
 	}
 

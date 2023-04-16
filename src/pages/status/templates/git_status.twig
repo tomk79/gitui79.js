@@ -2,7 +2,7 @@
 	<p>Branch: <q>{{ currentBranchName }}</q></p>
 </section>
 
-<section class="gitui79__uncommited-changes">
+<section class="gitui79__cont-uncommited-changes">
 	<h2>コミットされていない変更</h2>
 {% if status.notStaged.untracked.length
  or status.notStaged.modified.length
@@ -13,6 +13,7 @@
  or status.unmerged.bothAdded.length
  or status.unmerged.bothModified.length
 %}
+	<div class="gitui79__cont-list-changes-wrap">
 	<ul class="gitui79__list-changes">
 {% for file in status.notStaged.untracked %}
 		<li class="gitui79__list-changes-untracked"><a href="javascript:;" data-file="{{ file|e }}" data-status="untracked" data-is-staged="noStaged">{{ file|e }}</a></li>
@@ -39,6 +40,7 @@
 		<li class="gitui79__list-changes-staged gitui79__list-changes-unmerged"><a href="javascript:;" data-file="{{ file|e }}" data-status="unmerged" data-is-staged="noStaged">{{ file|e }}</a></li>
 {% endfor %}
 	</ul>
+	</div>
 	<div class="gitui79__btn-block-open-commit-form">
 		<div class="px2-form-submit-area">
 			<ul class="px2-form-submit-area__btns">
@@ -69,7 +71,7 @@
 	</div>
 
 {% else %}
-	<div class="gitui79__uncommited-changes-nothing-to-commit">
+	<div class="gitui79__cont-uncommited-changes-nothing-to-commit">
 		<p>コミットされていない変更はありません。</p>
 	</div>
 {% endif %}

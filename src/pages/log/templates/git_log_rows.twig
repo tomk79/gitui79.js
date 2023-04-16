@@ -1,5 +1,7 @@
 {% for commit in log.logs %}
-<li><h3><a href="javascript:;" data-commit="{{ commit.commit|e }}">{{ commit.messageTitle|e }}</a></h3>
-	<p>by {{ commit.author|e }} &lt;{{ commit.email|e }}&gt; at {{ commit.date|e }}</p>
-</li>
+<li><a href="javascript:;" data-commit="{{ commit.commit|e }}">
+	<div class="gitui79__list-commit-logs__title">{% if commit.messageTitle %}{{ commit.messageTitle|e }}{% else %}<i>(no comment)</i>{% endif %}</div>
+	<div>{{ commit.author|e }} &lt;{{ commit.email|e }}&gt;</div>
+	<div>{{ commit.date|date("Y-m-d(D) H:i:s") }}</div>
+</a></li>
 {% endfor %}
