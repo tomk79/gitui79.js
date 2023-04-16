@@ -46,7 +46,17 @@ module.exports = function(main, $elms, gitparse79){
 										return;
 									}
 									rollbackAll(commit);
-								})
+								}),
+							$('<button>')
+								.text('このバージョン適用前に戻す')
+								.addClass('px2-btn')
+								.attr('type', 'button')
+								.on('click', function(){
+									if( !confirm('すべてのファイルのバージョンを戻します。コミットされていない変更がある場合は、破棄されます。続けますか？') ){
+										return;
+									}
+									rollbackAll(commit+'~');
+								}),
 						],
 						form: {
 							action: 'javascript:;',
@@ -136,7 +146,17 @@ module.exports = function(main, $elms, gitparse79){
 										return;
 									}
 									rollbackFile(commit, file, status);
-								})
+								}),
+							$('<button>')
+								.text('このバージョン適用前に戻す')
+								.addClass('px2-btn')
+								.attr('type', 'button')
+								.on('click', function(){
+									if( !confirm('選択したファイルのバージョンを戻します。コミットされていない変更がある場合は、破棄されます。続けますか？') ){
+										return;
+									}
+									rollbackFile(commit+'~', file, status);
+								}),
 						],
 						form: {
 							action: 'javascript:;',
