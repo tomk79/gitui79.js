@@ -25,7 +25,6 @@ module.exports = function(main, $elms, gitparse79){
 				gitparse79.git(
 					['fetch', '--prune'],
 					function(result){
-						console.log(result);
 						rlv();
 					}
 				);
@@ -36,7 +35,6 @@ module.exports = function(main, $elms, gitparse79){
 				gitparse79.git(
 					['status', '-u'],
 					function(result){
-						// console.log(result);
 						git_status = result;
 						main.setCurrentBranchName(git_status.currentBranchName);
 						rlv();
@@ -159,7 +157,6 @@ module.exports = function(main, $elms, gitparse79){
 				gitparse79.git(
 					diffCmd,
 					function(result){
-						// console.log(result);
 						diffInfo = result;
 						rlv();
 					}
@@ -275,9 +272,8 @@ module.exports = function(main, $elms, gitparse79){
 		px2style.loadingMessage('コミットしています...');
 
 		gitparse79.git(
-			['add', './'],
+			['add', '--all', './'],
 			function(result){
-				// console.log(result);
 				gitparse79.git(
 					[
 						'commit',
@@ -285,7 +281,6 @@ module.exports = function(main, $elms, gitparse79){
 						'--author='+committer.name+' <'+committer.email+'>'
 					],
 					function(result){
-						console.log(result);
 						main.flashMessage('コミットしました。');
 						px2style.loadingMessage('コミットしました。');
 						setTimeout(function(){
@@ -308,7 +303,6 @@ module.exports = function(main, $elms, gitparse79){
 				gitparse79.git(
 					['checkout', '--'+direction, file],
 					function(result){
-						// console.log(result);
 						rlv();
 					}
 				);
@@ -344,7 +338,6 @@ module.exports = function(main, $elms, gitparse79){
 				gitparse79.git(
 					['reset', 'HEAD', file],
 					function(result){
-						// console.log(result);
 						rlv();
 					}
 				);
@@ -354,7 +347,6 @@ module.exports = function(main, $elms, gitparse79){
 					gitparse79.git(
 						['clean', '-f', file],
 						function(result){
-							console.log(result);
 							rlv();
 						}
 					);
@@ -362,7 +354,6 @@ module.exports = function(main, $elms, gitparse79){
 					gitparse79.git(
 						['checkout', 'HEAD', file],
 						function(result){
-							console.log(result);
 							rlv();
 						}
 					);
@@ -386,13 +377,11 @@ module.exports = function(main, $elms, gitparse79){
 				gitparse79.git(
 					['reset', 'HEAD', './'],
 					function(result){
-						// console.log(result);
 
 						// 戻せるものは全部戻す
 						gitparse79.git(
 							['checkout', 'HEAD', './'],
 							function(result){
-								// console.log(result);
 								rlv();
 							}
 						);
@@ -403,7 +392,6 @@ module.exports = function(main, $elms, gitparse79){
 				gitparse79.git(
 					['status', '-u'],
 					function(result){
-						console.log(result);
 						git_status = result;
 						main.setCurrentBranchName(git_status.currentBranchName);
 						rlv();
@@ -422,7 +410,6 @@ module.exports = function(main, $elms, gitparse79){
 									files,
 									function( it3, file, idx3 ){
 										px2style.loadingMessage( file );
-										console.log( file, status, isStaged );
 										discardFile( file, status, isStaged, function(){
 											it3.next();
 										} );
@@ -451,7 +438,6 @@ module.exports = function(main, $elms, gitparse79){
 							files,
 							function( it3, file, idx3 ){
 								px2style.loadingMessage( file );
-								console.log( file, status );
 								discardFile( file, status, 'noStaged', function(){
 									it3.next();
 								} );
