@@ -18,7 +18,7 @@
  or status.unmerged.bothAdded.length
  or status.unmerged.bothModified.length
 %}
-	<div class="gitui79__list-changes-wrap">
+	<div class="gitui79__cont-list-changes-wrap">
 	<ul class="gitui79__list-changes">
 {% for file in status.notStaged.untracked %}
 		<li class="gitui79__list-changes-untracked"><a href="javascript:;" data-file="{{ file|e }}" data-status="untracked" data-is-staged="noStaged">{{ file|e }}</a></li>
