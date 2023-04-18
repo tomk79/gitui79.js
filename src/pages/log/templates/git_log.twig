@@ -1,16 +1,16 @@
 <section class="gitui79__current-branch-name">
-	<table class="px2-table" style="width: 100%;">
+	<table class="px2-table">
 		<tr>
-			<th style="width: 30%;">Branch</th>
-			<td style="width: 70%;">{{ currentBranchName|e }}</td>
+			<th>Branch</th>
+			<td>{{ currentBranchName|e }}</td>
 		</tr>
 	</table>
 </section>
 
-<section class="gitui79__commit-logs">
+<section class="gitui79__cont-commit-logs">
 <h2>コミットログ</h2>
 {% if log.logs.length %}
-<ul class="gitui79__list-commit-logs">
+<ul class="gitui79__cont-list-commit-logs">
 </ul>
 <div class="px2-p px2-text-align-center gitui79__btn-block-next-page"><button type="button" class="px2-btn px2-btn--primary">次の {{dpp}} 件</button></div>
 {% else %}

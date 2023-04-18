@@ -58,7 +58,7 @@ module.exports = function(main, $elms, gitparse79){
 				// --------------------------------------
 				// 差分表示
 
-				$($elms.body).find('.gitui79__cont-list-changes a').on('click', function(){
+				$($elms.body).find('.gitui79__list-changes a').on('click', function(){
 					var file = $(this).attr('data-file');
 					var status = $(this).attr('data-status');
 					var isStaged = $(this).attr('data-is-staged');

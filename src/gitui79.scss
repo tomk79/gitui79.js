@@ -20,11 +20,13 @@
 		font-size: large;
 		font-weight: bold;
 		margin: 1em 0;
+		font-size: 18px;
 	}
 	h3 {
 		font-size: medium;
 		font-weight: bold;
 		margin: 0.5em 0;
+		font-size: 16px;
 	}
 
 	pre code {
@@ -102,6 +104,15 @@
 		word-wrap: break-word;
 		overflow-wrap: break-word;
 		word-break : break-all;
+		table {
+			width: 100%;
+		}
+		th {
+			width: 30%;
+		}
+		td {
+			width: 70%;
+		}
 	}
 
 	&__statusbar {
@@ -110,36 +121,47 @@
 		flex-grow: 0;
 	}
 
-	&__list-commit-logs {
+	&__list-changes {
 		padding: 0;
-		margin: 0;
+		margin: 0.7em 0;
 		border-top: 1px solid #ddd;
-		> li{
+		> li {
 			list-style-type: none;
-			padding: 0;
-			margin: 0;
 			border-bottom: 1px solid #ddd;
-			> a {
-				display: block;
-				padding: 0.8em 15px;
-				background-color: #ffffff;
+			a {
 				text-decoration: none;
+				display: block;
+				padding: 0.4em 15px;
 				color: #333;
 				&:hover {
+					opacity: 0.9;
 					background-color: #f5faff;
-					text-decoration: none;
-					color: #333;
-					.gitui79__list-commit-logs__title {
-						color: #00a0e6;
-						text-decoration: underline;
-					}
+					color: #00a0e6;
 				}
 			}
 		}
-		&__title {
-			font-size: 16px;
-			color: #000;
-			font-weight: bold;
+
+		&-added a::before,
+		&-untracked a::before {
+			content: "■";
+			color: #15c118;
+			margin-right: 0.5em;
+		}
+		&-changed a::before,
+		&-modified a::before {
+			content: "■";
+			color: #edbc42;
+			margin-right: 0.5em;
+		}
+		&-deleted a::before {
+			content: "■";
+			color: #e55454;
+			margin-right: 0.5em;
+		}
+		&-unmerged a::before {
+			content: "▲";
+			color: #aaaa00;
+			margin-right: 0.5em;
 		}
 	}
 
@@ -176,6 +198,9 @@
 	// 画面個別のスタイル
 	&__body[data-page-name=status] {
 		@import "./pages/status/status.scss";
+	}
+	&__body[data-page-name=log] {
+		@import "./pages/log/log.scss";
 	}
 }
 .px2-darkmode {

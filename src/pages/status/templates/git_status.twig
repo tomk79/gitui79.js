@@ -1,8 +1,8 @@
 <section class="gitui79__current-branch-name">
-	<table class="px2-table" style="width: 100%;">
+	<table class="px2-table">
 		<tr>
-			<th style="width: 30%;">Branch</th>
-			<td style="width: 70%;">{{ currentBranchName|e }}</td>
+			<th>Branch</th>
+			<td>{{ currentBranchName|e }}</td>
 		</tr>
 	</table>
 </section>
@@ -18,31 +18,31 @@
  or status.unmerged.bothAdded.length
  or status.unmerged.bothModified.length
 %}
-	<div class="gitui79__cont-list-changes-wrap">
-	<ul class="gitui79__cont-list-changes">
+	<div class="gitui79__list-changes-wrap">
+	<ul class="gitui79__list-changes">
 {% for file in status.notStaged.untracked %}
-		<li class="gitui79__cont-list-changes-untracked"><a href="javascript:;" data-file="{{ file|e }}" data-status="untracked" data-is-staged="noStaged">{{ file|e }}</a></li>
+		<li class="gitui79__list-changes-untracked"><a href="javascript:;" data-file="{{ file|e }}" data-status="untracked" data-is-staged="noStaged">{{ file|e }}</a></li>
 {% endfor %}
 {% for file in status.notStaged.modified %}
-		<li class="gitui79__cont-list-changes-modified"><a href="javascript:;" data-file="{{ file|e }}" data-status="modified" data-is-staged="noStaged">{{ file|e }}</a></li>
+		<li class="gitui79__list-changes-modified"><a href="javascript:;" data-file="{{ file|e }}" data-status="modified" data-is-staged="noStaged">{{ file|e }}</a></li>
 {% endfor %}
 {% for file in status.notStaged.deleted %}
-		<li class="gitui79__cont-list-changes-deleted"><a href="javascript:;" data-file="{{ file|e }}" data-status="deleted" data-is-staged="noStaged">{{ file|e }}</a></li>
+		<li class="gitui79__list-changes-deleted"><a href="javascript:;" data-file="{{ file|e }}" data-status="deleted" data-is-staged="noStaged">{{ file|e }}</a></li>
 {% endfor %}
 {% for file in status.staged.untracked %}
-		<li class="gitui79__cont-list-changes-staged gitui79__cont-list-changes-untracked"><a href="javascript:;" data-file="{{ file|e }}" data-status="untracked" data-is-staged="staged">{{ file|e }}</a></li>
+		<li class="gitui79__list-changes-staged gitui79__list-changes-untracked"><a href="javascript:;" data-file="{{ file|e }}" data-status="untracked" data-is-staged="staged">{{ file|e }}</a></li>
 {% endfor %}
 {% for file in status.staged.modified %}
-		<li class="gitui79__cont-list-changes-staged gitui79__cont-list-changes-modified"><a href="javascript:;" data-file="{{ file|e }}" data-status="modified" data-is-staged="staged">{{ file|e }}</a></li>
+		<li class="gitui79__list-changes-staged gitui79__list-changes-modified"><a href="javascript:;" data-file="{{ file|e }}" data-status="modified" data-is-staged="staged">{{ file|e }}</a></li>
 {% endfor %}
 {% for file in status.staged.deleted %}
-		<li class="gitui79__cont-list-changes-staged gitui79__cont-list-changes-deleted"><a href="javascript:;" data-file="{{ file|e }}" data-status="deleted" data-is-staged="staged">{{ file|e }}</a></li>
+		<li class="gitui79__list-changes-staged gitui79__list-changes-deleted"><a href="javascript:;" data-file="{{ file|e }}" data-status="deleted" data-is-staged="staged">{{ file|e }}</a></li>
 {% endfor %}
 {% for file in status.unmerged.bothAdded %}
-		<li class="gitui79__cont-list-changes-staged gitui79__cont-list-changes-unmerged"><a href="javascript:;" data-file="{{ file|e }}" data-status="unmerged" data-is-staged="noStaged">{{ file|e }}</a></li>
+		<li class="gitui79__list-changes-staged gitui79__list-changes-unmerged"><a href="javascript:;" data-file="{{ file|e }}" data-status="unmerged" data-is-staged="noStaged">{{ file|e }}</a></li>
 {% endfor %}
 {% for file in status.unmerged.bothModified %}
-		<li class="gitui79__cont-list-changes-staged gitui79__cont-list-changes-unmerged"><a href="javascript:;" data-file="{{ file|e }}" data-status="unmerged" data-is-staged="noStaged">{{ file|e }}</a></li>
+		<li class="gitui79__list-changes-staged gitui79__list-changes-unmerged"><a href="javascript:;" data-file="{{ file|e }}" data-status="unmerged" data-is-staged="noStaged">{{ file|e }}</a></li>
 {% endfor %}
 	</ul>
 	</div>

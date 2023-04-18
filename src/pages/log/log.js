@@ -332,8 +332,8 @@ module.exports = function(main, $elms, gitparse79){
 				log: git_log
 			});
 
-			$elms.body.querySelector('.gitui79__list-commit-logs').innerHTML += src_rows;
-			$elms.body.querySelectorAll('.gitui79__list-commit-logs a').forEach(function(elm){
+			$elms.body.querySelector('.gitui79__cont-list-commit-logs').innerHTML += src_rows;
+			$elms.body.querySelectorAll('.gitui79__cont-list-commit-logs a').forEach(function(elm){
 				elm.addEventListener('click', function(){
 					var commit = this.getAttribute('data-commit');
 					showCommitDetails(commit);
