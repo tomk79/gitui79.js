@@ -1,5 +1,10 @@
 <section class="gitui79__current-branch-name">
-	<p>Branch: <q>{{ currentBranchName|e }}</q></p>
+	<table class="px2-table" style="width: 100%;">
+		<tr>
+			<th style="width: 30%;">Branch</th>
+			<td style="width: 70%;">{{ currentBranchName|e }}</td>
+		</tr>
+	</table>
 </section>
 
 <section class="gitui79__commit-logs">
