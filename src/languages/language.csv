@@ -2,8 +2,8 @@
 page_title.status,"Status","ステータス",,
 page_title.branch,"Branch","ブランチ",,
 page_title.log,"Commit log","コミットログ",,
-page_title.pull,"Push","プル",,
-page_title.push,"Pull","プッシュ",,
+page_title.pull,"Pull","プル",,
+page_title.push,"Push","プッシュ",,
 ui_label.ok,OK,OK,OK,OK
 ui_label.save,Save,保存する,保存,保存
 ui_label.cancel,Cancel,キャンセル,取消,取消
