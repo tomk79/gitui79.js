@@ -2,13 +2,6 @@
  * page: log
  */
 module.exports = function(main, $elms, gitparse79){
-	var _twig = require('twig');
-	var templates = {
-		"git_show": require('./templates/git_show.twig'),
-		"git_log": require('./templates/git_log.twig'),
-		"git_log_rows": require('./templates/git_log_rows.twig'),
-		"show_fileinfo": require('./templates/show_fileinfo.twig')
-	};
 	var it79 = require('iterate79');
 	var px2style = main.px2style;
 
@@ -23,11 +16,11 @@ module.exports = function(main, $elms, gitparse79){
 			function(result){
 				console.log(result);
 				var splitedCommitMessage = main.parseCommitMessage(result.message);
-				var src = templates.git_show({
+				var src = main.bindTwig( require('-!text-loader!./templates/git_show.twig'), {
 					commit: result,
 					title: splitedCommitMessage.title,
 					body: splitedCommitMessage.body,
-				});
+				} );
 				var $body = $('<div>').html(src);
 				px2style.modal(
 					{
@@ -117,11 +110,11 @@ module.exports = function(main, $elms, gitparse79){
 				);
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
-				var src = templates.show_fileinfo({
+				var src = main.bindTwig( require('-!text-loader!./templates/show_fileinfo.twig'), {
 					file: file,
 					status: status,
 					diffHtml: diffHtml,
-				});
+				} );
 
 				$body = $('<div>').addClass('gitui79').append(src);
 				rlv();
@@ -328,9 +321,9 @@ module.exports = function(main, $elms, gitparse79){
 				log.messageTitle = parsedCommitMessage.title;
 				log.messageBody = parsedCommitMessage.body;
 			});
-			var src_rows = templates.git_log_rows({
+			var src_rows = main.bindTwig( require('-!text-loader!./templates/git_log_rows.twig'), {
 				log: git_log
-			});
+			} );
 
 			$elms.body.querySelector('.gitui79__cont-list-commit-logs').innerHTML += src_rows;
 			$elms.body.querySelectorAll('.gitui79__cont-list-commit-logs a').forEach(function(elm){
@@ -353,12 +346,12 @@ module.exports = function(main, $elms, gitparse79){
 				);
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
-				var src = templates.git_log({
+				var src = main.bindTwig( require('-!text-loader!./templates/git_log.twig'), {
 					currentBranchName: main.getCurrentBranchName(),
 					log: git_log,
 					committer: main.getCommitter(),
 					dpp: dpp
-				});
+				} );
 				$elms.body.innerHTML = src;
 
 				appendLogList(git_log);

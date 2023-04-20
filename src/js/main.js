@@ -3,9 +3,12 @@
  */
 module.exports = function($elm, fncCallGit, options){
 	var Twig = require('twig');
+	var LangBank = require('langbank');
+	var languageCsv = require('../languages/language.csv');
 	var main = this;
 	options = options || {};
 	options.committer = options.committer || {};
+	options.lang = options.lang || "ja";
 
 	var gitparse79 = new (require('gitparse79'))(fncCallGit);
 	require('px2style/dist/px2style.js');
@@ -14,17 +17,14 @@ module.exports = function($elm, fncCallGit, options){
 
 	var $elms = {};
 
-	var templates = {
-		"mainframe": require('../resources/templates/mainframe.twig')
-	};
-
 	var committer = {
 		name: "",
 		email: ""
 	};
 	var currentBranchName;
 
-	this.pages = new (require('./pages.js'))(main, gitparse79, $elms, templates);
+	this.lb;
+	this.pages = new (require('./pages.js'))(main, gitparse79, $elms);
 
 	/**
 	 * GitUi79 を初期化します。
@@ -33,6 +33,12 @@ module.exports = function($elm, fncCallGit, options){
 		callback = callback || function(){};
 
 		new Promise(function(rlv){rlv();})
+			.then(function(){ return new Promise(function(rlv, rjt){
+				main.lb = new LangBank(languageCsv, ()=>{
+					main.lb.setLang( options.lang );
+					rlv();
+				});
+			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				if(options.committer.name){
 					committer.name = options.committer.name;
@@ -65,7 +71,7 @@ module.exports = function($elm, fncCallGit, options){
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				$elm.classList.add("gitui79");
-				$elm.innerHTML = templates.mainframe();
+				$elm.innerHTML = main.bindTwig( require('-!text-loader!../resources/templates/mainframe.twig'), {} );
 
 				// buttons
 				$elm.querySelector('.gitui79__btn--status').addEventListener('click', function(e){
@@ -162,9 +168,13 @@ module.exports = function($elm, fncCallGit, options){
 	 * Twig テンプレートを処理する
 	 */
 	this.bindTwig = function( templateSrc, bindData ){
+		var data = {
+			"lb": main.lb,
+			...bindData,
+		};
 		var template = Twig.twig({
 			data: templateSrc,
 		});
-		return template.render(bindData);
+		return template.render(data);
 	}
 }

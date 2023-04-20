@@ -2,11 +2,6 @@
  * page: status
  */
 module.exports = function(main, $elms, gitparse79){
-	var _twig = require('twig');
-	var templates = {
-		"git_status": require('./templates/git_status.twig'),
-		"diff": require('./templates/diff.twig'),
-	};
 	var it79 = require('iterate79');
 	var px2style = main.px2style;
 
@@ -44,11 +39,11 @@ module.exports = function(main, $elms, gitparse79){
 			.then(function(){ return new Promise(function(rlv, rjt){
 				// --------------------------------------
 				// 状態情報を表示
-				var src = templates.git_status({
+				var src = main.bindTwig( require('-!text-loader!./templates/git_status.twig'), {
 					status: git_status,
 					currentBranchName: main.getCurrentBranchName(),
 					committer: main.getCommitter()
-				});
+				} );
 
 				$elms.body.innerHTML = src;
 

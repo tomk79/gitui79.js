@@ -2,10 +2,6 @@
  * page: pull
  */
 module.exports = function(main, $elms, gitparse79){
-	var _twig = require('twig');
-	var templates = {
-		"git_pull": require('./templates/git_pull.twig')
-	};
 	var px2style = main.px2style;
 
 	return function(){
@@ -25,10 +21,10 @@ module.exports = function(main, $elms, gitparse79){
 				);
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
-				var src = templates.git_pull({
+				var src = main.bindTwig( require('-!text-loader!./templates/git_pull.twig'), {
 					currentBranchName: main.getCurrentBranchName(),
 					remote: git_remote
-				});
+				} );
 				$elms.body.innerHTML = src;
 
 				if( !git_remote.remotes.length ){

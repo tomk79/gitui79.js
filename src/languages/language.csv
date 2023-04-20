@@ -1,0 +1,16 @@
+,en,ja,zh,zh-TW
+page_title.status,"Status","ステータス",,
+page_title.branch,"Branch","ブランチ",,
+page_title.log,"Commit log","コミットログ",,
+page_title.pull,"Push","プル",,
+page_title.push,"Pull","プッシュ",,
+ui_label.ok,OK,OK,OK,OK
+ui_label.save,Save,保存する,保存,保存
+ui_label.cancel,Cancel,キャンセル,取消,取消
+ui_label.close,Close,閉じる,关闭,關閉
+ui_label.create,Create,作成する,,
+ui_label.finished,Finished,完了,,
+ui_label.anchor,Anchor,アンカー,,
+ui_label.search,Search,検索,,
+ui_label.back,Back,戻る,,
+ui_label.branch,"Branch","ブランチ",,

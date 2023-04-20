@@ -28,10 +28,11 @@ var gitUi79 = new GitUi79(
         return;
     },
     {
-        committer: {
-            name: "Committer Name",
-            email: "committer@example.com"
-        }
+        "committer": {
+            "name": "Committer Name",
+            "email": "committer@example.com",
+        },
+        "lang": "ja",
     }
 );
 // console.log(remoteFinder);
@@ -51,6 +52,7 @@ gitUi79.init(function(){
 - log画面で、コミット中のファイルの差分を表示するようになった。
 - log画面で、「次の50件」をクリックして続きがない場合に起きるエラーを修正した。
 - 古いバージョンの git環境で、削除されたファイルをコミットできない不具合を修正した。
+- `options.lang` を追加した。
 - スタイリングとUIの改善。
 
 ### gitui79 v0.3.0 (2022年6月5日)

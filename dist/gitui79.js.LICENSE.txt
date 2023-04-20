@@ -6,7 +6,16 @@
  * @version   3.3.1
  */
 
+/*!
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <http://feross.org>
+ * @license  MIT
+ */
+
 /*! For license information please see px2style.js.LICENSE.txt */
+
+/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
 /**
  * Twig.js

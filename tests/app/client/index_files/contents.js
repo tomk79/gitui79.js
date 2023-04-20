@@ -26,8 +26,9 @@
 		{
 			committer: {
 				name: 'Test User',
-				email: 'test.user@example.com'
-			}
+				email: 'test.user@example.com',
+			},
+			lang: "ja",
 		}
 	);
 	// console.log(gitUi79);

@@ -1,7 +1,7 @@
 /**
  * pages
  */
-module.exports = function(main, gitparse79, $elms, templates){
+module.exports = function(main, gitparse79, $elms){
     var _this = this;
 	var _twig = require('twig');
 	this.pages = {};
