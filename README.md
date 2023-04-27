@@ -45,6 +45,10 @@ gitUi79.init(function(){
 
 ## 更新履歴 - Change log
 
+### gitui79 v0.3.2 (リリース日未定)
+
+- px2style を更新した。
+
 ### gitui79 v0.3.1 (2023年4月22日)
 
 - status画面でファイル毎の差分表示がされない不具合の修正。
