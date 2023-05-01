@@ -45,7 +45,7 @@ gitUi79.init(function(){
 
 ## 更新履歴 - Change log
 
-### gitui79 v0.3.2 (リリース日未定)
+### gitui79 v0.3.2 (2023年5月1日)
 
 - px2style を更新した。
 
