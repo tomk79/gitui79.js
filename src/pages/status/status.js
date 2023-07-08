@@ -273,7 +273,7 @@ module.exports = function(main, $elms, gitparse79){
 					[
 						'commit',
 						'-m', message,
-						'--author='+committer.name+' <'+committer.email+'>'
+						'--author="'+committer.name+' <'+committer.email+'>"'
 					],
 					function(result){
 						main.flashMessage('コミットしました。');
