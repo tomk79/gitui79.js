@@ -266,9 +266,32 @@ module.exports = function(main, $elms, gitparse79){
 		px2style.loading();
 		px2style.loadingMessage('コミットしています...');
 
-		gitparse79.git(
-			['add', '--all', './'],
-			function(result){
+		it79.fnc({}, [
+			function(it){
+				gitparse79.git(
+					['add', '--all', './'],
+					function(result){
+						it.next();
+					}
+				);
+			},
+			function(it){
+				gitparse79.git(
+					['config', '--local', 'user.name', committer.name],
+					function(result){
+						it.next();
+					}
+				);
+			},
+			function(it){
+				gitparse79.git(
+					['config', '--local', 'user.email', committer.email],
+					function(result){
+						it.next();
+					}
+				);
+			},
+			function(it){
 				gitparse79.git(
 					[
 						'commit',
@@ -276,16 +299,19 @@ module.exports = function(main, $elms, gitparse79){
 						'--author="'+committer.name+' <'+committer.email+'>"'
 					],
 					function(result){
-						main.flashMessage('コミットしました。');
-						px2style.loadingMessage('コミットしました。');
-						setTimeout(function(){
-							px2style.closeLoading();
-							main.pages.load('status');
-						}, 500);
+						it.next();
 					}
 				);
-			}
-		);
+			},
+			function(it){
+				main.flashMessage('コミットしました。');
+				px2style.loadingMessage('コミットしました。');
+				setTimeout(function(){
+					px2style.closeLoading();
+					main.pages.load('status');
+				}, 500);
+			},
+		]);
 	}
 
 
