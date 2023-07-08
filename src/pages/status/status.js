@@ -277,22 +277,6 @@ module.exports = function(main, $elms, gitparse79){
 			},
 			function(it){
 				gitparse79.git(
-					['config', '--local', 'user.name', committer.name],
-					function(result){
-						it.next();
-					}
-				);
-			},
-			function(it){
-				gitparse79.git(
-					['config', '--local', 'user.email', committer.email],
-					function(result){
-						it.next();
-					}
-				);
-			},
-			function(it){
-				gitparse79.git(
 					[
 						'commit',
 						'-m', message,
