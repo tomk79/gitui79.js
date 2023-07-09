@@ -9,6 +9,15 @@
 				<li><button class="px2-btn" disabled>マージ</button></li>
 				<li><button class="px2-btn" disabled>削除</button></li>
 			</ul>
+			<form action="javascript:;" method="post">
+				<div class="px2-p">
+					<div class="px2-input-group px2-input-group--fluid">
+						<span class="px2-input-group__text">新しい分岐を作成</span>
+						<input type="text" name="branch-name" value="" class="px2-input" style="flex-grow: 100;" />
+						<button type="submit" class="px2-btn px2-btn--primary">作成する</button>
+					</div>
+				</div>
+			</form>
 			{% else %}
 			<a href="javascript:;" data-branch-name="{{ row|e }}">{{ row|e }}</a>
 			<ul class="gitui79__menu-list">
@@ -38,14 +47,4 @@
 		</li>
 		{% endfor %}
 	</ul>
-</section>
-
-<section>
-	<h2>ブランチを作成する</h2>
-	<form action="javascript:;" method="get">
-		<div class="px2-input-group px2-input-group--fluid">
-			<input type="text" name="branch-name" value="" class="px2-input" style="flex-grow: 100;" />
-			<button type="submit" class="px2-btn px2-btn--primary">作成する</button>
-		</div>
-	</form>
 </section>
