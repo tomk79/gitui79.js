@@ -1,0 +1,22 @@
+.gitui79__cont {
+	&-list-commit-logs {
+		border-top: 1px solid #555;
+		> li{
+			border-bottom: 1px solid #555;
+			> a {
+				color: #ccc;
+				background-color: #222;
+				&:hover {
+					background-color: #202428;
+					color: #ddd;
+					.gitui79__cont-list-commit-logs__title {
+						color: #00a0e6;
+					}
+				}
+			}
+		}
+		&__title {
+			color: #eee;
+		}
+	}
+}

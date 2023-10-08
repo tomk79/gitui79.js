@@ -49,5 +49,6 @@ mix
 	// gitui79
 	.js('src/gitui79.js', 'dist/')
 	.sass('src/gitui79.scss', 'dist/')
+	.sass('src/themes/darkmode.scss', 'dist/themes/')
 
 ;
