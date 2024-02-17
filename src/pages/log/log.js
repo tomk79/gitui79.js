@@ -102,6 +102,7 @@ module.exports = function(main, $elms, gitparse79){
 								{
 									drawFileList: false,
 									outputFormat: 'line-by-line',
+									colorScheme: 'auto',
 								}
 							);
 							diffHtmlSideBySide = Diff2html.html(
@@ -109,6 +110,7 @@ module.exports = function(main, $elms, gitparse79){
 								{
 									drawFileList: false,
 									outputFormat: 'side-by-side',
+									colorScheme: 'auto',
 								}
 							);
 							// / diff2html
