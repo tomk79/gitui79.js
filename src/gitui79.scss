@@ -6,6 +6,19 @@
 
 .gitui79 {
 
+	&__sm {
+		display: block;
+		@media all and (min-width: 621px) {
+			display: none;
+		}
+	}
+	&__lg {
+		display: block;
+		@media all and (max-width: 620px) {
+			display: none;
+		}
+	}
+
 
 	display: flex;
 	flex-direction: column;

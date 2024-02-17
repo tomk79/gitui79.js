@@ -5,15 +5,15 @@
 	<table class="px2-table px2-table--dl">
 		<tbody>
 			<tr>
-				<th>commit:</th>
+				<th>Commit:</th>
 				<td>{{ commit.commit|e }}</td>
 			</tr>
 			<tr>
-				<th>committer:</th>
+				<th>Committer:</th>
 				<td>{{ commit.author|e }} &lt;{{ commit.email|e }}&gt;</td>
 			</tr>
 			<tr>
-				<th>date:</th>
+				<th>Date:</th>
 				<td>{{ commit.date|date("Y-m-d(D) H:i:s") }}</td>
 			</tr>
 		</tbody>

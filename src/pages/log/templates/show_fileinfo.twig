@@ -1,19 +1,20 @@
 <div class="px2-p">
     <table class="px2-table px2-table--dl">
         <tr>
-            <th>file</th>
+            <th>File</th>
             <td>{{ file|e }}</td>
         </tr>
         <tr>
-            <th>status</th>
+            <th>Status</th>
             <td>{{ status|e }}</td>
         </tr>
     </table>
 </div>
 
-{% if code or diffHtml %}
+{% if code or diffHtmlLineByLine %}
 <h2>差分</h2>
-{% if diffHtml %}
-<div>{{ diffHtml }}</div>
+{% if diffHtmlLineByLine %}
+<div class="gitui79__sm">{{ diffHtmlLineByLine }}</div>
+<div class="gitui79__lg">{{ diffHtmlSideBySide }}</div>
 {% endif %}
 {% endif %}

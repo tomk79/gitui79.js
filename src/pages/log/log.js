@@ -85,25 +85,35 @@ module.exports = function(main, $elms, gitparse79){
 		var modalTitle = file;
 		modalTitle = modalTitle.replace(/^[\s\S]*?([^\/]*)$/, '$1');
 
-		var diffHtml;
+		var diffHtmlLineByLine = '';
+		var diffHtmlSideBySide = '';
 
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
 				gitparse79.git(
-					['diff', commit+'~', commit, file],
+					['diff', commit+'~', commit, '--', file],
 					function(result){
-						// --------------------------------------
-						// diff2html
-						const Diff2html = require('diff2html');
-						diffHtml = Diff2html.html(
-							Diff2html.parse( result.stdout ),
-							{
-								drawFileList: false,
-								outputFormat: 'side-by-side',
-							}
-						);
-						// / diff2html
-						// --------------------------------------
+						if( !result.errors.length ){
+							// --------------------------------------
+							// diff2html
+							const Diff2html = require('diff2html');
+							diffHtmlLineByLine = Diff2html.html(
+								Diff2html.parse( result.stdout ),
+								{
+									drawFileList: false,
+									outputFormat: 'line-by-line',
+								}
+							);
+							diffHtmlSideBySide = Diff2html.html(
+								Diff2html.parse( result.stdout ),
+								{
+									drawFileList: false,
+									outputFormat: 'side-by-side',
+								}
+							);
+							// / diff2html
+							// --------------------------------------
+						}
 
 						rlv();
 					}
@@ -113,7 +123,8 @@ module.exports = function(main, $elms, gitparse79){
 				var src = main.bindTwig( require('-!text-loader!./templates/show_fileinfo.twig'), {
 					file: file,
 					status: status,
-					diffHtml: diffHtml,
+					diffHtmlLineByLine,
+					diffHtmlSideBySide,
 				} );
 
 				$body = $('<div>').addClass('gitui79').append(src);

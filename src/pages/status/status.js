@@ -137,7 +137,8 @@ module.exports = function(main, $elms, gitparse79){
 	// 差分を表示する
 	function showDiff( file, status, isStaged ){
 		var diffInfo;
-		var diffHtml;
+		var diffHtmlLineByLine = '';
+		var diffHtmlSideBySide = '';
 		px2style.loading();
 
 		new Promise(function(rlv){rlv();})
@@ -148,6 +149,7 @@ module.exports = function(main, $elms, gitparse79){
 				if( isStaged == 'staged' ){
 					diffCmd.push('--cached');
 				}
+				diffCmd.push('--');
 				diffCmd.push(file);
 				gitparse79.git(
 					diffCmd,
@@ -160,14 +162,23 @@ module.exports = function(main, $elms, gitparse79){
 			.then(function(){ return new Promise(function(rlv, rjt){
 				// --------------------------------------
 				// diff2html
-				const Diff2html = require('diff2html');
-				diffHtml = Diff2html.html(
-					Diff2html.parse( diffInfo.stdout ),
-					{
-						drawFileList: false,
-						outputFormat: 'side-by-side',
-					}
-				);
+				if( !diffInfo.errors.length ){
+					const Diff2html = require('diff2html');
+					diffHtmlLineByLine = Diff2html.html(
+						Diff2html.parse( diffInfo.stdout ),
+						{
+							drawFileList: false,
+							outputFormat: 'line-by-line',
+						}
+					);
+					diffHtmlSideBySide = Diff2html.html(
+						Diff2html.parse( diffInfo.stdout ),
+						{
+							drawFileList: false,
+							outputFormat: 'side-by-side',
+						}
+					);
+				}
 				// / diff2html
 				// --------------------------------------
 
@@ -181,7 +192,8 @@ module.exports = function(main, $elms, gitparse79){
 						status: status,
 						isStaged: isStaged,
 						code: diffInfo.stdout,
-						diffHtml: diffHtml,
+						diffHtmlLineByLine,
+						diffHtmlSideBySide,
 					}
 				);
 				var $body = $('<div>').addClass('gitui79').append(src);
