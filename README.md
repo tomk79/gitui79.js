@@ -45,7 +45,7 @@ gitUi79.init(function(){
 
 ## 更新履歴 - Change log
 
-### gitui79 v0.3.5 (リリース日未定)
+### gitui79 v0.3.5 (2024年2月18日)
 
 - 差分表示に関する改善。
 
