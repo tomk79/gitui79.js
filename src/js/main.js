@@ -11,7 +11,6 @@ module.exports = function($elm, fncCallGit, options){
 	options.lang = options.lang || "ja";
 
 	var gitparse79 = new (require('gitparse79'))(fncCallGit);
-	require('px2style/dist/px2style.js');
 	var px2style = window.px2style;
 	this.px2style = px2style;
 

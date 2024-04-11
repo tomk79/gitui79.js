@@ -1,0 +1,80 @@
+.gitui79 {
+	pre code {
+		background-color: #262626;
+		border: 1px solid #767676;
+	}
+	a {
+		color: #eee;
+		&:hover {
+			color: #00a0e6;
+		}
+	}
+
+	&__toolbar {
+		> ul {
+			border-bottom: 1px solid #111;
+			background-color: #1c1c1c;
+
+			> li {
+				> a {
+					border-top: 1px solid #111;
+					border-left: 1px solid #111;
+					border-right: 1px solid #111;
+					background-color: #333;
+					border-bottom: 1px solid #111;
+					&:hover {
+						background-color: #393939;
+					}
+				}
+				> a.current {
+					border-bottom-color: #333;
+				}
+			}
+		}
+	}
+
+	&__list-changes {
+		border-top: 1px solid #555;
+		> li {
+			border-bottom: 1px solid #555;
+			a {
+				color: #ddd;
+				&:hover {
+					background-color: #444;
+					color: #00a0e6;
+				}
+			}
+		}
+
+		&-added a::before,
+		&-untracked a::before {
+			color: #15c118;
+		}
+		&-changed a::before,
+		&-modified a::before {
+			color: #edbc42;
+		}
+		&-deleted a::before {
+			color: #e55454;
+		}
+		&-unmerged a::before {
+			color: #aaaa00;
+		}
+	}
+
+	&__branch-list {
+		border-bottom: 1px solid #555;
+
+		> li {
+			border-top: 1px solid #555;
+		}
+	}
+
+	// 画面個別のスタイル
+	&__body[data-page-name=status] {
+		@import "../../pages/status/status-darkmode.scss";
+	}
+	&__body[data-page-name=log] {
+		@import "../../pages/log/log-darkmode.scss";
+	}
+}

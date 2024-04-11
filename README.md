@@ -48,6 +48,7 @@ gitUi79.init(function(){
 ### gitui79 v0.4.0 (リリース日未定)
 
 - px2style を分離した。
+- px2style を統合した bundledビルドを追加。
 
 ### gitui79 v0.3.5 (2024年2月18日)
 
