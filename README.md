@@ -45,6 +45,10 @@ gitUi79.init(function(){
 
 ## 更新履歴 - Change log
 
+### gitui79 v0.4.1 (リリース日未定)
+
+- エスケープ処理を改善した。
+
 ### gitui79 v0.4.0 (2024年4月30日)
 
 - px2style を分離した。

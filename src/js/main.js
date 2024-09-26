@@ -47,7 +47,6 @@ module.exports = function($elm, fncCallGit, options){
 				gitparse79.git(
 					['config', 'user.name'],
 					function(result){
-						console.log(result);
 						committer.name = result.name;
 						rlv();
 					}
@@ -62,7 +61,6 @@ module.exports = function($elm, fncCallGit, options){
 				gitparse79.git(
 					['config', 'user.email'],
 					function(result){
-						console.log(result);
 						committer.email = result.email;
 						rlv();
 					}
@@ -164,6 +162,15 @@ module.exports = function($elm, fncCallGit, options){
 	}
 
 	/**
+	 * コマンドをエスケープ処理する
+	 * 受け取った文字列を、コマンドラインで安全に使えるようにエスケープする。
+	 * @returns 
+	 */
+	this.escapeShell = function(cmd){
+		return cmd.replace(/(["\s'$`\\])/g, '\\$1');
+	}
+
+	/**
 	 * Twig テンプレートを処理する
 	 */
 	this.bindTwig = function( templateSrc, bindData ){
@@ -173,6 +180,7 @@ module.exports = function($elm, fncCallGit, options){
 		};
 		var template = Twig.twig({
 			data: templateSrc,
+			autoescape: true,
 		});
 		return template.render(data);
 	}

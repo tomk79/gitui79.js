@@ -294,7 +294,7 @@ module.exports = function(main, $elms, gitparse79){
 					[
 						'commit',
 						'-m', message,
-						'--author="'+committer.name+' <'+committer.email+'>"'
+						'--author="'+main.escapeShell(committer.name)+' <'+main.escapeShell(committer.email)+'>"'
 					],
 					function(result){
 						it.next();
