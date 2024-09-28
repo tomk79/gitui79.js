@@ -14,7 +14,7 @@
 {% if code or diffHtmlLineByLine %}
 <h2>差分</h2>
 {% if diffHtmlLineByLine %}
-<div class="gitui79__sm">{{ diffHtmlLineByLine }}</div>
-<div class="gitui79__lg">{{ diffHtmlSideBySide }}</div>
+<div class="gitui79__sm">{{ diffHtmlLineByLine | raw }}</div>
+<div class="gitui79__lg">{{ diffHtmlSideBySide | raw }}</div>
 {% endif %}
 {% endif %}

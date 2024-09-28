@@ -4,21 +4,23 @@
 		function(cmdAry, callback){
 			// サーバーでgitコマンドを実行するAPIを用意してください。
 			// callback には、 gitコマンドが出力した文字列を返してください。
-			var stdout = '';
+			console.info('=-=-=-= cmdAry:', cmdAry);
+			var stdout = null;
+			var stderr = null;
 			$.ajax({
 				url: '/apis/git',
 				method: 'POST',
 				data: {"cmdAry": cmdAry},
 				success: function(data){
-					stdout += data;
+					stdout = data;
 				},
 				error: function(data){
-					stdout += data; // エラー出力も stdout に混ぜて送る
+					stderr = data;
 				},
 				complete: function(){
-					// alert(stdout);
 					var result = JSON.parse(stdout);
-					callback(result.code, result.stdout);
+					console.info('   --- result:', result, stderr);
+					callback(result.code, result.stdout, result.stderr);
 				}
 			});
 			return;

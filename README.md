@@ -12,6 +12,7 @@ var gitUi79 = new GitUi79(
         // サーバーでgitコマンドを実行するAPIを用意してください。
         // callback には、 gitコマンドが出力した文字列を返してください。
         var stdout = '';
+        var stderr = '';
         $.ajax({
             url: '/path/to/endpoint',
             data: cmdAry,
@@ -19,10 +20,10 @@ var gitUi79 = new GitUi79(
                 stdout += data;
             },
             error: function(data){
-                stdout += data; // エラー出力も stdout に混ぜて送る
+                stderr += data;
             },
             complete: function(){
-                callback(0, stdout);
+                callback(0, stdout, stderr);
             }
         });
         return;
@@ -45,9 +46,10 @@ gitUi79.init(function(){
 
 ## 更新履歴 - Change log
 
-### gitui79 v0.4.1 (リリース日未定)
+### gitui79 v0.5.0 (リリース日未定)
 
 - エスケープ処理を改善した。
+- エラー処理に関するいくつかの改善。
 
 ### gitui79 v0.4.0 (2024年4月30日)
 

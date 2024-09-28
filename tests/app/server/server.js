@@ -29,9 +29,9 @@ app.use( '/apis/git', function(req, res, next){
 	// console.log(cmdAry);
 
 	var stdout = '';
+	var stderr = '';
 	var _pathCurrentDir = process.cwd();
 	var _pathGitDir = require('path').resolve(__dirname+'/../../data/');
-	// console.log(_pathGitDir);
 	process.chdir( _pathGitDir );
 
 	var proc = require('child_process').spawn('git', cmdAry);
@@ -39,12 +39,13 @@ app.use( '/apis/git', function(req, res, next){
 		stdout += data;
 	});
 	proc.stderr.on('data', function(data){
-		stdout += data; // エラー出力も stdout に混ぜて送る
+		stderr += data;
 	});
 	proc.on('close', function(code){
 		res.send(JSON.stringify({
 			code: code,
-			stdout: stdout
+			stdout: stdout,
+			stderr: stderr,
 		}));
 	});
 

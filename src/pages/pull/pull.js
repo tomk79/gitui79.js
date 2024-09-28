@@ -14,7 +14,6 @@ module.exports = function(main, $elms, gitparse79){
 				gitparse79.git(
 					['remote', '-v'],
 					function(result){
-						console.log(result);
 						git_remote = result;
 						rlv();
 					}
@@ -69,9 +68,7 @@ module.exports = function(main, $elms, gitparse79){
 					gitparse79.git(
 						gitCmd,
 						function(result){
-							console.log(result);
-							// alert('refresh');
-							$elms.body.querySelector('.gitui79__result-stdout code').innerHTML = result.stdout;
+							$elms.body.querySelector('.gitui79__result-stdout code').innerHTML = (result.stdout || '') + (result.stderr || '');
 							formElements.forEach(function(elm){
 								elm.disabled = false;
 							});

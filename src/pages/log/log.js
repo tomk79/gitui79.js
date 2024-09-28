@@ -14,7 +14,6 @@ module.exports = function(main, $elms, gitparse79){
 		gitparse79.git(
 			['show', '--name-status', commit],
 			function(result){
-				console.log(result);
 				var splitedCommitMessage = main.parseCommitMessage(result.message);
 				var src = main.bindTwig( require('-!text-loader!./templates/git_show.twig'), {
 					commit: result,
@@ -62,7 +61,6 @@ module.exports = function(main, $elms, gitparse79){
 					},
 					function(){
 						px2style.closeLoading();
-						console.log('done.');
 					}
 				);
 				$body.find('.gitui79__list-changes a')
@@ -174,7 +172,6 @@ module.exports = function(main, $elms, gitparse79){
 					},
 					function(){
 						px2style.closeLoading();
-						console.log('done.');
 					}
 				);
 			}); })
@@ -186,7 +183,6 @@ module.exports = function(main, $elms, gitparse79){
 	// すべてのファイルをコミット時点の状態までロールバックする
 	function rollbackAll(commit){
 		px2style.loading();
-		// console.log(commit);
 		var diffFileList = [];
 
 		new Promise(function(rlv){rlv();})
@@ -194,7 +190,6 @@ module.exports = function(main, $elms, gitparse79){
 				gitparse79.git(
 					['checkout', commit, './'],
 					function(result){
-						// console.log(result);
 						rlv();
 						return;
 					}
@@ -204,7 +199,6 @@ module.exports = function(main, $elms, gitparse79){
 				gitparse79.git(
 					['diff', '--name-status', commit],
 					function(result){
-						// console.log(result);
 						diffFileList = result.diff;
 						rlv();
 						return;
@@ -215,13 +209,11 @@ module.exports = function(main, $elms, gitparse79){
 				it79.ary(
 					diffFileList,
 					function(itAry1, diffRow, diffIdx){
-						console.log(diffRow, diffIdx);
 						px2style.loadingMessage( diffRow.filename );
 						if( diffRow.type == 'added' ){
 							gitparse79.git(
 								['rm', diffRow.filename],
 								function(result){
-									// console.log(result);
 									itAry1.next();
 									return;
 								}
@@ -231,7 +223,6 @@ module.exports = function(main, $elms, gitparse79){
 							gitparse79.git(
 								['checkout', commit, diffRow.filename],
 								function(result){
-									// console.log(result);
 									itAry1.next();
 									return;
 								}
@@ -250,7 +241,6 @@ module.exports = function(main, $elms, gitparse79){
 				gitparse79.git(
 					['reset', 'HEAD', './'],
 					function(result){
-						// console.log(result);
 						rlv();
 						return;
 					}
@@ -258,7 +248,6 @@ module.exports = function(main, $elms, gitparse79){
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				px2style.closeLoading();
-				console.log('done.');
 				alert('バージョンを戻しました。');
 				rlv();
 			}); })
@@ -270,7 +259,6 @@ module.exports = function(main, $elms, gitparse79){
 	// 指定のファイルをコミット時点の状態までロールバックする
 	function rollbackFile(commit, file, status){
 		px2style.loading();
-		console.log(commit, file, status);
 
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
@@ -279,7 +267,6 @@ module.exports = function(main, $elms, gitparse79){
 					gitparse79.git(
 						['rm', file],
 						function(result){
-							// console.log(result);
 							rlv();
 							return;
 						}
@@ -289,7 +276,6 @@ module.exports = function(main, $elms, gitparse79){
 					gitparse79.git(
 						['checkout', commit, file],
 						function(result){
-							// console.log(result);
 							rlv();
 							return;
 						}
@@ -301,7 +287,6 @@ module.exports = function(main, $elms, gitparse79){
 				gitparse79.git(
 					['reset', 'HEAD', file],
 					function(result){
-						// console.log(result);
 						rlv();
 						return;
 					}
@@ -309,7 +294,6 @@ module.exports = function(main, $elms, gitparse79){
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				px2style.closeLoading();
-				console.log('done.');
 				alert('ファイル '+file+' のバージョンを戻しました。');
 				rlv();
 			}); })
@@ -352,7 +336,6 @@ module.exports = function(main, $elms, gitparse79){
 				gitparse79.git(
 					['log', '--max-count='+(dpp), '--skip='+(dpp*currentPage)],
 					function(result){
-						console.log(result);
 						git_log = result;
 						rlv();
 					}
@@ -385,7 +368,6 @@ module.exports = function(main, $elms, gitparse79){
 					gitparse79.git(
 						['log', '--max-count='+(dpp), '--skip='+(dpp*currentPage)],
 						function(result){
-							console.log(result);
 							git_log = result;
 
 							appendLogList(git_log);

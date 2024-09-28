@@ -280,11 +280,17 @@ module.exports = function(main, $elms, gitparse79){
 		px2style.loading();
 		px2style.loadingMessage('コミットしています...');
 
+		let isSuccess = true;
+
 		it79.fnc({}, [
 			function(it){
 				gitparse79.git(
 					['add', '--all', './'],
 					function(result){
+						if( result.code ){
+							isSuccess = false;
+							alert('Error: status: status code: '+result.code+';'+"\n"+result.stdout);
+						}
 						it.next();
 					}
 				);
@@ -297,13 +303,22 @@ module.exports = function(main, $elms, gitparse79){
 						'--author="'+main.escapeShell(committer.name)+' <'+main.escapeShell(committer.email)+'>"'
 					],
 					function(result){
+						if( result.code ){
+							isSuccess = false;
+							alert('Error: status: status code: '+result.code+';'+"\n"+result.stdout);
+						}
 						it.next();
 					}
 				);
 			},
 			function(it){
-				main.flashMessage('コミットしました。');
-				px2style.loadingMessage('コミットしました。');
+				if( !isSuccess ){
+					main.flashMessage('コミットに失敗しました。');
+					px2style.loadingMessage('コミットに失敗しました。');
+				}else{
+					main.flashMessage('コミットしました。');
+					px2style.loadingMessage('コミットしました。');
+				}
 				setTimeout(function(){
 					px2style.closeLoading();
 					main.pages.load('status');

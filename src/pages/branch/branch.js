@@ -23,7 +23,6 @@ module.exports = function(main, $elms, gitparse79){
 				gitparse79.git(
 					['fetch', '--prune'],
 					function(result){
-						console.log(result);
 						rlv();
 					}
 				);
@@ -32,7 +31,6 @@ module.exports = function(main, $elms, gitparse79){
 				gitparse79.git(
 					['branch', '-a'],
 					function(result){
-						console.log(result);
 						git_branch = result;
 						for(var i = 0; i < git_branch.remoteBranches.length; i ++){
 							for(var ii = 0; ii < git_branch.localBranches.length; ii ++){
@@ -72,7 +70,6 @@ module.exports = function(main, $elms, gitparse79){
 							gitparse79.git(
 								['checkout', '-b', localBranchName, remoteBranchName],
 								function(result){
-									console.log(result);
 									if( result.result ){
 										main.setCurrentBranchName(result.currentBranchName);
 										main.pages.load('branch');
@@ -91,7 +88,6 @@ module.exports = function(main, $elms, gitparse79){
 							gitparse79.git(
 								['checkout', branchName],
 								function(result){
-									console.log(result);
 									if( result.result ){
 										main.setCurrentBranchName(result.currentBranchName);
 										main.pages.load('branch');
@@ -121,7 +117,6 @@ module.exports = function(main, $elms, gitparse79){
 							gitparse79.git(
 								['merge', branchName],
 								function(result){
-									console.log(result);
 									if(result.code){
 										alert(result.stdout);
 									}else{
@@ -149,7 +144,6 @@ module.exports = function(main, $elms, gitparse79){
 								gitparse79.git(
 									['push', '--delete', remoteName, localBranchName],
 									function(result){
-										console.log(result);
 										if(result.code){
 											alert(result.stdout);
 										}
@@ -165,13 +159,11 @@ module.exports = function(main, $elms, gitparse79){
 								gitparse79.git(
 									['branch', '--delete', branchName],
 									function(result){
-										console.log(result);
 										if(result.code){
 											if( confirm(result.stdout+"\n\n"+'強制的に削除しますか？') ){
 												gitparse79.git(
 													['branch', '-f', '--delete', branchName],
 													function(result){
-														console.log(result);
 														if(result.code){
 															alert(result.code);
 														}
@@ -210,7 +202,6 @@ module.exports = function(main, $elms, gitparse79){
 					gitparse79.git(
 						['checkout', '-b', newBranchName],
 						function(result){
-							// console.log(result);
 							if( result.result ){
 								main.setCurrentBranchName(result.currentBranchName);
 								main.pages.load('branch');
