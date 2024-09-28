@@ -11,6 +11,8 @@
 	}
 
 	&__toolbar {
+		background-color: var(--px2-background-color, #333);
+
 		> ul {
 			border-bottom: 1px solid #111;
 			background-color: #1c1c1c;
@@ -20,14 +22,14 @@
 					border-top: 1px solid #111;
 					border-left: 1px solid #111;
 					border-right: 1px solid #111;
-					background-color: #333;
+					background-color: var(--px2-background-color, #333);
 					border-bottom: 1px solid #111;
 					&:hover {
 						background-color: #393939;
 					}
 				}
 				> a.current {
-					border-bottom-color: #333;
+					border-bottom-color: var(--px2-background-color, #333);
 				}
 			}
 		}
