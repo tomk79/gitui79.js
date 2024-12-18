@@ -36,7 +36,6 @@ var gitUi79 = new GitUi79(
         "lang": "ja",
     }
 );
-// console.log(remoteFinder);
 gitUi79.init(function(){
     console.log('ready.');
 });
