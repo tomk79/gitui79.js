@@ -48,12 +48,14 @@
 	</div>
 	<div class="gitui79__btn-block-open-commit-form">
 		<div class="px2-form-submit-area">
-			<ul class="px2-form-submit-area__btns">
-				<li><button type="button" class="px2-btn px2-btn--primary gitui79__cont-btn-commit"{% if status.isUnmerged %} disabled="disabled"{% endif %}>コミットする</button></li>
-			</ul>
-			<ul class="px2-form-submit-area__backward-btns">
-				<li><button type="button" class="px2-btn gitui79__cont-btn-discard">変更を破棄する</button></li>
-			</ul>
+			<div class="px2-form-submit-area__inner">
+				<ul class="px2-form-submit-area__btns">
+					<li><button type="button" class="px2-btn px2-btn--primary gitui79__cont-btn-commit"{% if status.isUnmerged %} disabled="disabled"{% endif %}>コミットする</button></li>
+				</ul>
+				<ul class="px2-form-submit-area__backward-btns">
+					<li><button type="button" class="px2-btn gitui79__cont-btn-discard">変更を破棄する</button></li>
+				</ul>
+			</div>
 		</div>
 	</div>
 	<div class="gitui79__cont-commit-form" style="display: none;">
