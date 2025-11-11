@@ -53,5 +53,4 @@ mix
 	.sass('src/gitui79.bundled.scss', 'dist/')
 	.sass('src/themes/darkmode.scss', 'dist/themes/')
 	.sass('src/themes/darkmode.bundled.scss', 'dist/themes/')
-
 ;

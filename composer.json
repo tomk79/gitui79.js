@@ -10,7 +10,7 @@
         }
     ],
     "scripts":{
-    } ,
+    },
     "require": {
     },
     "require-dev": {
