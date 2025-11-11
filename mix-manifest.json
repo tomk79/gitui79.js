@@ -1,8 +1,12 @@
 {
     "/dist/gitui79.js": "/dist/gitui79.js",
     "/dist/gitui79.bundled.js": "/dist/gitui79.bundled.js",
+    "/dist/themes/lightmode.css": "/dist/themes/lightmode.css",
+    "/dist/themes/default.bundled.css": "/dist/themes/default.bundled.css",
+    "/dist/themes/default.css": "/dist/themes/default.css",
+    "/dist/gitui79.bundled.css": "/dist/gitui79.bundled.css",
+    "/dist/gitui79.css": "/dist/gitui79.css",
     "/dist/themes/darkmode.bundled.css": "/dist/themes/darkmode.bundled.css",
     "/dist/themes/darkmode.css": "/dist/themes/darkmode.css",
-    "/dist/gitui79.bundled.css": "/dist/gitui79.bundled.css",
-    "/dist/gitui79.css": "/dist/gitui79.css"
+    "/dist/themes/lightmode.bundled.css": "/dist/themes/lightmode.bundled.css"
 }

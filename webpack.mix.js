@@ -51,6 +51,10 @@ mix
 	.js('src/gitui79.bundled.js', 'dist/')
 	.sass('src/gitui79.scss', 'dist/')
 	.sass('src/gitui79.bundled.scss', 'dist/')
+	.sass('src/themes/default.scss', 'dist/themes/')
+	.sass('src/themes/default.bundled.scss', 'dist/themes/')
+	.sass('src/themes/lightmode.scss', 'dist/themes/')
+	.sass('src/themes/lightmode.bundled.scss', 'dist/themes/')
 	.sass('src/themes/darkmode.scss', 'dist/themes/')
 	.sass('src/themes/darkmode.bundled.scss', 'dist/themes/')
 ;
