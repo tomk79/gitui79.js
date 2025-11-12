@@ -18,14 +18,24 @@
 		<link rel="stylesheet" href="./common/gitui79/gitui79.css" />
 		{% if appearance == 'darkmode' %}
 		<style>
+        :root {
+            --px2-main-color: #00a0e6;
+            --px2-text-color: #f3f3f3;
+            --px2-background-color: #242424;
+        }
         body{
             color: #ddd;
-            background-color: #333;
+            background-color: #242424;
         }
 		</style>
 		<link rel="stylesheet" href="./common/gitui79/themes/darkmode.css" />
 		{% elseif appearance == 'lightmode' %}
 		<style>
+        :root {
+            --px2-main-color: #00a0e6;
+            --px2-text-color: #333;
+            --px2-background-color: #f9f9f9;
+        }
         body{
             color: #333;
             background-color: #eee;
@@ -35,29 +45,30 @@
 		{% else %}
 		<style>
 		@media (prefers-color-scheme: light) {
+            :root {
+                --px2-main-color: #00a0e6;
+                --px2-text-color: #333;
+                --px2-background-color: #f9f9f9;
+            }
 			body{
 				color: #333;
 				background-color: #eee;
 			}
 		}
 		@media (prefers-color-scheme: dark) {
+            :root {
+                --px2-main-color: #00a0e6;
+                --px2-text-color: #f3f3f3;
+                --px2-background-color: #242424;
+            }
 			body{
 				color: #ddd;
-				background-color: #333;
+				background-color: #242424;
 			}
 		}
 		</style>
 		<link rel="stylesheet" href="./common/gitui79/themes/default.css" />
 		{% endif %}
-
-		<!-- darkmode -->
-		<!-- <style>
-		body {
-			background-color: #333;
-			color: #ddd;
-		}
-		</style>
-		<link rel="stylesheet" href="./common/gitui79/themes/darkmode.css" /> -->
 
 		<!-- contents.css -->
 		<link rel="stylesheet" href="./index_files/contents.css" />
