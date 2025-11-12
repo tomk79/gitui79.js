@@ -16,6 +16,23 @@
 
 		<!-- gitui79.css -->
 		<link rel="stylesheet" href="./common/gitui79/gitui79.css" />
+		{% if appearance == 'darkmode' %}
+		<style>
+        body{
+            color: #ddd;
+            background-color: #333;
+        }
+		</style>
+		<link rel="stylesheet" href="./common/gitui79/themes/darkmode.css" />
+		{% elseif appearance == 'lightmode' %}
+		<style>
+        body{
+            color: #333;
+            background-color: #eee;
+        }
+		</style>
+		<link rel="stylesheet" href="./common/gitui79/themes/lightmode.css" />
+		{% else %}
 		<style>
 		@media (prefers-color-scheme: light) {
 			body{
@@ -31,6 +48,7 @@
 		}
 		</style>
 		<link rel="stylesheet" href="./common/gitui79/themes/default.css" />
+		{% endif %}
 
 		<!-- darkmode -->
 		<!-- <style>
@@ -48,6 +66,11 @@
 
 <h1>GitUi79 TEST</h1>
 <div id="cont-gitui79"></div>
+
+
+<script>
+window.lang = '{% if lang %}{{ lang }}{% else %}en{% endif %}';
+</script>
 
 <!-- jQuery -->
 <script src="./libs/scripts/jquery-3.4.1.min.js"></script>

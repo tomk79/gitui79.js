@@ -30,7 +30,7 @@
 				name: 'Test User',
 				email: 'test.user@example.com',
 			},
-			lang: "ja",
+			lang: window.lang || "en",
 		}
 	);
 	// console.log(gitUi79);
