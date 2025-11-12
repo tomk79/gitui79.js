@@ -53,6 +53,34 @@ app.use( '/apis/git', function(req, res, next){
 	return;
 } );
 
+// ルートパスのハンドラ - GETパラメータに応じてテンプレートを処理
+app.get('/', function(req, res, next){
+	const appearance = req.query.appearance;
+	let px2styleTheme = 'default.css';
+	
+	// GETパラメータに応じてCSSを切り替え
+	if (appearance === 'darkmode') {
+		px2styleTheme = 'darkmode.css';
+	} else if (appearance === 'lightmode') {
+		px2styleTheme = 'default.css';
+	} else {
+		px2styleTheme = 'auto.css';
+	}
+	
+	// テンプレートを読み込んで変数を置換
+	const templatePath = path.resolve(__dirname, '../client/index.html');
+	fs.readFile(templatePath, 'utf8', function(err, data){
+		if (err) {
+			console.error('Template read error:', err);
+			res.status(500).send('Internal Server Error');
+			return;
+		}
+		
+		const html = data.replace('{{PX2STYLE_THEME}}', px2styleTheme);
+		res.send(html);
+	});
+});
+
 app.use( express.static( __dirname+'/../client/' ) );
 
 // 8080番ポートでLISTEN状態にする
