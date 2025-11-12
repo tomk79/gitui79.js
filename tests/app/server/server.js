@@ -58,10 +58,21 @@ app.use( '/apis/git', function(req, res, next){
 const templateDir = path.resolve(__dirname, '../client/');
 Twig.cache(false); // 開発時はキャッシュを無効化
 
-// .htmlリクエストをすべてTwigで処理
-app.get('/*.html', function(req, res, next){
+// .htmlリクエストまたはディレクトリリクエストをTwigで処理
+app.get('*', function(req, res, next){
 	// リクエストパスから.twigファイルを解決
-	const requestedFile = req.path.replace(/^\//, ''); // 先頭の/を削除
+	let requestedFile = req.path.replace(/^\//, ''); // 先頭の/を削除
+	
+	// パスが空文字列または/で終わっている場合はindex.htmlを追加
+	if (!requestedFile || requestedFile.endsWith('/')) {
+		requestedFile += 'index.html';
+	}
+	
+	// .htmlで終わっていない場合は次のハンドラへ
+	if (!requestedFile.endsWith('.html')) {
+		return next();
+	}
+	
 	const twigPath = path.join(templateDir, requestedFile.replace('.html', '.twig'));
 	
 	// .twigファイルが存在するか確認
