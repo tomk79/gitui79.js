@@ -35,7 +35,7 @@
     "langbank": "^0.3.1",
     "lodash": "^4.17.21",
     "px2style": "github:pickles2/px2style#develop",
-    "twig": "^1.16.0",
+    "twig": "^1.17.1",
     "utils79": "^0.0.5"
   },
   "devDependencies": {

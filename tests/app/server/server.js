@@ -4,6 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const utils79 = require('utils79');
+const Twig = require('twig');
 const express = require('express'),
 	app = express();
 const server = require('http').Server(app);
@@ -53,30 +54,32 @@ app.use( '/apis/git', function(req, res, next){
 	return;
 } );
 
-// ルートパスのハンドラ - GETパラメータに応じてテンプレートを処理
-app.get('/', function(req, res, next){
-	const appearance = req.query.appearance;
-	let px2styleTheme = 'default.css';
+// Twigテンプレートの設定
+const templateDir = path.resolve(__dirname, '../client/');
+Twig.cache(false); // 開発時はキャッシュを無効化
+
+// .htmlリクエストをすべてTwigで処理
+app.get('/*.html', function(req, res, next){
+	// リクエストパスから.twigファイルを解決
+	const requestedFile = req.path.replace(/^\//, ''); // 先頭の/を削除
+	const twigPath = path.join(templateDir, requestedFile.replace('.html', '.twig'));
 	
-	// GETパラメータに応じてCSSを切り替え
-	if (appearance === 'darkmode') {
-		px2styleTheme = 'darkmode.css';
-	} else if (appearance === 'lightmode') {
-		px2styleTheme = 'default.css';
-	} else {
-		px2styleTheme = 'auto.css';
+	// .twigファイルが存在するか確認
+	if (!fs.existsSync(twigPath)) {
+		// .twigファイルが存在しない場合は次のハンドラへ
+		return next();
 	}
 	
-	// テンプレートを読み込んで変数を置換
-	const templatePath = path.resolve(__dirname, '../client/index.html');
-	fs.readFile(templatePath, 'utf8', function(err, data){
+	// GETパラメータをすべてテンプレートにバインド
+	const templateData = Object.assign({}, req.query);
+	
+	// Twigテンプレートをレンダリング
+	Twig.renderFile(twigPath, templateData, function(err, html){
 		if (err) {
-			console.error('Template read error:', err);
+			console.error('Template render error:', err);
 			res.status(500).send('Internal Server Error');
 			return;
 		}
-		
-		const html = data.replace('{{PX2STYLE_THEME}}', px2styleTheme);
 		res.send(html);
 	});
 });
