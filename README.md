@@ -45,7 +45,7 @@ gitUi79.init(function(){
 
 ## 更新履歴 - Change log
 
-### gitui79 v0.6.0 (リリース日未定)
+### gitui79 v0.6.0 (2025年11月16日)
 
 - アピアランス対応の強化。
 
