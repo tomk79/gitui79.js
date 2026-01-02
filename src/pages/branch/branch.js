@@ -185,34 +185,37 @@ module.exports = function(main, $elms, gitparse79){
 					});
 				});
 
-				$elms.body.querySelector('form').addEventListener('submit', function(elm){
-					var newBranchName = this.querySelector('input[name=branch-name]').value;
-					if( newBranchName.match(/^remotes/i) ){
-						alert('remotes で始まる名前は使えません。');
-						return;
-					}
-					if( newBranchName.match(/(?:\s|　)/i) ){
-						alert('ブランチ名にスペースや空白文字を含めることはできません。');
-						return;
-					}
-					// alert(newBranchName);
-
-					px2style.loading();
-
-					gitparse79.git(
-						['checkout', '-b', newBranchName],
-						function(result){
-						if( result.code === 0 ){
-								main.setCurrentBranchName(result.currentBranchName);
-								main.pages.load('branch');
-							}else{
-								alert('Failed.');
-							}
-							px2style.closeLoading();
+				var formElm = $elms.body.querySelector('form');
+				if (formElm) {
+					formElm.addEventListener('submit', function(elm){
+						var newBranchName = this.querySelector('input[name=branch-name]').value;
+						if( newBranchName.match(/^remotes/i) ){
+							alert('remotes で始まる名前は使えません。');
+							return;
 						}
-					);
-					return;
-				});
+						if( newBranchName.match(/(?:\s|　)/i) ){
+							alert('ブランチ名にスペースや空白文字を含めることはできません。');
+							return;
+						}
+						// alert(newBranchName);
+
+						px2style.loading();
+
+						gitparse79.git(
+							['checkout', '-b', newBranchName],
+							function(result){
+							if( result.code === 0 ){
+									main.setCurrentBranchName(result.currentBranchName);
+									main.pages.load('branch');
+								}else{
+									alert('Failed.');
+								}
+								px2style.closeLoading();
+							}
+						);
+						return;
+					});
+				}
 
 				rlv();
 			}); })
