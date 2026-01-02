@@ -70,7 +70,7 @@ module.exports = function(main, $elms, gitparse79){
 							gitparse79.git(
 								['checkout', '-b', localBranchName, remoteBranchName],
 								function(result){
-									if( result.result ){
+									if( result.code === 0 ){
 										main.setCurrentBranchName(result.currentBranchName);
 										main.pages.load('branch');
 									}else{
@@ -88,7 +88,7 @@ module.exports = function(main, $elms, gitparse79){
 							gitparse79.git(
 								['checkout', branchName],
 								function(result){
-									if( result.result ){
+									if( result.code === 0 ){
 										main.setCurrentBranchName(result.currentBranchName);
 										main.pages.load('branch');
 									}else{
@@ -202,7 +202,7 @@ module.exports = function(main, $elms, gitparse79){
 					gitparse79.git(
 						['checkout', '-b', newBranchName],
 						function(result){
-							if( result.result ){
+						if( result.code === 0 ){
 								main.setCurrentBranchName(result.currentBranchName);
 								main.pages.load('branch');
 							}else{
