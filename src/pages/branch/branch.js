@@ -32,6 +32,8 @@ module.exports = function(main, $elms, gitparse79){
 					['branch', '-a'],
 					function(result){
 						git_branch = result;
+						// カレントブランチ名を更新
+						main.setCurrentBranchName(result.currentBranchName);
 						for(var i = 0; i < git_branch.remoteBranches.length; i ++){
 							for(var ii = 0; ii < git_branch.localBranches.length; ii ++){
 								var lastIndexOf = git_branch.remoteBranches[i].lastIndexOf('/'+git_branch.localBranches[ii]);
