@@ -187,35 +187,77 @@ module.exports = function(main, $elms, gitparse79){
 					});
 				});
 
-				var formElm = $elms.body.querySelector('form');
-				if (formElm) {
-					formElm.addEventListener('submit', function(elm){
-						var newBranchName = this.querySelector('input[name=branch-name]').value;
-						if( newBranchName.match(/^remotes/i) ){
-							alert('remotes で始まる名前は使えません。');
-							return;
-						}
-						if( newBranchName.match(/(?:\s|　)/i) ){
-							alert('ブランチ名にスペースや空白文字を含めることはできません。');
-							return;
-						}
-						// alert(newBranchName);
+				// 新しいブランチ作成ボタン
+				var btnCreateBranch = $elms.body.querySelector('#gitui79-btn-create-branch');
+				if (btnCreateBranch) {
+					btnCreateBranch.addEventListener('click', function(){
+						// モーダルでブランチ名入力フォームを表示
+						var $modalBody = $('<div>').addClass('px2-p');
+						var $input = $('<input>')
+							.attr('type', 'text')
+							.attr('name', 'branch-name')
+							.attr('placeholder', 'ブランチ名を入力')
+							.addClass('px2-input')
+							.css('width', '100%');
+						$modalBody.append($input);
 
-						px2style.loading();
+						px2style.modal(
+							{
+								title: '新しい分岐を作成',
+								body: $modalBody,
+								buttons: [
+									'<button type="submit" class="px2-btn px2-btn--primary">作成する</button>'
+								],
+								buttonsSecondary: [
+									$('<button type="button" class="px2-btn">キャンセル</button>')
+										.on('click', function(){
+											px2style.closeModal();
+										})
+								],
+								form: {
+									action: 'javascript:;',
+									method: 'post',
+									submit: function(){
+										var newBranchName = $input.val().trim();
+										
+										if( !newBranchName ){
+											alert('ブランチ名を入力してください。');
+											return false;
+										}
+										if( newBranchName.match(/^remotes/i) ){
+											alert('remotes で始まる名前は使えません。');
+											return false;
+										}
+										if( newBranchName.match(/(?:\s|　)/i) ){
+											alert('ブランチ名にスペースや空白文字を含めることはできません。');
+											return false;
+										}
 
-						gitparse79.git(
-							['checkout', '-b', newBranchName],
-							function(result){
-							if( result.code === 0 ){
-									main.setCurrentBranchName(result.currentBranchName);
-									main.pages.load('branch');
-								}else{
-									alert('Failed.');
-								}
-								px2style.closeLoading();
+										px2style.closeModal();
+										px2style.loading();
+
+										gitparse79.git(
+											['checkout', '-b', newBranchName],
+											function(result){
+												if( result.code === 0 ){
+													main.setCurrentBranchName(result.currentBranchName);
+													main.pages.load('branch');
+												}else{
+													alert('Failed.');
+												}
+													px2style.closeLoading();
+												}
+											);
+										return false;
+									}
+								},
+								width: 500
+							},
+							function(){
+								// モーダルが開いたらinputにフォーカス
+								$input.focus();
 							}
 						);
-						return;
 					});
 				}
 
