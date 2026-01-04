@@ -48,6 +48,7 @@ module.exports = function(main, $elms, gitparse79){
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				var src = templates.git_branch({
+					lb: main.lb,
 					currentBranchName: main.getCurrentBranchName(),
 					branch: git_branch,
 					checkoutedRemoteBranches: checkoutedRemoteBranches
