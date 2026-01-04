@@ -112,7 +112,7 @@ module.exports = function(main, $elms, gitparse79){
 						if( method == 'merge' ){
 							// --------------------
 							// ブランチをマージする
-							if( !confirm('ブランチ '+branchName+' を、 ' + main.getCurrentBranchName() + ' にマージしようとしています。' + "\n" + 'よろしいですか？') ){
+							if( !confirm(main.lb.get('branch.confirm_merge').replace('{branchName}', branchName).replace('{currentBranch}', main.getCurrentBranchName())) ){
 								return;
 							}
 							px2style.loading();
@@ -122,7 +122,7 @@ module.exports = function(main, $elms, gitparse79){
 									if(result.code){
 										alert(result.stdout);
 									}else{
-										alert('Success!');
+										alert(main.lb.get('branch.success'));
 									}
 									main.pages.load('branch');
 									px2style.closeLoading();
@@ -132,7 +132,7 @@ module.exports = function(main, $elms, gitparse79){
 						}else if( method == 'delete' ){
 							// --------------------
 							// ブランチを削除する
-							if( !confirm('ブランチ '+branchName+' を、削除してもよろしいですか？') ){
+							if( !confirm(main.lb.get('branch.confirm_delete').replace('{branchName}', branchName)) ){
 								return;
 							}
 							px2style.loading();
@@ -162,7 +162,7 @@ module.exports = function(main, $elms, gitparse79){
 									['branch', '--delete', branchName],
 									function(result){
 										if(result.code){
-											if( confirm(result.stdout+"\n\n"+'強制的に削除しますか？') ){
+											if( confirm(result.stdout+"\n\n"+main.lb.get('branch.force_delete_confirm')) ){
 												gitparse79.git(
 													['branch', '-f', '--delete', branchName],
 													function(result){
@@ -196,20 +196,20 @@ module.exports = function(main, $elms, gitparse79){
 						var $input = $('<input>')
 							.attr('type', 'text')
 							.attr('name', 'branch-name')
-							.attr('placeholder', 'ブランチ名を入力')
+							.attr('placeholder', main.lb.get('branch.enter_branch_name'))
 							.addClass('px2-input')
 							.css('width', '100%');
 						$modalBody.append($input);
 
 						px2style.modal(
 							{
-								title: '新しい分岐を作成',
+								title: main.lb.get('branch.create_new_branch'),
 								body: $modalBody,
 								buttons: [
-									'<button type="submit" class="px2-btn px2-btn--primary">作成する</button>'
+									'<button type="submit" class="px2-btn px2-btn--primary">'+main.lb.get('ui_label.create')+'</button>'
 								],
 								buttonsSecondary: [
-									$('<button type="button" class="px2-btn">キャンセル</button>')
+									$('<button type="button" class="px2-btn">'+main.lb.get('ui_label.cancel')+'</button>')
 										.on('click', function(){
 											px2style.closeModal();
 										})
@@ -221,15 +221,15 @@ module.exports = function(main, $elms, gitparse79){
 										var newBranchName = $input.val().trim();
 										
 										if( !newBranchName ){
-											alert('ブランチ名を入力してください。');
+											alert(main.lb.get('branch.enter_branch_name'));
 											return false;
 										}
 										if( newBranchName.match(/^remotes/i) ){
-											alert('remotes で始まる名前は使えません。');
+											alert(main.lb.get('branch.cannot_use_remotes'));
 											return false;
 										}
 										if( newBranchName.match(/(?:\s|　)/i) ){
-											alert('ブランチ名にスペースや空白文字を含めることはできません。');
+											alert(main.lb.get('branch.no_spaces'));
 											return false;
 										}
 
@@ -243,11 +243,11 @@ module.exports = function(main, $elms, gitparse79){
 													main.setCurrentBranchName(result.currentBranchName);
 													main.pages.load('branch');
 												}else{
-													alert('Failed.');
+													alert(main.lb.get('branch.failed'));
 												}
-													px2style.closeLoading();
-												}
-											);
+												px2style.closeLoading();
+											}
+										);
 										return false;
 									}
 								},

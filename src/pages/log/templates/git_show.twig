@@ -5,15 +5,15 @@
 	<table class="px2-table px2-table--dl">
 		<tbody>
 			<tr>
-				<th>Commit:</th>
+				<th>{{ lb.get("log.commit") }}</th>
 				<td>{{ commit.commit|e }}</td>
 			</tr>
 			<tr>
-				<th>Committer:</th>
+				<th>{{ lb.get("log.committer") }}</th>
 				<td>{{ commit.author|e }} &lt;{{ commit.email|e }}&gt;</td>
 			</tr>
 			<tr>
-				<th>Date:</th>
+				<th>{{ lb.get("log.date") }}</th>
 				<td>{{ commit.date|date("Y-m-d(D) H:i:s") }}</td>
 			</tr>
 		</tbody>
@@ -21,7 +21,7 @@
 </div>
 
 
-<h2>変更履歴</h2>
+<h2>{{ lb.get("log.change_history") }}</h2>
 <ul class="gitui79__list-changes">
 	{% for file in commit.files %}
 	<li class="gitui79__list-changes-{{ file.type }}"><a href="javascript:;" data-file="{{ file.filename|e }}" data-status="{{ file.type|e }}">{{ file.filename|e }}</a></li>

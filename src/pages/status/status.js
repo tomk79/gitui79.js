@@ -86,7 +86,7 @@ module.exports = function(main, $elms, gitparse79){
 					var messageInput = this.querySelector('textarea');
 					var message = messageInput.value;
 					if( !message ){
-						alert('コミットメッセージを入力してください。');
+						alert(main.lb.get('status.enter_commit_message'));
 						messageInput.focus();
 						return;
 					}
@@ -94,7 +94,7 @@ module.exports = function(main, $elms, gitparse79){
 					var committerNameInput = this.querySelector('input[name="committer.name"]');
 					var committerName = committerNameInput.value;
 					if( !committerName ){
-						alert('コミッターの名前を入力してください。');
+						alert(main.lb.get('status.enter_committer_name'));
 						committerNameInput.focus();
 						return;
 					}
@@ -102,7 +102,7 @@ module.exports = function(main, $elms, gitparse79){
 					var committerEmailInput = this.querySelector('input[name="committer.email"]');
 					var committerEmail = committerEmailInput.value;
 					if( !committerEmail ){
-						alert('コミッターのメールアドレスを入力してください。');
+						alert(main.lb.get('status.enter_committer_email'));
 						committerEmailInput.focus();
 						return;
 					}
@@ -114,13 +114,13 @@ module.exports = function(main, $elms, gitparse79){
 
 				// 変更を破棄するボタン
 				btnDiscardAll.addEventListener('click', function(){
-					if( !confirm('すべての変更を破棄し、元に戻します。コミットされていない情報は永久に失われます。続けてよろしいですか？') ){
+					if( !confirm(main.lb.get('status.confirm_discard_all')) ){
 						return;
 					}
 					px2style.loading();
 					discardAll( function(){
 						px2style.closeLoading();
-						alert('破棄しました。');
+						alert(main.lb.get('status.discarded'));
 						main.pages.load('status');
 					} );
 				});
@@ -200,7 +200,7 @@ module.exports = function(main, $elms, gitparse79){
 				);
 				var $body = $('<div>').addClass('gitui79').append(src);
 				$body.find('.gitui79__resolve-ours').on('click', function(){
-					alert('自分の変更を使って競合を解決します。');
+					alert(main.lb.get('status.resolve_ours_confirm'));
 					px2style.loading();
 					resolveFile(file, 'ours', function(){
 						px2style.closeLoading();
@@ -209,7 +209,7 @@ module.exports = function(main, $elms, gitparse79){
 					});
 				});
 				$body.find('.gitui79__resolve-theirs').on('click', function(){
-					alert('相手の変更を使って競合を解決します。');
+					alert(main.lb.get('status.resolve_theirs_confirm'));
 					px2style.loading();
 					resolveFile(file, 'theirs', function(){
 						px2style.closeLoading();
@@ -218,11 +218,11 @@ module.exports = function(main, $elms, gitparse79){
 					});
 				});
 				var $rollbackButton = $('<button>')
-					.text('この変更を取り消す')
+					.text(main.lb.get('status.cancel_changes'))
 					.addClass('px2-btn')
 					.attr('type', 'button')
 					.on('click', function(){
-						if( !confirm('変更を取り消し、元に戻します。よろしいですか？') ){
+						if( !confirm(main.lb.get('status.confirm_cancel_change')) ){
 							callback();
 							return;
 						}
@@ -237,11 +237,11 @@ module.exports = function(main, $elms, gitparse79){
 
 				px2style.modal(
 					{
-						title: '詳細',
+						title: main.lb.get('status.detail'),
 						body: $body,
 						width: '100%',
 						buttons: [
-							'<button type="submit" class="px2-btn px2-btn--primary">閉じる</button>'
+							'<button type="submit" class="px2-btn px2-btn--primary">'+main.lb.get('ui_label.close')+'</button>'
 						],
 						buttonsSecondary: [
 							$rollbackButton

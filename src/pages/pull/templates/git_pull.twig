@@ -20,8 +20,8 @@
 		<pre><code>{{ remote.stdout|e }}</code></pre>
 	{% endif %}
 	<div class="px2-p">
-		<button class="px2-btn px2-btn--primary">プルする</button>
-		<label><input type="checkbox" name="force" value="1" /> 強制的にプルする</label>
+		<button class="px2-btn px2-btn--primary">{{ lb.get("pull.pull") }}</button>
+		<label><input type="checkbox" name="force" value="1" /> {{ lb.get("pull.force_pull") }}</label>
 	</div>
 	<pre class="gitui79__result-stdout"><code></code></pre>
 </section>

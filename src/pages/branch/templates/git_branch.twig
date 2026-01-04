@@ -1,18 +1,18 @@
 <section>
-	<h2>ブランチリスト</h2>
+	<h2>{{ lb.get("branch.branch_list") }}</h2>
 	<ul class="gitui79__branch-list">
 		{% for row in branch.localBranches %}
 		<li>
 			{% if row == currentBranchName %}
 			<strong class="gitui79__branch-list-current-branch">{{ row|e }}</strong>
 			<ul class="gitui79__menu-list">
-				<li><button type="button" class="px2-btn px2-btn--primary" id="gitui79-btn-create-branch">新しい分岐を作成</button></li>
+				<li><button type="button" class="px2-btn px2-btn--primary" id="gitui79-btn-create-branch">{{ lb.get("branch.create_new_branch") }}</button></li>
 			</ul>
 			{% else %}
 			<a href="javascript:;" data-branch-name="{{ row|e }}">{{ row|e }}</a>
 			<ul class="gitui79__menu-list">
-				<li><button class="px2-btn px2-btn--default" data-branch-name="{{ row|e }}" data-method="merge">マージ</button></li>
-				<li><button class="px2-btn px2-btn--danger" data-branch-name="{{ row|e }}" data-method="delete">削除</button></li>
+				<li><button class="px2-btn px2-btn--default" data-branch-name="{{ row|e }}" data-method="merge">{{ lb.get("branch.merge") }}</button></li>
+				<li><button class="px2-btn px2-btn--danger" data-branch-name="{{ row|e }}" data-method="delete">{{ lb.get("branch.delete") }}</button></li>
 			</ul>
 			{% endif %}
 		</li>
@@ -21,7 +21,7 @@
 </section>
 
 <section>
-	<h2>リモートブランチ</h2>
+	<h2>{{ lb.get("branch.remote_branches") }}</h2>
 	<ul class="gitui79__branch-list">
 		{% for row in branch.remoteBranches %}
 		<li>
@@ -31,8 +31,8 @@
 			<a href="javascript:;" data-branch-name="remotes/{{ row|e }}">{{ row|e }}</a>
 			{% endif %}
 			<ul class="gitui79__menu-list">
-				<li><button class="px2-btn px2-btn--default" data-branch-name="remotes/{{ row|e }}" data-method="merge">マージ</button></li>
-				<li><button class="px2-btn px2-btn--danger" data-branch-name="remotes/{{ row|e }}" data-method="delete">削除</button></li>
+				<li><button class="px2-btn px2-btn--default" data-branch-name="remotes/{{ row|e }}" data-method="merge">{{ lb.get("branch.merge") }}</button></li>
+				<li><button class="px2-btn px2-btn--danger" data-branch-name="remotes/{{ row|e }}" data-method="delete">{{ lb.get("branch.delete") }}</button></li>
 			</ul>
 		</li>
 		{% endfor %}

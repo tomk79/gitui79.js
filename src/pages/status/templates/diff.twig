@@ -1,15 +1,15 @@
 <div class="px2-p">
     <table class="px2-table px2-table--dl">
         <tr>
-            <th>File</th>
+            <th>{{ lb.get("status.file") }}</th>
             <td>{{ file|e }}</td>
         </tr>
         <tr>
-            <th>Status</th>
+            <th>{{ lb.get("ui_label.status") }}</th>
             <td>{{ status|e }}</td>
         </tr>
         <tr>
-            <th>Is staged</th>
+            <th>{{ lb.get("status.is_staged") }}</th>
             <td>{{ isStaged|e }}</td>
         </tr>
     </table>
@@ -17,14 +17,14 @@
 
 {% if status == "unmerged" %}
 <div class="px2-p">
-    <p>このファイルはコンフリクトしています。</p>
-    <button class="px2-btn gitui79__resolve-ours" type="button">自分の変更を採用</button>
-    <button class="px2-btn gitui79__resolve-theirs" type="button">相手の変更を採用</button>
+    <p>{{ lb.get("status.conflict") }}</p>
+    <button class="px2-btn gitui79__resolve-ours" type="button">{{ lb.get("status.resolve_ours") }}</button>
+    <button class="px2-btn gitui79__resolve-theirs" type="button">{{ lb.get("status.resolve_theirs") }}</button>
 </div>
 {% endif %}
 
 {% if code or diffHtmlLineByLine %}
-<h2>差分</h2>
+<h2>{{ lb.get("status.diff") }}</h2>
 {% if diffHtmlLineByLine %}
 <div class="gitui79__sm">{{ diffHtmlLineByLine | raw }}</div>
 <div class="gitui79__lg">{{ diffHtmlSideBySide | raw }}</div>

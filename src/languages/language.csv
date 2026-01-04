@@ -1,16 +1,74 @@
 ,en,ja,zh,zh-TW
-page_title.status,"Status","ステータス",,
-page_title.branch,"Branch","ブランチ",,
-page_title.log,"Commit log","コミットログ",,
-page_title.pull,"Pull","プル",,
-page_title.push,"Push","プッシュ",,
+page_title.status,"Status","ステータス","状态","狀態"
+page_title.branch,"Branch","ブランチ","分支","分支"
+page_title.log,"Commit log","コミットログ","提交日志","提交記錄"
+page_title.pull,"Pull","プル","拉取","拉取"
+page_title.push,"Push","プッシュ","推送","推送"
 ui_label.ok,OK,OK,OK,OK
 ui_label.save,Save,保存する,保存,保存
 ui_label.cancel,Cancel,キャンセル,取消,取消
 ui_label.close,Close,閉じる,关闭,關閉
-ui_label.create,Create,作成する,,
-ui_label.finished,Finished,完了,,
-ui_label.anchor,Anchor,アンカー,,
-ui_label.search,Search,検索,,
-ui_label.back,Back,戻る,,
-ui_label.branch,"Branch","ブランチ",,
+ui_label.create,Create,作成する,创建,創建
+ui_label.finished,Finished,完了,完成,完成
+ui_label.anchor,Anchor,アンカー,锚点,錨點
+ui_label.search,Search,検索,搜索,搜索
+ui_label.back,Back,戻る,返回,返回
+ui_label.branch,"Branch","ブランチ","分支","分支"
+ui_label.status,"Status","ステータス","状态","狀態"
+status.uncommitted_changes,"Uncommitted changes","コミットされていない変更","未提交的更改","未提交的變更"
+status.commit,"Commit","コミットする","提交","提交"
+status.discard_changes,"Discard changes","変更を破棄する","放弃更改","捨棄變更"
+status.commit_message,"Commit message","コミットコメント","提交消息","提交訊息"
+status.committer,"Committer","コミッター","提交者","提交者"
+status.no_changes,"Nothing to commit","コミットされていない変更はありません。","没有需要提交的更改。","沒有需要提交的變更。"
+status.enter_commit_message,"Please enter a commit message.","コミットメッセージを入力してください。","请输入提交消息。","請輸入提交訊息。"
+status.enter_committer_name,"Please enter the committer name.","コミッターの名前を入力してください。","请输入提交者名称。","請輸入提交者名稱。"
+status.enter_committer_email,"Please enter the committer email.","コミッターのメールアドレスを入力してください。","请输入提交者电子邮件。","請輸入提交者電子郵件。"
+status.confirm_discard_all,"Are you sure you want to discard all changes? Uncommitted changes will be lost forever.","すべての変更を破棄し、元に戻します。コミットされていない情報は永久に失われます。続けてよろしいですか？","确定要放弃所有更改吗？未提交的更改将永久丢失。","確定要捨棄所有變更嗎？未提交的變更將永久遺失。"
+status.discarded,"Discarded.","破棄しました。","已放弃。","已捨棄。"
+status.detail,"Detail","詳細","详细","詳細"
+status.cancel_changes,"Cancel this change","この変更を取り消す","取消此更改","取消此變更"
+status.confirm_cancel_change,"Are you sure you want to cancel this change?","変更を取り消し、元に戻します。よろしいですか？","确定要取消此更改吗？","確定要取消此變更嗎？"
+status.file,"File","ファイル","文件","檔案"
+status.is_staged,"Is staged","ステージング状態","暂存状态","暫存狀態"
+status.conflict,"This file has conflicts.","このファイルはコンフリクトしています。","此文件存在冲突。","此檔案存在衝突。"
+status.resolve_ours,"Use our changes","自分の変更を採用","使用我们的更改","使用我們的變更"
+status.resolve_theirs,"Use their changes","相手の変更を採用","使用他们的更改","使用他們的變更"
+status.diff,"Diff","差分","差异","差異"
+status.resolve_ours_confirm,"Resolve conflict using our changes.","自分の変更を使って競合を解決します。","使用我们的更改解决冲突。","使用我們的變更解決衝突。"
+status.resolve_theirs_confirm,"Resolve conflict using their changes.","相手の変更を使って競合を解決します。","使用他们的更改解决冲突。","使用他們的變更解決衝突。"
+branch.branch_list,"Branch list","ブランチリスト","分支列表","分支列表"
+branch.remote_branches,"Remote branches","リモートブランチ","远程分支","遠端分支"
+branch.create_new_branch,"Create new branch","新しい分岐を作成","创建新分支","創建新分支"
+branch.merge,"Merge","マージ","合并","合併"
+branch.delete,"Delete","削除","删除","刪除"
+branch.enter_branch_name,"Enter branch name","ブランチ名を入力","输入分支名称","輸入分支名稱"
+branch.confirm_merge,"Are you sure you want to merge branch {branchName} into {currentBranch}?","ブランチ {branchName} を、 {currentBranch} にマージしようとしています。\nよろしいですか？","确定要将分支 {branchName} 合并到 {currentBranch} 吗？","確定要將分支 {branchName} 合併到 {currentBranch} 嗎？"
+branch.success,"Success!","完了しました。","成功！","成功！"
+branch.confirm_delete,"Are you sure you want to delete branch {branchName}?","ブランチ {branchName} を、削除してもよろしいですか？","确定要删除分支 {branchName} 吗？","確定要刪除分支 {branchName} 嗎？"
+branch.force_delete_confirm,"Force delete?","強制的に削除しますか？","强制删除？","強制刪除？"
+branch.failed,"Failed.","失敗しました。","失败。","失敗。"
+branch.cannot_use_remotes,"Cannot use name starting with 'remotes'","remotes で始まる名前は使えません。","不能使用以 'remotes' 开头的名称","無法使用以 'remotes' 開頭的名稱"
+branch.no_spaces,"Branch name cannot contain spaces or whitespace characters.","ブランチ名にスペースや空白文字を含めることはできません。","分支名称不能包含空格或空白字符。","分支名稱不能包含空格或空白字元。"
+log.commit_log,"Commit log","コミットログ","提交日志","提交記錄"
+log.no_logs,"No commit logs.","コミットログはありません。","没有提交日志。","沒有提交記錄。"
+log.next_items,"Next {count} items","次の {count} 件","下 {count} 条","下 {count} 筆"
+log.rollback_to_version,"Rollback to this version","このバージョンに戻す","回滚到此版本","回滾到此版本"
+log.rollback_before_version,"Rollback to before this version","このバージョン適用前に戻す","回滚到此版本之前","回滾到此版本之前"
+log.confirm_rollback_all,"Are you sure you want to rollback all files to this version? Uncommitted changes will be discarded.","すべてのファイルのバージョンを戻します。コミットされていない変更がある場合は、破棄されます。続けますか？","确定要将所有文件回滚到此版本吗？未提交的更改将被放弃。","確定要將所有檔案回滾到此版本嗎？未提交的變更將被捨棄。"
+log.confirm_rollback_file,"Are you sure you want to rollback this file? Uncommitted changes will be discarded.","選択したファイルのバージョンを戻します。コミットされていない変更がある場合は、破棄されます。続けますか？","确定要回滚此文件吗？未提交的更改将被放弃。","確定要回滾此檔案嗎？未提交的變更將被捨棄。"
+log.commit,"Commit:","コミット:","提交:","提交:"
+log.committer,"Committer:","コミッター:","提交者:","提交者:"
+log.date,"Date:","日付:","日期:","日期:"
+log.change_history,"Change history","変更履歴","更改历史","變更歷史"
+log.unstaging,"Unstaging...","ステージング解除中...","取消暂存中...","取消暫存中..."
+log.rollback_success,"Version rolled back.","バージョンを戻しました。","版本已回滚。","版本已回滾。"
+log.rollback_file_success,"Version of file {file} rolled back.","ファイル {file} のバージョンを戻しました。","文件 {file} 的版本已回滚。","檔案 {file} 的版本已回滾。"
+pull.pull,"Pull","プルする","拉取","拉取"
+pull.force_pull,"Force pull","強制的にプルする","强制拉取","強制拉取"
+pull.confirm_force_pull,"Are you sure you want to force pull? This will overwrite your local branch.","強制的にプルします。この操作は、ローカルブランチを上書きします。続けますか？","确定要强制拉取吗？这将覆盖您的本地分支。","確定要強制拉取嗎？這將覆蓋您的本地分支。"
+pull.select_remote,"Select remote.","リモートを選択してください。","选择远程。","選擇遠端。"
+push.push,"Push","プッシュする","推送","推送"
+push.force_push,"Force push","強制的にプッシュする","强制推送","強制推送"
+push.confirm_force_push,"Are you sure you want to force push? This will overwrite the remote branch.","強制的にプッシュします。この操作は、リモートブランチを上書きします。続けますか？","确定要强制推送吗？这将覆盖远程分支。","確定要強制推送嗎？這將覆蓋遠端分支。"
+push.select_remote,"Select remote.","リモートを選択してください。","选择远程。","選擇遠端。"

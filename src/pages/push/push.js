@@ -43,7 +43,7 @@ module.exports = function(main, $elms, gitparse79){
 
 					var remoteName = $elms.body.querySelector('input[type=radio][name=remote_name]:checked').value;
 					if( !remoteName ){
-						alert('Select remote.');
+						alert(main.lb.get('push.select_remote'));
 						formElements.forEach(function(elm){
 							elm.disabled = false;
 						});
@@ -54,7 +54,7 @@ module.exports = function(main, $elms, gitparse79){
 					var gitCmd = [];
 					gitCmd.push('push');
 					if( $elms.body.querySelector('input[type=checkbox][name=force]:checked') ){
-						if( !confirm('強制的にプッシュします。この操作は、リモートブランチを上書きします。続けますか？') ){
+						if( !confirm(main.lb.get('push.confirm_force_push')) ){
 							formElements.forEach(function(elm){
 								elm.disabled = false;
 							});

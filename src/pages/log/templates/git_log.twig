@@ -8,12 +8,12 @@
 </section>
 
 <section class="gitui79__cont-commit-logs">
-<h2>コミットログ</h2>
+<h2>{{ lb.get("log.commit_log") }}</h2>
 {% if log.logs.length %}
 <ul class="gitui79__cont-list-commit-logs">
 </ul>
-<div class="px2-p px2-text-align-center gitui79__btn-block-next-page"><button type="button" class="px2-btn px2-btn--primary">次の {{dpp}} 件</button></div>
+<div class="px2-p px2-text-align-center gitui79__btn-block-next-page"><button type="button" class="px2-btn px2-btn--primary">{{ lb.get("log.next_items")|replace({'{count}': dpp}) }}</button></div>
 {% else %}
-<p>コミットログはありません。</p>
+<p>{{ lb.get("log.no_logs") }}</p>
 {% endif %}
 </section>

@@ -26,25 +26,25 @@ module.exports = function(main, $elms, gitparse79){
 						title: splitedCommitMessage.title,
 						body: $body,
 						buttons: [
-							'<button type="submit" class="px2-btn px2-btn--primary">閉じる</button>'
+							'<button type="submit" class="px2-btn px2-btn--primary">'+main.lb.get('ui_label.close')+'</button>'
 						],
 						buttonsSecondary: [
 							$('<button>')
-								.text('このバージョンに戻す')
+								.text(main.lb.get('log.rollback_to_version'))
 								.addClass('px2-btn')
 								.attr('type', 'button')
 								.on('click', function(){
-									if( !confirm('すべてのファイルのバージョンを戻します。コミットされていない変更がある場合は、破棄されます。続けますか？') ){
+									if( !confirm(main.lb.get('log.confirm_rollback_all')) ){
 										return;
 									}
 									rollbackAll(commit);
 								}),
 							$('<button>')
-								.text('このバージョン適用前に戻す')
+								.text(main.lb.get('log.rollback_before_version'))
 								.addClass('px2-btn')
 								.attr('type', 'button')
 								.on('click', function(){
-									if( !confirm('すべてのファイルのバージョンを戻します。コミットされていない変更がある場合は、破棄されます。続けますか？') ){
+									if( !confirm(main.lb.get('log.confirm_rollback_all')) ){
 										return;
 									}
 									rollbackAll(commit+'~');
@@ -138,25 +138,25 @@ module.exports = function(main, $elms, gitparse79){
 						body: $body,
 						width: '100%',
 						buttons: [
-							'<button type="submit" class="px2-btn px2-btn--primary">閉じる</button>'
+							'<button type="submit" class="px2-btn px2-btn--primary">'+main.lb.get('ui_label.close')+'</button>'
 						],
 						buttonsSecondary: [
 							$('<button>')
-								.text('このバージョンに戻す')
+								.text(main.lb.get('log.rollback_to_version'))
 								.addClass('px2-btn')
 								.attr('type', 'button')
 								.on('click', function(){
-									if( !confirm('選択したファイルのバージョンを戻します。コミットされていない変更がある場合は、破棄されます。続けますか？') ){
+									if( !confirm(main.lb.get('log.confirm_rollback_file')) ){
 										return;
 									}
 									rollbackFile(commit, file, status);
 								}),
 							$('<button>')
-								.text('このバージョン適用前に戻す')
+								.text(main.lb.get('log.rollback_before_version'))
 								.addClass('px2-btn')
 								.attr('type', 'button')
 								.on('click', function(){
-									if( !confirm('選択したファイルのバージョンを戻します。コミットされていない変更がある場合は、破棄されます。続けますか？') ){
+									if( !confirm(main.lb.get('log.confirm_rollback_file')) ){
 										return;
 									}
 									rollbackFile(commit+'~', file, status);
@@ -237,7 +237,7 @@ module.exports = function(main, $elms, gitparse79){
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				// unstage
-				px2style.loadingMessage( 'Unstaging...' );
+				px2style.loadingMessage( main.lb.get('log.unstaging') );
 				gitparse79.git(
 					['reset', 'HEAD', './'],
 					function(result){
