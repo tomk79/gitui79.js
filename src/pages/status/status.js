@@ -137,35 +137,126 @@ module.exports = function(main, $elms, gitparse79){
 	// 差分を表示する
 	function showDiff( file, status, isStaged ){
 		var diffInfo;
+		var diffText = '';
 		var diffHtmlLineByLine = '';
 		var diffHtmlSideBySide = '';
+		var isNewFile = false;
 		px2style.loading();
+
+		// 新規ファイルかどうかを判定
+		// `untracked` の場合は新規ファイル
+		if( status === 'untracked'){
+			isNewFile = true;
+		}
 
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
-				var diffCmd = [];
-				diffCmd.push('diff');
-				diffCmd.push('-U12');
-				if( isStaged == 'staged' ){
-					diffCmd.push('--cached');
-				}
-				diffCmd.push('--');
-				diffCmd.push(file);
-				gitparse79.git(
-					diffCmd,
-					function(result){
-						diffInfo = result;
-						rlv();
+				if( isNewFile ){
+					// 新規ファイルの場合は、ファイル内容を取得
+					if( isStaged == 'staged' ){
+						// ステージングされた新規ファイルの内容を取得
+						// git show :0:filename でインデックスのファイル内容を取得
+						gitparse79.git(
+							['show', ':0:' + file],
+							function(result){
+								diffInfo = result;
+								rlv();
+							}
+						);
+					} else {
+						// ステージングされていない新規ファイル（untrackedファイル）の場合
+						// git diff --no-index /dev/null <file> で差分を取得
+						// これにより、空ファイルと現在のファイルの差分が取得できる
+						gitparse79.git(
+							['diff', '--no-index', '-U12', '/dev/null', file],
+							function(result){
+								// exit code 1 は差分がある場合の正常終了
+								if( result.code === 1 || result.code === 0 ){
+									diffInfo = {
+										code: 0,
+										stdout: result.stdout,
+										stderr: result.stderr,
+										errors: []
+									};
+								} else {
+									diffInfo = result;
+								}
+								rlv();
+							}
+						);
 					}
-				);
+				} else {
+					// 既存ファイルの差分を取得
+					var diffCmd = [];
+					diffCmd.push('diff');
+					diffCmd.push('-U12');
+					if( isStaged == 'staged' ){
+						diffCmd.push('--cached');
+					}
+					diffCmd.push('--');
+					diffCmd.push(file);
+					gitparse79.git(
+						diffCmd,
+						function(result){
+							diffInfo = result;
+							rlv();
+						}
+					);
+				}
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				// --------------------------------------
 				// diff2html
-				if( !diffInfo.errors.length ){
+				if( isNewFile && isStaged == 'staged' ){
+					// ステージ済み新規ファイルの場合、unified diff形式を手動で作成
+					var fileContent = diffInfo.stdout || '';
+					var lines = fileContent.split('\n');
+					
+					// 末尾の空行を除外（splitの結果、最後が空文字列になる場合がある）
+					if( lines.length > 0 && lines[lines.length - 1] === '' ){
+						lines.pop();
+					}
+					
+					// unified diff形式のヘッダーを作成
+					diffText = 'diff --git a/' + file + ' b/' + file + '\n';
+					diffText += 'new file mode 100644\n';
+					diffText += 'index 0000000..0000000\n';
+					diffText += '--- /dev/null\n';
+					diffText += '+++ b/' + file + '\n';
+					diffText += '@@ -0,0 +1,' + lines.length + ' @@\n';
+					
+					// 各行に + プレフィックスを追加
+					for( var i = 0; i < lines.length; i++ ){
+						diffText += '+' + lines[i];
+						if( i < lines.length - 1 ){
+							diffText += '\n';
+						}
+					}
+					// 最後に改行を追加（unified diff形式の規則）
+					if( lines.length > 0 ){
+						diffText += '\n';
+					}
+				} else if( isNewFile && isStaged != 'staged' ){
+					// untracked ファイルの場合、git diff --no-index の出力をそのまま使用
+					// ただし、パス表記を調整する必要がある場合がある
+					diffText = diffInfo.stdout;
+					
+					// /dev/null の表記を a/ に、実際のファイルパスを b/ に統一
+					// git diff --no-index の出力形式を normalized する
+					if( diffText ){
+						// 既に unified diff 形式なのでそのまま使用
+						// 必要に応じてパス正規化
+						diffText = diffText.replace(/^--- \/dev\/null/gm, '--- /dev/null');
+						diffText = diffText.replace(/^\+\+\+ b\//gm, '+++ b/');
+					}
+				} else {
+					diffText = diffInfo.stdout;
+				}
+
+				if( !diffInfo.errors || !diffInfo.errors.length ){
 					const Diff2html = require('diff2html/lib/src/diff2html');
 					diffHtmlLineByLine = Diff2html.html(
-						Diff2html.parse( diffInfo.stdout ),
+						Diff2html.parse( diffText ),
 						{
 							drawFileList: false,
 							outputFormat: 'line-by-line',
@@ -173,7 +264,7 @@ module.exports = function(main, $elms, gitparse79){
 						}
 					);
 					diffHtmlSideBySide = Diff2html.html(
-						Diff2html.parse( diffInfo.stdout ),
+						Diff2html.parse( diffText ),
 						{
 							drawFileList: false,
 							outputFormat: 'side-by-side',
@@ -193,7 +284,7 @@ module.exports = function(main, $elms, gitparse79){
 						file: file,
 						status: status,
 						isStaged: isStaged,
-						code: diffInfo.stdout,
+						code: diffText,
 						diffHtmlLineByLine,
 						diffHtmlSideBySide,
 					}
