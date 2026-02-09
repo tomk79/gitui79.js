@@ -25,13 +25,22 @@ module.exports = function(main, $elms, gitparse79){
 					callback(null);
 					return;
 				}
-				// stdoutをBase64にエンコード
+				// stdoutをBase64にエンコード（Uint8Arrayを使用）
 				try{
-					var base64 = btoa(
-						result.stdout.split('').map(function(c){
-							return String.fromCharCode(c.charCodeAt(0) & 0xff);
-						}).join('')
-					);
+					// バイナリデータをUint8Arrayに変換
+					var uint8Array = new Uint8Array(result.stdout.length);
+					for (var i = 0; i < result.stdout.length; i++) {
+						uint8Array[i] = result.stdout.charCodeAt(i) & 0xff;
+					}
+					
+					// toBase64()が利用可能な場合はそれを使用、なければbtoaを使用
+					var base64;
+					if (typeof uint8Array.toBase64 === 'function') {
+						base64 = uint8Array.toBase64();
+					} else {
+						// フォールバック: btoaを使用
+						base64 = btoa(String.fromCharCode.apply(null, uint8Array));
+					}
 					callback(base64);
 				}catch(e){
 					console.error('Failed to encode image:', e);
