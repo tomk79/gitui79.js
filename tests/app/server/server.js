@@ -29,24 +29,30 @@ app.use( '/apis/git', function(req, res, next){
 	var cmdAry = req.body.cmdAry;
 	// console.log(cmdAry);
 
-	var stdout = '';
-	var stderr = '';
+	// バイナリデータを安全に扱うためBufferで保持
+	var stdoutBuffers = [];
+	var stderrBuffers = [];
 	var _pathCurrentDir = process.cwd();
 	var _pathGitDir = require('path').resolve(__dirname+'/../../data/');
 	process.chdir( _pathGitDir );
 
 	var proc = require('child_process').spawn('git', cmdAry);
 	proc.stdout.on('data', function(data){
-		stdout += data;
+		stdoutBuffers.push(data);
 	});
 	proc.stderr.on('data', function(data){
-		stderr += data;
+		stderrBuffers.push(data);
 	});
 	proc.on('close', function(code){
+		// Bufferを結合してBase64エンコード
+		var stdoutBuffer = Buffer.concat(stdoutBuffers);
+		var stderrBuffer = Buffer.concat(stderrBuffers);
+		
 		res.send(JSON.stringify({
 			code: code,
-			stdout: stdout,
-			stderr: stderr,
+			stdout: stdoutBuffer.toString('base64'),
+			stderr: stderrBuffer.toString('base64'),
+			encoding: 'base64'
 		}));
 	});
 
