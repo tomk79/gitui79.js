@@ -64,7 +64,11 @@ module.exports = function(main, $elms, gitparse79){
 					title: splitedCommitMessage.title,
 					body: splitedCommitMessage.body,
 				} );
-				var $body = $('<div>').html(src);
+				var $body = $('<div>')
+					.addClass('gitui79')
+					.addClass('gitui79__body')
+					.attr('data-page-name', 'log')
+					.html(src);
 				px2style.modal(
 					{
 						title: splitedCommitMessage.title,
@@ -223,7 +227,11 @@ module.exports = function(main, $elms, gitparse79){
 					diffHtmlSideBySide,
 				} );
 
-				$body = $('<div>').addClass('gitui79').append(src);
+				$body = $('<div>')
+					.addClass('gitui79')
+					.addClass('gitui79__body')
+					.attr('data-page-name', 'log')
+					.append(src);
 				rlv();
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
