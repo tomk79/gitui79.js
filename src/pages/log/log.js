@@ -7,6 +7,41 @@ module.exports = function(main, $elms, gitparse79){
 
 
 	// --------------------------------------
+	// 画像ファイルかどうかを判定する
+	function isImageFile(filename){
+		var imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.svg', '.webp', '.ico'];
+		var ext = filename.toLowerCase().match(/\.[^.]+$/);
+		if(!ext) return false;
+		return imageExtensions.indexOf(ext[0]) !== -1;
+	}
+
+	// --------------------------------------
+	// 画像データをBase64で取得する
+	function getImageDataBase64(commit, file, callback){
+		gitparse79.git(
+			['show', commit + ':' + file],
+			function(result){
+				if(result.code !== 0){
+					callback(null);
+					return;
+				}
+				// stdoutをBase64にエンコード
+				try{
+					var base64 = btoa(
+						result.stdout.split('').map(function(c){
+							return String.fromCharCode(c.charCodeAt(0) & 0xff);
+						}).join('')
+					);
+					callback(base64);
+				}catch(e){
+					console.error('Failed to encode image:', e);
+					callback(null);
+				}
+			}
+		);
+	}
+
+	// --------------------------------------
 	// コミットの詳細を表示する
 	function showCommitDetails( commit ){
 		px2style.loading();
@@ -85,44 +120,96 @@ module.exports = function(main, $elms, gitparse79){
 
 		var diffHtmlLineByLine = '';
 		var diffHtmlSideBySide = '';
+		var isImage = isImageFile(file);
+		var imageDataBefore = null;
+		var imageDataAfter = null;
+		var mimeType = 'image/png';
+
+		// MIMEタイプを拡張子から判定
+		if(isImage){
+			var ext = file.toLowerCase().match(/\.[^.]+$/);
+			if(ext){
+				var mimeTypes = {
+					'.png': 'image/png',
+					'.jpg': 'image/jpeg',
+					'.jpeg': 'image/jpeg',
+					'.gif': 'image/gif',
+					'.bmp': 'image/bmp',
+					'.svg': 'image/svg+xml',
+					'.webp': 'image/webp',
+					'.ico': 'image/x-icon'
+				};
+				mimeType = mimeTypes[ext[0]] || 'image/png';
+			}
+		}
 
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
-				gitparse79.git(
-					['diff', commit+'~', commit, '--', file],
-					function(result){
-						if( !result.errors.length ){
-							// --------------------------------------
-							// diff2html
-							const Diff2html = require('diff2html/lib/src/diff2html');
-							diffHtmlLineByLine = Diff2html.html(
-								Diff2html.parse( result.stdout ),
-								{
-									drawFileList: false,
-									outputFormat: 'line-by-line',
-									colorScheme: 'auto',
-								}
-							);
-							diffHtmlSideBySide = Diff2html.html(
-								Diff2html.parse( result.stdout ),
-								{
-									drawFileList: false,
-									outputFormat: 'side-by-side',
-									colorScheme: 'auto',
-								}
-							);
-							// / diff2html
-							// --------------------------------------
+				if(!isImage){
+					// 画像ファイル以外は通常のdiff処理
+					gitparse79.git(
+						['diff', commit+'~', commit, '--', file],
+						function(result){
+							if( !result.errors.length ){
+								// --------------------------------------
+								// diff2html
+								const Diff2html = require('diff2html/lib/src/diff2html');
+								diffHtmlLineByLine = Diff2html.html(
+									Diff2html.parse( result.stdout ),
+									{
+										drawFileList: false,
+										outputFormat: 'line-by-line',
+										colorScheme: 'auto',
+									}
+								);
+								diffHtmlSideBySide = Diff2html.html(
+									Diff2html.parse( result.stdout ),
+									{
+										drawFileList: false,
+										outputFormat: 'side-by-side',
+										colorScheme: 'auto',
+									}
+								);
+								// / diff2html
+								// --------------------------------------
+							}
+							rlv();
 						}
-
-						rlv();
+					);
+				}else{
+					// 画像ファイルの場合はBase64データを取得
+					if(status !== 'added'){
+						// Before画像を取得（新規ファイル以外）
+						getImageDataBase64(commit+'~', file, function(data){
+							imageDataBefore = data;
+							if(status === 'deleted'){
+								// 削除ファイルの場合はBeforeのみ
+								rlv();
+							}else{
+								// After画像を取得（変更ファイル）
+								getImageDataBase64(commit, file, function(data){
+									imageDataAfter = data;
+									rlv();
+								});
+							}
+						});
+					}else{
+						// 新規ファイルの場合はAfterのみ
+						getImageDataBase64(commit, file, function(data){
+							imageDataAfter = data;
+							rlv();
+						});
 					}
-				);
+				}
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				var src = main.bindTwig( require('-!text-loader!./templates/show_fileinfo.twig'), {
 					file: file,
 					status: status,
+					isImage: isImage,
+					imageDataBefore: imageDataBefore,
+					imageDataAfter: imageDataAfter,
+					mimeType: mimeType,
 					diffHtmlLineByLine,
 					diffHtmlSideBySide,
 				} );

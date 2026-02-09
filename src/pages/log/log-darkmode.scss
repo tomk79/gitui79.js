@@ -20,3 +20,16 @@
 		}
 	}
 }
+
+// 画像差分表示用スタイル（ダークモード）
+.gitui79__image-diff {
+	&-label {
+		background-color: #333;
+		color: #eee;
+	}
+	
+	&-content {
+		border-color: #444;
+		background-color: #2a2a2a;
+	}
+}
