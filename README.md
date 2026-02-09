@@ -2,6 +2,42 @@
 
 ## Usage
 
+gitコマンドの出力には画像などのバイナリデータが含まれる場合があるため、サーバー側とクライアント側で以下のようにBase64エンコード/デコード処理を実装してください。
+
+### サーバー側の実装例
+
+```javascript
+// Gitコマンドの出力をBufferで保持し、Base64エンコードして返す
+app.use('/apis/git', function(req, res, next){
+    var cmdAry = req.body.cmdAry;
+    
+    var stdoutBuffers = [];
+    var stderrBuffers = [];
+    
+    var proc = require('child_process').spawn('git', cmdAry);
+    proc.stdout.on('data', function(data){
+        stdoutBuffers.push(data);
+    });
+    proc.stderr.on('data', function(data){
+        stderrBuffers.push(data);
+    });
+    proc.on('close', function(code){
+        // Bufferを結合してBase64エンコード
+        var stdoutBuffer = Buffer.concat(stdoutBuffers);
+        var stderrBuffer = Buffer.concat(stderrBuffers);
+        
+        res.send(JSON.stringify({
+            code: code,
+            stdout: stdoutBuffer.toString('base64'),
+            stderr: stderrBuffer.toString('base64'),
+            encoding: 'base64'
+        }));
+    });
+});
+```
+
+### クライアント側の実装例
+
 ```html
 <div id="gitui79"></div>
 
@@ -9,21 +45,58 @@
 var gitUi79 = new GitUi79(
     document.getElementById('gitui79'),
     function(cmdAry, callback){
-        // サーバーでgitコマンドを実行するAPIを用意してください。
-        // callback には、 gitコマンドが出力した文字列を返してください。
-        var stdout = '';
-        var stderr = '';
+        var stdout = null;
+        var stderr = null;
         $.ajax({
-            url: '/path/to/endpoint',
-            data: cmdAry,
+            url: '/apis/git',
+            method: 'POST',
+            data: {"cmdAry": cmdAry},
             success: function(data){
-                stdout += data;
+                stdout = data;
             },
             error: function(data){
-                stderr += data;
+                stderr = data;
             },
             complete: function(){
-                callback(0, stdout, stderr);
+                var result = JSON.parse(stdout);
+                
+                // Base64エンコードされたデータをデコード
+                var decodedStdout = result.stdout;
+                var decodedStderr = result.stderr;
+                
+                if (result.encoding === 'base64') {
+                    try {
+                        // Base64デコードしてUint8Arrayに変換
+                        var binaryStdout = atob(result.stdout);
+                        var binaryStderr = atob(result.stderr);
+                        
+                        // バイナリ文字列をUint8Arrayに変換
+                        var uint8ArrayStdout = new Uint8Array(binaryStdout.length);
+                        var uint8ArrayStderr = new Uint8Array(binaryStderr.length);
+                        
+                        for (var i = 0; i < binaryStdout.length; i++) {
+                            uint8ArrayStdout[i] = binaryStdout.charCodeAt(i);
+                        }
+                        for (var i = 0; i < binaryStderr.length; i++) {
+                            uint8ArrayStderr[i] = binaryStderr.charCodeAt(i);
+                        }
+                        
+                        // UTF-8としてデコードを試みる
+                        try {
+                            var decoder = new TextDecoder('utf-8', { fatal: true });
+                            decodedStdout = decoder.decode(uint8ArrayStdout);
+                            decodedStderr = decoder.decode(uint8ArrayStderr);
+                        } catch(utf8Error) {
+                            // UTF-8デコードに失敗した場合、バイナリデータとして扱う
+                            decodedStdout = binaryStdout;
+                            decodedStderr = binaryStderr;
+                        }
+                    } catch(e) {
+                        console.error('Base64 decode error:', e);
+                    }
+                }
+                
+                callback(result.code, decodedStdout, decodedStderr);
             }
         });
         return;
@@ -42,10 +115,9 @@ gitUi79.init(function(){
 </script>
 ```
 
-
 ## 更新履歴 - Change log
 
-### gitui79 v0.6.2 (リリース日未定)
+### gitui79 v0.7.0 (リリース日未定)
 
 - 新規ファイルの内容を、差分として確認できるようになった。
 - 画像ファイルを確認できるようになった。
