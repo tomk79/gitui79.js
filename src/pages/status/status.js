@@ -5,6 +5,70 @@ module.exports = function(main, $elms, gitparse79){
 	var it79 = require('iterate79');
 	var px2style = main.px2style;
 
+
+	// --------------------------------------
+	// 画像ファイルかどうかを判定する
+	function isImageFile(filename){
+		var imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.svg', '.webp', '.ico'];
+		var ext = filename.toLowerCase().match(/\.[^.]+$/);
+		if(!ext) return false;
+		return imageExtensions.indexOf(ext[0]) !== -1;
+	}
+
+	// --------------------------------------
+	// 画像データをBase64で取得する
+	function getImageDataBase64(ref, file, callback){
+		gitparse79.git(
+			['show', ref + ':' + file],
+			function(result){
+				if(result.code !== 0){
+					callback(null);
+					return;
+				}
+				// stdoutをBase64にエンコード（Uint8Arrayを使用）
+				try{
+					// バイナリデータをUint8Arrayに変換
+					var uint8Array = new Uint8Array(result.stdout.length);
+					for (var i = 0; i < result.stdout.length; i++) {
+						uint8Array[i] = result.stdout.charCodeAt(i) & 0xff;
+					}
+					
+					// toBase64()が利用可能な場合はそれを使用、なければbtoaを使用
+					var base64;
+					if (typeof uint8Array.toBase64 === 'function') {
+						base64 = uint8Array.toBase64();
+					} else {
+						// フォールバック: btoaを使用
+						base64 = btoa(String.fromCharCode.apply(null, uint8Array));
+					}
+					callback(base64);
+				}catch(e){
+					console.error('Failed to encode image:', e);
+					callback(null);
+				}
+			}
+		);
+	}
+
+	// --------------------------------------
+	// 作業ツリーまたはインデックスから画像ファイルを取得する
+	function getWorkingTreeImageBase64(file, isStaged, callback){
+		if(isStaged == 'staged'){
+			// ステージング済みの場合はインデックスから取得
+			getImageDataBase64(':0', file, callback);
+		}else{
+			// 作業ツリーから直接ファイルを読み込む
+			// Gitコマンドでは作業ツリーのファイルを直接読めないため
+			// hash-objectを使ってBase64を取得する代替案として
+			// catコマンドを使用（gitコマンド経由ではないが、サーバー側で実行可能と仮定）
+			// ここでは、git show :./file を使うアプローチを試みる
+			
+			// 作業ツリーのファイルは git show では取得できないため
+			// 新規ファイルの場合はnullを返す（後で別の方法で処理）
+			callback(null);
+		}
+	}
+
 	// --------------------------------------
 	// 画面を初期化
 	function init(){
@@ -141,7 +205,29 @@ module.exports = function(main, $elms, gitparse79){
 		var diffHtmlLineByLine = '';
 		var diffHtmlSideBySide = '';
 		var isNewFile = false;
+		var isImage = isImageFile(file);
+		var imageDataBefore = null;
+		var imageDataAfter = null;
+		var mimeType = 'image/png';
 		px2style.loading();
+
+		// MIMEタイプを拡張子から判定
+		if(isImage){
+			var ext = file.toLowerCase().match(/\.[^.]+$/);
+			if(ext){
+				var mimeTypes = {
+					'.png': 'image/png',
+					'.jpg': 'image/jpeg',
+					'.jpeg': 'image/jpeg',
+					'.gif': 'image/gif',
+					'.bmp': 'image/bmp',
+					'.svg': 'image/svg+xml',
+					'.webp': 'image/webp',
+					'.ico': 'image/x-icon'
+				};
+				mimeType = mimeTypes[ext[0]] || 'image/png';
+			}
+		}
 
 		// 新規ファイルかどうかを判定
 		// `untracked` の場合は新規ファイル
@@ -151,129 +237,181 @@ module.exports = function(main, $elms, gitparse79){
 
 		new Promise(function(rlv){rlv();})
 			.then(function(){ return new Promise(function(rlv, rjt){
-				if( isNewFile ){
-					// 新規ファイルの場合は、ファイル内容を取得
-					if( isStaged == 'staged' ){
-						// ステージングされた新規ファイルの内容を取得
-						// git show :0:filename でインデックスのファイル内容を取得
+				if(!isImage){
+					// 画像ファイル以外は通常の処理
+					if( isNewFile ){
+						// 新規ファイルの場合は、ファイル内容を取得
+						if( isStaged == 'staged' ){
+							// ステージングされた新規ファイルの内容を取得
+							// git show :0:filename でインデックスのファイル内容を取得
+							gitparse79.git(
+								['show', ':0:' + file],
+								function(result){
+									diffInfo = result;
+									rlv();
+								}
+							);
+						} else {
+							// ステージングされていない新規ファイル（untrackedファイル）の場合
+							// git diff --no-index /dev/null <file> で差分を取得
+							// これにより、空ファイルと現在のファイルの差分が取得できる
+							gitparse79.git(
+								['diff', '--no-index', '-U12', '/dev/null', file],
+								function(result){
+									// exit code 1 は差分がある場合の正常終了
+									if( result.code === 1 || result.code === 0 ){
+										diffInfo = {
+											code: 0,
+											stdout: result.stdout,
+											stderr: result.stderr,
+											errors: []
+										};
+									} else {
+										diffInfo = result;
+									}
+									rlv();
+								}
+							);
+						}
+					} else {
+						// 既存ファイルの差分を取得
+						var diffCmd = [];
+						diffCmd.push('diff');
+						diffCmd.push('-U12');
+						if( isStaged == 'staged' ){
+							diffCmd.push('--cached');
+						}
+						diffCmd.push('--');
+						diffCmd.push(file);
 						gitparse79.git(
-							['show', ':0:' + file],
+							diffCmd,
 							function(result){
 								diffInfo = result;
 								rlv();
 							}
 						);
-					} else {
-						// ステージングされていない新規ファイル（untrackedファイル）の場合
-						// git diff --no-index /dev/null <file> で差分を取得
-						// これにより、空ファイルと現在のファイルの差分が取得できる
-						gitparse79.git(
-							['diff', '--no-index', '-U12', '/dev/null', file],
-							function(result){
-								// exit code 1 は差分がある場合の正常終了
-								if( result.code === 1 || result.code === 0 ){
-									diffInfo = {
-										code: 0,
-										stdout: result.stdout,
-										stderr: result.stderr,
-										errors: []
-									};
-								} else {
-									diffInfo = result;
-								}
+					}
+				}else{
+					// 画像ファイルの場合はBase64データを取得
+					if(status === 'deleted'){
+						// 削除ファイルの場合はHEADのみ取得
+						getImageDataBase64('HEAD', file, function(data){
+							imageDataBefore = data;
+							diffInfo = { code: 0, errors: [] };
+							rlv();
+						});
+					}else if(status === 'untracked' || isNewFile){
+						// 新規ファイルの場合
+						if(isStaged == 'staged'){
+							// ステージング済み新規ファイル: インデックスから取得
+							getImageDataBase64(':0', file, function(data){
+								imageDataAfter = data;
+								diffInfo = { code: 0, errors: [] };
 								rlv();
-							}
-						);
-					}
-				} else {
-					// 既存ファイルの差分を取得
-					var diffCmd = [];
-					diffCmd.push('diff');
-					diffCmd.push('-U12');
-					if( isStaged == 'staged' ){
-						diffCmd.push('--cached');
-					}
-					diffCmd.push('--');
-					diffCmd.push(file);
-					gitparse79.git(
-						diffCmd,
-						function(result){
-							diffInfo = result;
+							});
+						}else{
+							// untracked ファイル: gitコマンドでは取得不可
+							// 画像を表示できない旨をメッセージで表示
+							diffInfo = { code: 0, errors: [] };
 							rlv();
 						}
-					);
+					}else{
+						// 変更ファイルの場合
+						if(isStaged == 'staged'){
+							// ステージング済み: HEADとインデックスを比較
+							getImageDataBase64('HEAD', file, function(dataBefore){
+								imageDataBefore = dataBefore;
+								getImageDataBase64(':0', file, function(dataAfter){
+									imageDataAfter = dataAfter;
+									diffInfo = { code: 0, errors: [] };
+									rlv();
+								});
+							});
+						}else{
+							// ステージングされていない変更: HEADのみ表示
+							// 作業ツリーの画像はgitコマンドでは取得不可
+							getImageDataBase64('HEAD', file, function(data){
+								imageDataBefore = data;
+								diffInfo = { code: 0, errors: [] };
+								rlv();
+							});
+						}
+					}
 				}
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
-				// --------------------------------------
-				// diff2html
-				if( isNewFile && isStaged == 'staged' ){
-					// ステージ済み新規ファイルの場合、unified diff形式を手動で作成
-					var fileContent = diffInfo.stdout || '';
-					var lines = fileContent.split('\n');
-					
-					// 末尾の空行を除外（splitの結果、最後が空文字列になる場合がある）
-					if( lines.length > 0 && lines[lines.length - 1] === '' ){
-						lines.pop();
-					}
-					
-					// unified diff形式のヘッダーを作成
-					diffText = 'diff --git a/' + file + ' b/' + file + '\n';
-					diffText += 'new file mode 100644\n';
-					diffText += 'index 0000000..0000000\n';
-					diffText += '--- /dev/null\n';
-					diffText += '+++ b/' + file + '\n';
-					diffText += '@@ -0,0 +1,' + lines.length + ' @@\n';
-					
-					// 各行に + プレフィックスを追加
-					for( var i = 0; i < lines.length; i++ ){
-						diffText += '+' + lines[i];
-						if( i < lines.length - 1 ){
+				if(!isImage){
+					// 画像ファイル以外は diff2html で処理
+					// --------------------------------------
+					// diff2html
+					if( isNewFile && isStaged == 'staged' ){
+						// ステージ済み新規ファイルの場合、unified diff形式を手動で作成
+						var fileContent = diffInfo.stdout || '';
+						var lines = fileContent.split('\n');
+						
+						// 末尾の空行を除外（splitの結果、最後が空文字列になる場合がある）
+						if( lines.length > 0 && lines[lines.length - 1] === '' ){
+							lines.pop();
+						}
+						
+						// unified diff形式のヘッダーを作成
+						diffText = 'diff --git a/' + file + ' b/' + file + '\n';
+						diffText += 'new file mode 100644\n';
+						diffText += 'index 0000000..0000000\n';
+						diffText += '--- /dev/null\n';
+						diffText += '+++ b/' + file + '\n';
+						diffText += '@@ -0,0 +1,' + lines.length + ' @@\n';
+						
+						// 各行に + プレフィックスを追加
+						for( var i = 0; i < lines.length; i++ ){
+							diffText += '+' + lines[i];
+							if( i < lines.length - 1 ){
+								diffText += '\n';
+							}
+						}
+						// 最後に改行を追加（unified diff形式の規則）
+						if( lines.length > 0 ){
 							diffText += '\n';
 						}
+					} else if( isNewFile && isStaged != 'staged' ){
+						// untracked ファイルの場合、git diff --no-index の出力をそのまま使用
+						// ただし、パス表記を調整する必要がある場合がある
+						diffText = diffInfo.stdout;
+						
+						// /dev/null の表記を a/ に、実際のファイルパスを b/ に統一
+						// git diff --no-index の出力形式を normalized する
+						if( diffText ){
+							// 既に unified diff 形式なのでそのまま使用
+							// 必要に応じてパス正規化
+							diffText = diffText.replace(/^--- \/dev\/null/gm, '--- /dev/null');
+							diffText = diffText.replace(/^\+\+\+ b\//gm, '+++ b/');
+						}
+					} else {
+						diffText = diffInfo.stdout;
 					}
-					// 最後に改行を追加（unified diff形式の規則）
-					if( lines.length > 0 ){
-						diffText += '\n';
-					}
-				} else if( isNewFile && isStaged != 'staged' ){
-					// untracked ファイルの場合、git diff --no-index の出力をそのまま使用
-					// ただし、パス表記を調整する必要がある場合がある
-					diffText = diffInfo.stdout;
-					
-					// /dev/null の表記を a/ に、実際のファイルパスを b/ に統一
-					// git diff --no-index の出力形式を normalized する
-					if( diffText ){
-						// 既に unified diff 形式なのでそのまま使用
-						// 必要に応じてパス正規化
-						diffText = diffText.replace(/^--- \/dev\/null/gm, '--- /dev/null');
-						diffText = diffText.replace(/^\+\+\+ b\//gm, '+++ b/');
-					}
-				} else {
-					diffText = diffInfo.stdout;
-				}
 
-				if( !diffInfo.errors || !diffInfo.errors.length ){
-					const Diff2html = require('diff2html/lib/src/diff2html');
-					diffHtmlLineByLine = Diff2html.html(
-						Diff2html.parse( diffText ),
-						{
-							drawFileList: false,
-							outputFormat: 'line-by-line',
-							colorScheme: 'auto',
-						}
-					);
-					diffHtmlSideBySide = Diff2html.html(
-						Diff2html.parse( diffText ),
-						{
-							drawFileList: false,
-							outputFormat: 'side-by-side',
-							colorScheme: 'auto',
-						}
-					);
+					if( !diffInfo.errors || !diffInfo.errors.length ){
+						const Diff2html = require('diff2html/lib/src/diff2html');
+						diffHtmlLineByLine = Diff2html.html(
+							Diff2html.parse( diffText ),
+							{
+								drawFileList: false,
+								outputFormat: 'line-by-line',
+								colorScheme: 'auto',
+							}
+						);
+						diffHtmlSideBySide = Diff2html.html(
+							Diff2html.parse( diffText ),
+							{
+								drawFileList: false,
+								outputFormat: 'side-by-side',
+								colorScheme: 'auto',
+							}
+						);
+					}
+					// / diff2html
+					// --------------------------------------
 				}
-				// / diff2html
-				// --------------------------------------
 
 				rlv();
 			}); })
@@ -284,12 +422,20 @@ module.exports = function(main, $elms, gitparse79){
 						file: file,
 						status: status,
 						isStaged: isStaged,
+						isImage: isImage,
+						imageDataBefore: imageDataBefore,
+						imageDataAfter: imageDataAfter,
+						mimeType: mimeType,
 						code: diffText,
 						diffHtmlLineByLine,
 						diffHtmlSideBySide,
 					}
 				);
-				var $body = $('<div>').addClass('gitui79').append(src);
+				var $body = $('<div>')
+					.addClass('gitui79')
+					.addClass('gitui79__body')
+					.attr('data-page-name', 'status')
+					.append(src);
 				$body.find('.gitui79__resolve-ours').on('click', function(){
 					alert(main.lb.get('status.resolve_ours_confirm'));
 					px2style.loading();

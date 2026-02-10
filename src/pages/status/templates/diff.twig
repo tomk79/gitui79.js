@@ -23,7 +23,52 @@
 </div>
 {% endif %}
 
-{% if code or diffHtmlLineByLine %}
+{% if isImage %}
+<h2>画像差分</h2>
+<div class="gitui79__image-diff">
+    {% if imageDataBefore and imageDataAfter %}
+    {# 変更ファイルの場合: Before と After を左右に表示 #}
+    <div class="gitui79__image-diff-container">
+        <div class="gitui79__image-diff-side">
+            <div class="gitui79__image-diff-label">Before</div>
+            <div class="gitui79__image-diff-content">
+                <img src="data:{{ mimeType|e }};base64,{{ imageDataBefore|e }}" alt="Before">
+            </div>
+        </div>
+        <div class="gitui79__image-diff-side">
+            <div class="gitui79__image-diff-label">After{% if isStaged == 'staged' %} (Staged){% else %} (Working Tree){% endif %}</div>
+            <div class="gitui79__image-diff-content">
+                <img src="data:{{ mimeType|e }};base64,{{ imageDataAfter|e }}" alt="After">
+            </div>
+        </div>
+    </div>
+    {% elseif imageDataBefore %}
+    {# 削除ファイルまたはunstagedの変更ファイル（作業ツリーを取得できない場合） #}
+    <div class="gitui79__image-diff-single">
+        <div class="gitui79__image-diff-label">{% if status == 'deleted' %}Deleted{% else %}Before{% endif %}</div>
+        <div class="gitui79__image-diff-content">
+            <img src="data:{{ mimeType|e }};base64,{{ imageDataBefore|e }}" alt="{% if status == 'deleted' %}Deleted Image{% else %}Before Image{% endif %}">
+        </div>
+        {% if status != 'deleted' and isStaged != 'staged' %}
+        <p class="px2-p" style="color: #666; font-size: 14px;">※Untrackedファイルの画像は取得できません。ファイルをステージングすると画像を表示できます。</p>
+        {% endif %}
+    </div>
+    {% elseif imageDataAfter %}
+    {# 新規ファイルの場合: After のみ表示 #}
+    <div class="gitui79__image-diff-single">
+        <div class="gitui79__image-diff-label">Added{% if isStaged == 'staged' %} (Staged){% endif %}</div>
+        <div class="gitui79__image-diff-content">
+            <img src="data:{{ mimeType|e }};base64,{{ imageDataAfter|e }}" alt="Added Image">
+        </div>
+    </div>
+    {% else %}
+    {# untrackedファイルで画像を取得できない場合 #}
+    <div class="px2-p">
+        <p style="color: #666;">※Untrackedファイルの画像は取得できません。ファイルをステージングすると画像を表示できます。</p>
+    </div>
+    {% endif %}
+</div>
+{% elseif code or diffHtmlLineByLine %}
 <h2>{{ lb.get("status.diff") }}</h2>
 {% if diffHtmlLineByLine %}
 <div class="gitui79__sm">{{ diffHtmlLineByLine | raw }}</div>
