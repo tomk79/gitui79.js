@@ -107,6 +107,40 @@ var gitUi79 = new GitUi79(
             "email": "committer@example.com",
         },
         "lang": "ja",
+        "getWorkingTreeFile": function(filePath, callback) {
+            // ワークツリー内のファイルを取得するコールバック（オプション）
+            // filePath: ワークツリーのルートからの相対パス
+            // callback(error, binaryData)
+            //   - error: エラーオブジェクト（成功時は null）
+            //   - binaryData: Uint8Array 形式のバイナリデータ
+            
+            // サーバーサイドでファイルを読み込む例
+            $.ajax({
+                url: '/apis/read-file',
+                method: 'POST',
+                data: {"filePath": filePath},
+                success: function(data){
+                    if (data.error) {
+                        callback(new Error(data.error), null);
+                        return;
+                    }
+                    // Base64エンコードされたデータをデコード
+                    try {
+                        var binaryString = atob(data.content);
+                        var uint8Array = new Uint8Array(binaryString.length);
+                        for (var i = 0; i < binaryString.length; i++) {
+                            uint8Array[i] = binaryString.charCodeAt(i);
+                        }
+                        callback(null, uint8Array);
+                    } catch(e) {
+                        callback(e, null);
+                    }
+                },
+                error: function(xhr, status, error){
+                    callback(new Error(error), null);
+                }
+            });
+        }
     }
 );
 gitUi79.init(function(){
@@ -115,12 +149,75 @@ gitUi79.init(function(){
 </script>
 ```
 
+### オプション - Options
+
+GitUi79 のコンストラクタの第3引数には、以下のオプションを指定できます：
+
+- `committer.name`: コミッターの名前（省略時は `git config user.name` から取得）
+- `committer.email`: コミッターのメールアドレス（省略時は `git config user.email` から取得）
+- `lang`: 表示言語（デフォルト: `"ja"`）
+- `getWorkingTreeFile`: ワークツリー内のファイルを取得するコールバック関数（オプション）
+
+#### `getWorkingTreeFile` コールバック
+
+このコールバックを設定することで、untracked な画像ファイルや、staged されていない変更済み画像ファイルの内容を表示できるようになります。
+
+**シグネチャ:**
+```javascript
+function(filePath, callback) {
+    // filePath: ワークツリーのルートからの相対パス（string）
+    // callback: 完了時に呼び出す関数
+    //   callback(error, binaryData)
+    //     - error: エラーオブジェクト（成功時は null）
+    //     - binaryData: Uint8Array 形式のバイナリデータ
+}
+```
+
+**サーバーサイド実装例（Node.js/Express）:**
+```javascript
+const path = require('path');
+const fs = require('fs');
+
+// ワークツリーのルートパス
+const workTreeRoot = '/path/to/your/repository';
+
+app.use('/apis/read-file', function(req, res, next){
+    const filePath = req.body.filePath;
+    
+    // パストラバーサル対策
+    const safePath = path.normalize(filePath).replace(/^(\.\.[\/\\])+/, '');
+    const fullPath = path.join(workTreeRoot, safePath);
+    
+    // ワークツリー外へのアクセスを防止
+    if (!fullPath.startsWith(workTreeRoot)) {
+        res.status(400).json({ error: 'Invalid path' });
+        return;
+    }
+    
+    fs.readFile(fullPath, (err, data) => {
+        if (err) {
+            res.status(404).json({ error: err.message });
+        } else {
+            // Base64エンコードして返す
+            res.json({ content: data.toString('base64') });
+        }
+    });
+});
+```
+
+**注意事項:**
+- セキュリティ上、パストラバーサル攻撃を防ぐため、必ずパスの検証を行ってください。
+- ワークツリー外のファイルへのアクセスを防ぐ必要があります。
+- `getWorkingTreeFile` が設定されていない場合、untracked/未staged の画像は「表示できません」というメッセージが表示されます。
+
+
 ## 更新履歴 - Change log
 
 ### gitui79 v0.7.0 (リリース日未定)
 
 - 新規ファイルの内容を、差分として確認できるようになった。
-- 画像ファイルを確認できるようになった。
+- 画像ファイルの変更内容を確認できるようになった。
+- 新しいオプション `options.getWorkingTreeFile` 追加。 untracked な画像ファイルや staged されていない変更済み画像の表示に対応した。
 
 ### gitui79 v0.6.1 (2026年1月10日)
 

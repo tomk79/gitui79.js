@@ -10,6 +10,9 @@ module.exports = function($elm, fncCallGit, options){
 	options.committer = options.committer || {};
 	options.lang = options.lang || "ja";
 
+	// options を外部から参照可能にする
+	this.options = options;
+
 	var gitparse79 = new (require('gitparse79'))(fncCallGit);
 	var px2style = window.px2style;
 	this.px2style = px2style;

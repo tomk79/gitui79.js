@@ -60,6 +60,31 @@ app.use( '/apis/git', function(req, res, next){
 	return;
 } );
 
+// ワークツリーのファイルを読み込むAPI
+app.use( '/apis/read-file', function(req, res, next){
+	var filePath = req.body.filePath;
+	var _pathGitDir = require('path').resolve(__dirname+'/../../data/');
+	
+	// パストラバーサル対策
+	var safePath = path.normalize(filePath).replace(/^(\.\.[/\\])+/, '');
+	var fullPath = path.join(_pathGitDir, safePath);
+	
+	// ワークツリー外へのアクセスを防止
+	if (!fullPath.startsWith(_pathGitDir)) {
+		res.status(400).json({ error: 'Invalid path' });
+		return;
+	}
+	
+	fs.readFile(fullPath, (err, data) => {
+		if (err) {
+			res.status(404).json({ error: err.message });
+		} else {
+			// Base64エンコードして返す
+			res.json({ content: data.toString('base64') });
+		}
+	});
+} );
+
 // Twigテンプレートの設定
 const templateDir = path.resolve(__dirname, '../client/');
 Twig.cache(false); // 開発時はキャッシュを無効化

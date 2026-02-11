@@ -16,7 +16,24 @@ module.exports = function(main, $elms, gitparse79){
 	}
 
 	// --------------------------------------
-	// 画像データをBase64で取得する
+	// バイナリデータ（Uint8Array）をBase64に変換する
+	function binaryDataToBase64(uint8Array){
+		try{
+			// toBase64()が利用可能な場合はそれを使用、なければbtoaを使用
+			if (typeof uint8Array.toBase64 === 'function') {
+				return uint8Array.toBase64();
+			} else {
+				// フォールバック: btoaを使用
+				return btoa(String.fromCharCode.apply(null, uint8Array));
+			}
+		}catch(e){
+			console.error('Failed to encode binary data to base64:', e);
+			return null;
+		}
+	}
+
+	// --------------------------------------
+	// 画像データをBase64で取得する（Git経由）
 	function getImageDataBase64(ref, file, callback){
 		gitparse79.git(
 			['show', ref + ':' + file],
@@ -32,15 +49,7 @@ module.exports = function(main, $elms, gitparse79){
 					for (var i = 0; i < result.stdout.length; i++) {
 						uint8Array[i] = result.stdout.charCodeAt(i) & 0xff;
 					}
-					
-					// toBase64()が利用可能な場合はそれを使用、なければbtoaを使用
-					var base64;
-					if (typeof uint8Array.toBase64 === 'function') {
-						base64 = uint8Array.toBase64();
-					} else {
-						// フォールバック: btoaを使用
-						base64 = btoa(String.fromCharCode.apply(null, uint8Array));
-					}
+					var base64 = binaryDataToBase64(uint8Array);
 					callback(base64);
 				}catch(e){
 					console.error('Failed to encode image:', e);
@@ -58,14 +67,22 @@ module.exports = function(main, $elms, gitparse79){
 			getImageDataBase64(':0', file, callback);
 		}else{
 			// 作業ツリーから直接ファイルを読み込む
-			// Gitコマンドでは作業ツリーのファイルを直接読めないため
-			// hash-objectを使ってBase64を取得する代替案として
-			// catコマンドを使用（gitコマンド経由ではないが、サーバー側で実行可能と仮定）
-			// ここでは、git show :./file を使うアプローチを試みる
-			
-			// 作業ツリーのファイルは git show では取得できないため
-			// 新規ファイルの場合はnullを返す（後で別の方法で処理）
-			callback(null);
+			// Gitコマンドでは作業ツリーのファイルを直接読めないため、
+			// options.getWorkingTreeFile コールバックを使用する
+			if (main.options.getWorkingTreeFile) {
+				main.options.getWorkingTreeFile(file, function(error, binaryData) {
+					if (error || !binaryData) {
+						callback(null);
+						return;
+					}
+					// Uint8Array を Base64 に変換
+					var base64 = binaryDataToBase64(binaryData);
+					callback(base64);
+				});
+			} else {
+				// コールバックが設定されていない場合は取得不可
+				callback(null);
+			}
 		}
 	}
 
@@ -310,10 +327,12 @@ module.exports = function(main, $elms, gitparse79){
 								rlv();
 							});
 						}else{
-							// untracked ファイル: gitコマンドでは取得不可
-							// 画像を表示できない旨をメッセージで表示
-							diffInfo = { code: 0, errors: [] };
-							rlv();
+							// untracked ファイル: getWorkingTreeImageBase64() で取得
+							getWorkingTreeImageBase64(file, isStaged, function(data){
+								imageDataAfter = data;
+								diffInfo = { code: 0, errors: [] };
+								rlv();
+							});
 						}
 					}else{
 						// 変更ファイルの場合
@@ -328,12 +347,15 @@ module.exports = function(main, $elms, gitparse79){
 								});
 							});
 						}else{
-							// ステージングされていない変更: HEADのみ表示
-							// 作業ツリーの画像はgitコマンドでは取得不可
-							getImageDataBase64('HEAD', file, function(data){
-								imageDataBefore = data;
-								diffInfo = { code: 0, errors: [] };
-								rlv();
+							// ステージングされていない変更: HEADと作業ツリーを比較
+							getImageDataBase64('HEAD', file, function(dataBefore){
+								imageDataBefore = dataBefore;
+								// 作業ツリーの画像を getWorkingTreeImageBase64() で取得
+								getWorkingTreeImageBase64(file, isStaged, function(dataAfter){
+									imageDataAfter = dataAfter;
+									diffInfo = { code: 0, errors: [] };
+									rlv();
+								});
 							});
 						}
 					}

@@ -68,6 +68,37 @@
 				email: 'test.user@example.com',
 			},
 			lang: window.lang || "en",
+			getWorkingTreeFile: function(filePath, callback) {
+				// ワークツリー内のファイルを取得するコールバック
+				// filePath: ワークツリーのルートからの相対パス
+				// callback(error, binaryData)
+				console.info('=-=-=-= getWorkingTreeFile:', filePath);
+				$.ajax({
+					url: '/apis/read-file',
+					method: 'POST',
+					data: {"filePath": filePath},
+					success: function(data){
+						if (data.error) {
+							callback(new Error(data.error), null);
+							return;
+						}
+						// Base64エンコードされたデータをデコード
+						try {
+							var binaryString = atob(data.content);
+							var uint8Array = new Uint8Array(binaryString.length);
+							for (var i = 0; i < binaryString.length; i++) {
+								uint8Array[i] = binaryString.charCodeAt(i);
+							}
+							callback(null, uint8Array);
+						} catch(e) {
+							callback(e, null);
+						}
+					},
+					error: function(xhr, status, error){
+						callback(new Error(error), null);
+					}
+				});
+			}
 		}
 	);
 	// console.log(gitUi79);
