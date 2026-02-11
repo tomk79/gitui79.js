@@ -34,12 +34,26 @@
             <div class="gitui79__image-diff-content">
                 <img src="data:{{ mimeType|e }};base64,{{ imageDataBefore|e }}" alt="Before">
             </div>
+            {% if imageMetadataBefore %}
+            <div class="gitui79__image-metadata">
+                <div>サイズ: {{ imageMetadataBefore.width }}x{{ imageMetadataBefore.height }}</div>
+                <div>フォーマット: {{ imageMetadataBefore.format|e }}</div>
+                <div>容量: {{ imageMetadataBefore.sizeFormatted|e }}</div>
+            </div>
+            {% endif %}
         </div>
         <div class="gitui79__image-diff-side">
             <div class="gitui79__image-diff-label">After{% if isStaged == 'staged' %} (Staged){% else %} (Working Tree){% endif %}</div>
             <div class="gitui79__image-diff-content">
                 <img src="data:{{ mimeType|e }};base64,{{ imageDataAfter|e }}" alt="After">
             </div>
+            {% if imageMetadataAfter %}
+            <div class="gitui79__image-metadata">
+                <div>サイズ: {{ imageMetadataAfter.width }}x{{ imageMetadataAfter.height }}</div>
+                <div>フォーマット: {{ imageMetadataAfter.format|e }}</div>
+                <div>容量: {{ imageMetadataAfter.sizeFormatted|e }}</div>
+            </div>
+            {% endif %}
         </div>
     </div>
     {% elseif imageDataBefore %}
@@ -49,6 +63,13 @@
         <div class="gitui79__image-diff-content">
             <img src="data:{{ mimeType|e }};base64,{{ imageDataBefore|e }}" alt="{% if status == 'deleted' %}Deleted Image{% else %}Before Image{% endif %}">
         </div>
+        {% if imageMetadataBefore %}
+        <div class="gitui79__image-metadata">
+            <div>サイズ: {{ imageMetadataBefore.width }}x{{ imageMetadataBefore.height }}</div>
+            <div>フォーマット: {{ imageMetadataBefore.format|e }}</div>
+            <div>容量: {{ imageMetadataBefore.sizeFormatted|e }}</div>
+        </div>
+        {% endif %}
         {% if status != 'deleted' and isStaged != 'staged' %}
         <p class="px2-p" style="color: #666; font-size: 14px;">※Untrackedファイルの画像は取得できません。ファイルをステージングすると画像を表示できます。</p>
         {% endif %}
@@ -60,6 +81,13 @@
         <div class="gitui79__image-diff-content">
             <img src="data:{{ mimeType|e }};base64,{{ imageDataAfter|e }}" alt="Added Image">
         </div>
+        {% if imageMetadataAfter %}
+        <div class="gitui79__image-metadata">
+            <div>サイズ: {{ imageMetadataAfter.width }}x{{ imageMetadataAfter.height }}</div>
+            <div>フォーマット: {{ imageMetadataAfter.format|e }}</div>
+            <div>容量: {{ imageMetadataAfter.sizeFormatted|e }}</div>
+        </div>
+        {% endif %}
     </div>
     {% else %}
     {# untrackedファイルで画像を取得できない場合 #}

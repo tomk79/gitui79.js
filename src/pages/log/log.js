@@ -16,6 +16,45 @@ module.exports = function(main, $elms, gitparse79){
 	}
 
 	// --------------------------------------
+	// バイト数を読みやすい形式にフォーマット
+	function formatBytes(bytes){
+		if (bytes === 0) return '0 Bytes';
+		var k = 1024;
+		var sizes = ['Bytes', 'KB', 'MB', 'GB'];
+		var i = Math.floor(Math.log(bytes) / Math.log(k));
+		return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+	}
+
+	// --------------------------------------
+	// 画像のメタデータを取得する（サイズ、幅、高さ）
+	function getImageMetadata(base64Data, mimeType, callback){
+		if (!base64Data) {
+			callback(null);
+			return;
+		}
+
+		var img = new Image();
+		img.onload = function() {
+			// 容量を計算（Base64のデコードサイズ）
+			var base64Length = base64Data.length;
+			var padding = (base64Data.match(/=/g) || []).length;
+			var byteSize = Math.floor((base64Length * 3) / 4) - padding;
+
+			callback({
+				width: img.width,
+				height: img.height,
+				size: byteSize,
+				sizeFormatted: formatBytes(byteSize),
+				format: mimeType
+			});
+		};
+		img.onerror = function() {
+			callback(null);
+		};
+		img.src = 'data:' + mimeType + ';base64,' + base64Data;
+	}
+
+	// --------------------------------------
 	// 画像データをBase64で取得する
 	function getImageDataBase64(commit, file, callback){
 		gitparse79.git(
@@ -216,16 +255,64 @@ module.exports = function(main, $elms, gitparse79){
 				}
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
+				if(isImage){
+					// 画像のメタデータを取得
+					var metadataCount = 0;
+					var metadataTotal = (imageDataBefore ? 1 : 0) + (imageDataAfter ? 1 : 0);
+					var imageMetadataBefore = null;
+					var imageMetadataAfter = null;
+
+					if (metadataTotal === 0) {
+						// 画像データがない場合
+						rlv();
+						return;
+					}
+
+					if (imageDataBefore) {
+						getImageMetadata(imageDataBefore, mimeType, function(metadata) {
+							imageMetadataBefore = metadata;
+							metadataCount++;
+							if (metadataCount === metadataTotal) {
+								// 画像メタデータを変数に格納
+								window._gitui79_imageMetadataBefore = imageMetadataBefore;
+								window._gitui79_imageMetadataAfter = imageMetadataAfter;
+								rlv();
+							}
+						});
+					}
+
+					if (imageDataAfter) {
+						getImageMetadata(imageDataAfter, mimeType, function(metadata) {
+							imageMetadataAfter = metadata;
+							metadataCount++;
+							if (metadataCount === metadataTotal) {
+								// 画像メタデータを変数に格納
+								window._gitui79_imageMetadataBefore = imageMetadataBefore;
+								window._gitui79_imageMetadataAfter = imageMetadataAfter;
+								rlv();
+							}
+						});
+					}
+				} else {
+					rlv();
+				}
+			}); })
+			.then(function(){ return new Promise(function(rlv, rjt){
 				var src = main.bindTwig( require('-!text-loader!./templates/show_fileinfo.twig'), {
 					file: file,
 					status: status,
 					isImage: isImage,
 					imageDataBefore: imageDataBefore,
 					imageDataAfter: imageDataAfter,
+					imageMetadataBefore: window._gitui79_imageMetadataBefore || null,
+					imageMetadataAfter: window._gitui79_imageMetadataAfter || null,
 					mimeType: mimeType,
 					diffHtmlLineByLine,
 					diffHtmlSideBySide,
 				} );
+				// グローバル変数をクリア
+				delete window._gitui79_imageMetadataBefore;
+				delete window._gitui79_imageMetadataAfter;
 
 				$body = $('<div>')
 					.addClass('gitui79')

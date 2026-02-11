@@ -22,12 +22,26 @@
             <div class="gitui79__image-diff-content">
                 <img src="data:{{ mimeType|e }};base64,{{ imageDataBefore|e }}" alt="Before">
             </div>
+            {% if imageMetadataBefore %}
+            <div class="gitui79__image-metadata">
+                <div>サイズ: {{ imageMetadataBefore.width }}x{{ imageMetadataBefore.height }}</div>
+                <div>フォーマット: {{ imageMetadataBefore.format|e }}</div>
+                <div>容量: {{ imageMetadataBefore.sizeFormatted|e }}</div>
+            </div>
+            {% endif %}
         </div>
         <div class="gitui79__image-diff-side">
             <div class="gitui79__image-diff-label">After</div>
             <div class="gitui79__image-diff-content">
                 <img src="data:{{ mimeType|e }};base64,{{ imageDataAfter|e }}" alt="After">
             </div>
+            {% if imageMetadataAfter %}
+            <div class="gitui79__image-metadata">
+                <div>サイズ: {{ imageMetadataAfter.width }}x{{ imageMetadataAfter.height }}</div>
+                <div>フォーマット: {{ imageMetadataAfter.format|e }}</div>
+                <div>容量: {{ imageMetadataAfter.sizeFormatted|e }}</div>
+            </div>
+            {% endif %}
         </div>
     </div>
     {% elseif imageDataBefore %}
@@ -37,6 +51,13 @@
         <div class="gitui79__image-diff-content">
             <img src="data:{{ mimeType|e }};base64,{{ imageDataBefore|e }}" alt="Deleted Image">
         </div>
+        {% if imageMetadataBefore %}
+        <div class="gitui79__image-metadata">
+            <div>サイズ: {{ imageMetadataBefore.width }}x{{ imageMetadataBefore.height }}</div>
+            <div>フォーマット: {{ imageMetadataBefore.format|e }}</div>
+            <div>容量: {{ imageMetadataBefore.sizeFormatted|e }}</div>
+        </div>
+        {% endif %}
     </div>
     {% elseif imageDataAfter %}
     {# 新規ファイルの場合: After のみ表示 #}
@@ -45,6 +66,13 @@
         <div class="gitui79__image-diff-content">
             <img src="data:{{ mimeType|e }};base64,{{ imageDataAfter|e }}" alt="Added Image">
         </div>
+        {% if imageMetadataAfter %}
+        <div class="gitui79__image-metadata">
+            <div>サイズ: {{ imageMetadataAfter.width }}x{{ imageMetadataAfter.height }}</div>
+            <div>フォーマット: {{ imageMetadataAfter.format|e }}</div>
+            <div>容量: {{ imageMetadataAfter.sizeFormatted|e }}</div>
+        </div>
+        {% endif %}
     </div>
     {% endif %}
 </div>
