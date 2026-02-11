@@ -15,12 +15,38 @@ ui_label.search,Search,検索,搜索,搜索
 ui_label.back,Back,戻る,返回,返回
 ui_label.branch,"Branch","ブランチ","分支","分支"
 ui_label.status,"Status","ステータス","状态","狀態"
+ui_label.file,File,ファイル,文件,檔案
+ui_label.name,Name,名前,名称,名稱
+ui_label.email,E-mail,Eメール,电子邮件,電子郵件
+ui_label.image_diff,"Image diff","画像差分","图像差异","影像差異"
+ui_label.before,Before,変更前,之前,之前
+ui_label.after,After,変更後,之后,之後
+ui_label.added,Added,追加,新增,新增
+ui_label.deleted,Deleted,削除,删除,刪除
+ui_label.staged,Staged,ステージ済み,已暂存,已暫存
+ui_label.working_tree,"Working Tree","作業ツリー","工作区","工作區"
+ui_label.size,Size,サイズ,尺寸,尺寸
+ui_label.format,Format,フォーマット,格式,格式
+ui_label.capacity,Capacity,容量,容量,容量
+ui_label.image_alt_before,"Before image","変更前の画像","之前的图像","之前的影像"
+ui_label.image_alt_after,"After image","変更後の画像","之后的图像","之後的影像"
+ui_label.image_alt_deleted,"Deleted image","削除された画像","删除的图像","刪除的影像"
+ui_label.image_alt_added,"Added image","追加された画像","新增的图像","新增的影像"
+ui_label.bytes,Bytes,バイト,字节,位元組
+ui_label.kb,KB,KB,KB,KB
+ui_label.mb,MB,MB,MB,MB
+ui_label.gb,GB,GB,GB,GB
 status.uncommitted_changes,"Uncommitted changes","コミットされていない変更","未提交的更改","未提交的變更"
 status.commit,"Commit","コミットする","提交","提交"
 status.discard_changes,"Discard changes","変更を破棄する","放弃更改","捨棄變更"
 status.commit_message,"Commit message","コミットコメント","提交消息","提交訊息"
 status.committer,"Committer","コミッター","提交者","提交者"
 status.no_changes,"Nothing to commit","コミットされていない変更はありません。","没有需要提交的更改。","沒有需要提交的變更。"
+status.untracked_image_note,"Images for untracked files cannot be loaded. Stage the file to view the image.","※Untrackedファイルの画像は取得できません。ファイルをステージングすると画像を表示できます。","未跟踪文件的图像无法获取。将文件暂存后即可查看图像。","未追蹤檔案的影像無法取得。將檔案暫存後即可查看影像。"
+status.committing,"Committing...","コミットしています...","正在提交...","正在提交..."
+status.commit_failed,"Commit failed.","コミットに失敗しました。","提交失败。","提交失敗。"
+status.commit_succeeded,"Committed.","コミットしました。","已提交。","已提交。"
+status.commit_error_detail,"Error: status code: {code}\n{stdout}","エラー: ステータスコード {code}\n{stdout}","错误: 状态码 {code}\n{stdout}","錯誤: 狀態碼 {code}\n{stdout}"
 status.enter_commit_message,"Please enter a commit message.","コミットメッセージを入力してください。","请输入提交消息。","請輸入提交訊息。"
 status.enter_committer_name,"Please enter the committer name.","コミッターの名前を入力してください。","请输入提交者名称。","請輸入提交者名稱。"
 status.enter_committer_email,"Please enter the committer email.","コミッターのメールアドレスを入力してください。","请输入提交者电子邮件。","請輸入提交者電子郵件。"
@@ -51,6 +77,7 @@ branch.failed,"Failed.","失敗しました。","失败。","失敗。"
 branch.cannot_use_remotes,"Cannot use name starting with 'remotes'","remotes で始まる名前は使えません。","不能使用以 'remotes' 开头的名称","無法使用以 'remotes' 開頭的名稱"
 branch.no_spaces,"Branch name cannot contain spaces or whitespace characters.","ブランチ名にスペースや空白文字を含めることはできません。","分支名称不能包含空格或空白字符。","分支名稱不能包含空格或空白字元。"
 log.commit_log,"Commit log","コミットログ","提交日志","提交記錄"
+log.no_comment,"(no comment)","(コメントなし)","(无注释)","(無註解)"
 log.no_logs,"No commit logs.","コミットログはありません。","没有提交日志。","沒有提交記錄。"
 log.next_items,"Next {count} items","次の {count} 件","下 {count} 条","下 {count} 筆"
 log.rollback_to_version,"Rollback to this version","このバージョンに戻す","回滚到此版本","回滾到此版本"

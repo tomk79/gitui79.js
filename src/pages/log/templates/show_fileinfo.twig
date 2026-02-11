@@ -1,45 +1,45 @@
 <div class="px2-p">
     <table class="px2-table px2-table--dl">
         <tr>
-            <th>File</th>
+            <th>{{ lb.get("ui_label.file") }}</th>
             <td>{{ file|e }}</td>
         </tr>
         <tr>
-            <th>Status</th>
+            <th>{{ lb.get("ui_label.status") }}</th>
             <td>{{ status|e }}</td>
         </tr>
     </table>
 </div>
 
 {% if isImage %}
-<h2>画像差分</h2>
+<h2>{{ lb.get("ui_label.image_diff") }}</h2>
 <div class="gitui79__image-diff">
     {% if imageDataBefore and imageDataAfter %}
     {# 変更ファイルの場合: Before と After を左右に表示 #}
     <div class="gitui79__image-diff-container">
         <div class="gitui79__image-diff-side">
-            <div class="gitui79__image-diff-label">Before</div>
+            <div class="gitui79__image-diff-label">{{ lb.get("ui_label.before") }}</div>
             <div class="gitui79__image-diff-content">
-                <img src="data:{{ mimeType|e }};base64,{{ imageDataBefore|e }}" alt="Before">
+                <img src="data:{{ mimeType|e }};base64,{{ imageDataBefore|e }}" alt="{{ lb.get('ui_label.image_alt_before') }}">
             </div>
             {% if imageMetadataBefore %}
             <div class="gitui79__image-metadata">
-                <div>サイズ: {{ imageMetadataBefore.width }}x{{ imageMetadataBefore.height }}</div>
-                <div>フォーマット: {{ imageMetadataBefore.format|e }}</div>
-                <div>容量: {{ imageMetadataBefore.sizeFormatted|e }}</div>
+                <div>{{ lb.get("ui_label.size") }}: {{ imageMetadataBefore.width }}x{{ imageMetadataBefore.height }}</div>
+                <div>{{ lb.get("ui_label.format") }}: {{ imageMetadataBefore.format|e }}</div>
+                <div>{{ lb.get("ui_label.capacity") }}: {{ imageMetadataBefore.sizeFormatted|e }}</div>
             </div>
             {% endif %}
         </div>
         <div class="gitui79__image-diff-side">
-            <div class="gitui79__image-diff-label">After</div>
+            <div class="gitui79__image-diff-label">{{ lb.get("ui_label.after") }}</div>
             <div class="gitui79__image-diff-content">
-                <img src="data:{{ mimeType|e }};base64,{{ imageDataAfter|e }}" alt="After">
+                <img src="data:{{ mimeType|e }};base64,{{ imageDataAfter|e }}" alt="{{ lb.get('ui_label.image_alt_after') }}">
             </div>
             {% if imageMetadataAfter %}
             <div class="gitui79__image-metadata">
-                <div>サイズ: {{ imageMetadataAfter.width }}x{{ imageMetadataAfter.height }}</div>
-                <div>フォーマット: {{ imageMetadataAfter.format|e }}</div>
-                <div>容量: {{ imageMetadataAfter.sizeFormatted|e }}</div>
+                <div>{{ lb.get("ui_label.size") }}: {{ imageMetadataAfter.width }}x{{ imageMetadataAfter.height }}</div>
+                <div>{{ lb.get("ui_label.format") }}: {{ imageMetadataAfter.format|e }}</div>
+                <div>{{ lb.get("ui_label.capacity") }}: {{ imageMetadataAfter.sizeFormatted|e }}</div>
             </div>
             {% endif %}
         </div>
@@ -47,37 +47,37 @@
     {% elseif imageDataBefore %}
     {# 削除ファイルの場合: Before のみ表示 #}
     <div class="gitui79__image-diff-single">
-        <div class="gitui79__image-diff-label">Deleted</div>
+        <div class="gitui79__image-diff-label">{{ lb.get("ui_label.deleted") }}</div>
         <div class="gitui79__image-diff-content">
-            <img src="data:{{ mimeType|e }};base64,{{ imageDataBefore|e }}" alt="Deleted Image">
+            <img src="data:{{ mimeType|e }};base64,{{ imageDataBefore|e }}" alt="{{ lb.get('ui_label.image_alt_deleted') }}">
         </div>
         {% if imageMetadataBefore %}
         <div class="gitui79__image-metadata">
-            <div>サイズ: {{ imageMetadataBefore.width }}x{{ imageMetadataBefore.height }}</div>
-            <div>フォーマット: {{ imageMetadataBefore.format|e }}</div>
-            <div>容量: {{ imageMetadataBefore.sizeFormatted|e }}</div>
+            <div>{{ lb.get("ui_label.size") }}: {{ imageMetadataBefore.width }}x{{ imageMetadataBefore.height }}</div>
+            <div>{{ lb.get("ui_label.format") }}: {{ imageMetadataBefore.format|e }}</div>
+            <div>{{ lb.get("ui_label.capacity") }}: {{ imageMetadataBefore.sizeFormatted|e }}</div>
         </div>
         {% endif %}
     </div>
     {% elseif imageDataAfter %}
     {# 新規ファイルの場合: After のみ表示 #}
     <div class="gitui79__image-diff-single">
-        <div class="gitui79__image-diff-label">Added</div>
+        <div class="gitui79__image-diff-label">{{ lb.get("ui_label.added") }}</div>
         <div class="gitui79__image-diff-content">
-            <img src="data:{{ mimeType|e }};base64,{{ imageDataAfter|e }}" alt="Added Image">
+            <img src="data:{{ mimeType|e }};base64,{{ imageDataAfter|e }}" alt="{{ lb.get('ui_label.image_alt_added') }}">
         </div>
         {% if imageMetadataAfter %}
         <div class="gitui79__image-metadata">
-            <div>サイズ: {{ imageMetadataAfter.width }}x{{ imageMetadataAfter.height }}</div>
-            <div>フォーマット: {{ imageMetadataAfter.format|e }}</div>
-            <div>容量: {{ imageMetadataAfter.sizeFormatted|e }}</div>
+            <div>{{ lb.get("ui_label.size") }}: {{ imageMetadataAfter.width }}x{{ imageMetadataAfter.height }}</div>
+            <div>{{ lb.get("ui_label.format") }}: {{ imageMetadataAfter.format|e }}</div>
+            <div>{{ lb.get("ui_label.capacity") }}: {{ imageMetadataAfter.sizeFormatted|e }}</div>
         </div>
         {% endif %}
     </div>
     {% endif %}
 </div>
 {% elseif code or diffHtmlLineByLine %}
-<h2>差分</h2>
+<h2>{{ lb.get("status.diff") }}</h2>
 {% if diffHtmlLineByLine %}
 <div class="gitui79__sm">{{ diffHtmlLineByLine | raw }}</div>
 <div class="gitui79__lg">{{ diffHtmlSideBySide | raw }}</div>

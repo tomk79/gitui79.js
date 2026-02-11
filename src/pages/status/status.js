@@ -18,9 +18,14 @@ module.exports = function(main, $elms, gitparse79){
 	// --------------------------------------
 	// バイト数を読みやすい形式にフォーマット
 	function formatBytes(bytes){
-		if (bytes === 0) return '0 Bytes';
+		if (bytes === 0) return '0 ' + main.lb.get('ui_label.bytes');
 		var k = 1024;
-		var sizes = ['Bytes', 'KB', 'MB', 'GB'];
+		var sizes = [
+			main.lb.get('ui_label.bytes'),
+			main.lb.get('ui_label.kb'),
+			main.lb.get('ui_label.mb'),
+			main.lb.get('ui_label.gb')
+		];
 		var i = Math.floor(Math.log(bytes) / Math.log(k));
 		return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
 	}
@@ -618,7 +623,7 @@ module.exports = function(main, $elms, gitparse79){
 		}
 
 		px2style.loading();
-		px2style.loadingMessage('コミットしています...');
+		px2style.loadingMessage(main.lb.get('status.committing'));
 
 		let isSuccess = true;
 
@@ -629,7 +634,12 @@ module.exports = function(main, $elms, gitparse79){
 					function(result){
 						if( result.code ){
 							isSuccess = false;
-							alert('Error: status: status code: '+result.code+';'+"\n"+result.stdout);
+							alert(
+								main.lb.get(
+									'status.commit_error_detail',
+									{code: result.code, stdout: result.stdout}
+								)
+							);
 						}
 						it.next();
 					}
@@ -645,7 +655,12 @@ module.exports = function(main, $elms, gitparse79){
 					function(result){
 						if( result.code ){
 							isSuccess = false;
-							alert('Error: status: status code: '+result.code+';'+"\n"+result.stdout);
+								alert(
+									main.lb.get(
+										'status.commit_error_detail',
+										{code: result.code, stdout: result.stdout}
+									)
+								);
 						}
 						it.next();
 					}
@@ -653,11 +668,11 @@ module.exports = function(main, $elms, gitparse79){
 			},
 			function(it){
 				if( !isSuccess ){
-					main.flashMessage('コミットに失敗しました。');
-					px2style.loadingMessage('コミットに失敗しました。');
+						main.flashMessage(main.lb.get('status.commit_failed'));
+						px2style.loadingMessage(main.lb.get('status.commit_failed'));
 				}else{
-					main.flashMessage('コミットしました。');
-					px2style.loadingMessage('コミットしました。');
+						main.flashMessage(main.lb.get('status.commit_succeeded'));
+						px2style.loadingMessage(main.lb.get('status.commit_succeeded'));
 				}
 				setTimeout(function(){
 					px2style.closeLoading();

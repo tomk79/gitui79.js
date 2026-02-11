@@ -18,9 +18,14 @@ module.exports = function(main, $elms, gitparse79){
 	// --------------------------------------
 	// バイト数を読みやすい形式にフォーマット
 	function formatBytes(bytes){
-		if (bytes === 0) return '0 Bytes';
+		if (bytes === 0) return '0 ' + main.lb.get('ui_label.bytes');
 		var k = 1024;
-		var sizes = ['Bytes', 'KB', 'MB', 'GB'];
+		var sizes = [
+			main.lb.get('ui_label.bytes'),
+			main.lb.get('ui_label.kb'),
+			main.lb.get('ui_label.mb'),
+			main.lb.get('ui_label.gb')
+		];
 		var i = Math.floor(Math.log(bytes) / Math.log(k));
 		return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
 	}
@@ -439,7 +444,7 @@ module.exports = function(main, $elms, gitparse79){
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				px2style.closeLoading();
-				alert('バージョンを戻しました。');
+				alert(main.lb.get('log.rollback_success'));
 				rlv();
 			}); })
 		;
@@ -485,7 +490,7 @@ module.exports = function(main, $elms, gitparse79){
 			}); })
 			.then(function(){ return new Promise(function(rlv, rjt){
 				px2style.closeLoading();
-				alert('ファイル '+file+' のバージョンを戻しました。');
+				alert(main.lb.get('log.rollback_file_success', {file: file}));
 				rlv();
 			}); })
 		;

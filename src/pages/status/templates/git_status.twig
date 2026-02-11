@@ -69,8 +69,8 @@
 			<input type="hidden" name="committer.email" value="{{ committer.email }}" />
 			{% else %}
 			<p>
-				<input type="text" name="committer.name" value="{{ committer.name }}" style="width: 35%;" placeholder="Name" />
-				&lt;<input type="text" name="committer.email" value="{{ committer.email }}" style="width: 35%;" placeholder="E-mail" />&gt;
+				<input type="text" name="committer.name" value="{{ committer.name }}" style="width: 35%;" placeholder="{{ lb.get('ui_label.name') }}" />
+				&lt;<input type="text" name="committer.email" value="{{ committer.email }}" style="width: 35%;" placeholder="{{ lb.get('ui_label.email') }}" />&gt;
 			</p>
 			{% endif %}
 			<div class="px2-text-align-center"><button type="submit" class="px2-btn px2-btn--primary gitui79__btn-do-commit">{{ lb.get("status.commit") }}</button></div>
