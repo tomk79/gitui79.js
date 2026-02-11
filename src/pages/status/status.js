@@ -413,7 +413,7 @@ module.exports = function(main, $elms, gitparse79){
 					}
 
 					if( !diffInfo.errors || !diffInfo.errors.length ){
-						const Diff2html = require('diff2html/lib/src/diff2html');
+						const Diff2html = require('diff2html');
 						diffHtmlLineByLine = Diff2html.html(
 							Diff2html.parse( diffText ),
 							{
