@@ -42,7 +42,7 @@
     "@babel/core": "^7.17.8",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
-    "axios": "^0.30",
+    "axios": "^0.32",
     "babel-loader": "^8.2.4",
     "body-parser": "^1.17.1",
     "cheerio": "*",
